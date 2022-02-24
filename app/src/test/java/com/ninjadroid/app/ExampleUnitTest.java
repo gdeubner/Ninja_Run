@@ -1,4 +1,4 @@
-package com.example.userprofiles;
+package com.ninjadroid.app;
 
 import org.junit.Test;
 

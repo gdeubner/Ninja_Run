@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.userprofiles">
+    package="com.ninjadroid.app">
 
     <application
         android:allowBackup="true"
@@ -9,18 +9,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UserProfiles">
-        <activity
-            android:name=".ProfilePage"
-            android:parentActivityName=".LoginPage"
-            android:label="@string/profile" />
-        <activity
-            android:name=".MapsActivity"
-            android:parentActivityName=".ProfilePage"
-            android:label="Maps" />
-        <activity
-            android:name=".LoginPage"
-            android:label="@string/app_name">
 
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
+
+        <activity
+            android:name="com.ninjadroid.app.activities.MapActivity"
+            android:exported="false"
+            android:label="@string/title_activity_map" />
+
+        <activity
+            android:name="com.ninjadroid.app.activities.ProfilePage"
+            android:label="@string/profile"
+            android:parentActivityName="com.ninjadroid.app.activities.LoginPage" />
+        <activity
+            android:name="com.ninjadroid.app.activities.LoginPage"
+            android:label="@string/app_name"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,5 +45,9 @@
             </intent-filter>
         </activity>
     </application>
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 </manifest>

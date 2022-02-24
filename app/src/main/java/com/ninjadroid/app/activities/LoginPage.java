@@ -1,4 +1,4 @@
-package com.example.userprofiles;
+package com.ninjadroid.app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.ninjadroid.app.R;
 
 public class LoginPage extends AppCompatActivity {
 
@@ -28,7 +30,7 @@ public class LoginPage extends AppCompatActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
-                Intent intent = new Intent(LoginPage.this, ProfilePage.class);
+                Intent intent = new Intent(LoginPage.this, MapActivity.class);
                 String message;
                 message = username;
 
