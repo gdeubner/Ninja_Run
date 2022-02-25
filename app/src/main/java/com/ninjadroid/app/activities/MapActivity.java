@@ -30,6 +30,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ninjadroid.app.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -54,6 +55,7 @@ import com.ninjadroid.app.utils.containers.RouteContainer;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -199,10 +201,20 @@ public class MapActivity extends AppCompatActivity
         route.setVar_uid(17); //todo: change this once user functionality is done
         route.setVar_dist(dist);
         route.setVar_town(cityName);
-        route.setVar_routf(new Gson().toJson(routeCoordinates));
+        //converts the list of Location objects to json
+        Log.i("Route", routeCoordinates.get(0).toString() );
+        Type listType = new TypeToken<ArrayList<Location>>() {}.getType();
+        String mRoute = new Gson().toJson(routeCoordinates, listType).replace('\"', '\'');
+        route.setVar_routf(mRoute);
         Log.i("Route", route.getVar_routf() );
 
-       return route;
+
+        ArrayList<Location> fixedList = new Gson().fromJson(mRoute.replace('\'', '\"'),
+                listType);
+        Log.i("Route", fixedList.get(0).toString() );
+
+
+        return route;
 
     }
 
@@ -222,7 +234,7 @@ public class MapActivity extends AppCompatActivity
                 .appendQueryParameter("var_town", route.getVar_town())
                 .appendQueryParameter("var_dist", String.valueOf(route.getVar_dist()))
                 .appendQueryParameter("var_uid", String.valueOf(route.getVar_uid()))
-                .appendQueryParameter("var_routf", "asdfsdfdf");
+                .appendQueryParameter("var_routf", route.getVar_routf());
 
         String myUrl = builder.build().toString();
         Log.i("Route", myUrl);
