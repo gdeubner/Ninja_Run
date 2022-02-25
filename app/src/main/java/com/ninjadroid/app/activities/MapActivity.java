@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -28,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.ninjadroid.app.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -45,6 +47,9 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
+import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.Utils;
+import com.ninjadroid.app.utils.containers.RouteContainer;
 
 import org.json.JSONObject;
 
@@ -135,9 +140,9 @@ public class MapActivity extends AppCompatActivity
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                     mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
 
-                    //launchRouteFinishModal();
-                    //postRoute();
-                    routeDetails();
+                    RouteContainer route = routeDetails();
+                    postRoute(route);
+
                 } else {
                     Toast.makeText(MapActivity.this, "You haven't started a route yet!",
                             Toast.LENGTH_SHORT).show();
@@ -155,90 +160,92 @@ public class MapActivity extends AppCompatActivity
         });
     }
 
-    private void routeDetails() {
-        int uid = 11111;
-
-        double startLat = routeCoordinates.get(0).getLatitude();
-        double startLon = routeCoordinates.get(0).getLongitude();
-
-        double endLat = routeCoordinates.get(routeCoordinates.size()-1).getLatitude();
-        double endLon = routeCoordinates.get(routeCoordinates.size()-1).getLongitude();
-
-
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        String cityName, stateName, countryName;
-        List<Address> addresses = null;
+    //collects all of the route details and adds them to a RouteContainer
+    private RouteContainer routeDetails() {
+        double startLat, startLon, endLat, endLon;
+        if(routeCoordinates.size()==0) {
+            return null;
+        }
+         startLat = routeCoordinates.get(0).getLatitude();
+         startLon = routeCoordinates.get(0).getLongitude();
+         endLat = routeCoordinates.get(routeCoordinates.size()-1).getLatitude();
+         endLon = routeCoordinates.get(routeCoordinates.size()-1).getLongitude();
+         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+         String cityName = "";
+         String stateName = "";
+         String countryName = "";
+         List<Address> addresses = null;
         try {
             addresses = geocoder.getFromLocation(startLat, startLon, 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        cityName = addresses.get(0).getAddressLine(0);
-        stateName = addresses.get(0).getAddressLine(1);
-        countryName = addresses.get(0).getAddressLine(2);
+        if (addresses != null) {
+            cityName = addresses.get(0).getAddressLine(0);
+            stateName = addresses.get(0).getAddressLine(1);
+            countryName = addresses.get(0).getAddressLine(2);
+        }
 
-        double dist = calcDistanceTraveled(routeCoordinates);
+        double dist = Utils.calcDistanceTraveled(routeCoordinates);
 
         Log.i("route", String.format("startLat:%s StartLon:%s EndLat:%s EndLon:%s City:%s Distance:%s",
                 startLat, startLon, endLat, endLon, cityName, dist));
 
+        RouteContainer route = new RouteContainer();
+        route.setVar_lat_start(startLat);
+        route.setVar_long_start(startLon);
+        route.setVar_lat_start(endLat);
+        route.setVar_long_start(endLon);
+        route.setVar_uid(17); //todo: change this once user functionality is done
+        route.setVar_dist(dist);
+        route.setVar_town(cityName);
+        route.setVar_routf(new Gson().toJson(routeCoordinates));
+        Log.i("Route", route.getVar_routf() );
+
+       return route;
+
     }
 
-    private double calcDistanceTraveled(ArrayList<Location> list){
-        double dist = 0;
-        for (int i = 0; i < list.size()-1; i++) {
-            dist += distance(list.get(i).getLatitude(), list.get(i).getLongitude(),
-                    list.get(i+1).getLatitude(), list.get(i+1).getLongitude(), 'M');
-        }
-        return dist;
-    }
-
-    private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
-        dist = Math.acos(dist);
-        dist = rad2deg(dist);
-        dist = dist * 60 * 1.1515;
-        if (unit == 'K') {
-            dist = dist * 1.609344;
-        } else if (unit == 'N') {
-            dist = dist * 0.8684;
-        }
-        return (dist);
-    }
-
-    private double deg2rad(double deg) {
-        return (deg * Math.PI / 180.0);
-    }
-
-    private double rad2deg(double rad) {
-        return (rad * 180.0 / Math.PI);
-    }
-
-    private void postRoute() {
+    //sends the route to the database
+    private void postRoute(RouteContainer route) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://www.google.com";
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(URLBuilder.getScheme())
+                .encodedAuthority(URLBuilder.getEncodedAuthority())
+                .appendPath(URLBuilder.getSendRoutePath())
+                .appendQueryParameter("var_lat_start", String.valueOf(route.getVar_lat_start()))
+                .appendQueryParameter("var_long_start", String.valueOf(route.getVar_long_start()))
+                .appendQueryParameter("var_lat_end", String.valueOf(route.getVar_lat_end()))
+                .appendQueryParameter("var_long_end", String.valueOf(route.getVar_long_end()))
+                .appendQueryParameter("var_town", route.getVar_town())
+                .appendQueryParameter("var_dist", String.valueOf(route.getVar_dist()))
+                .appendQueryParameter("var_uid", String.valueOf(route.getVar_uid()))
+                .appendQueryParameter("var_routf", "asdfsdfdf");
+
+        String myUrl = builder.build().toString();
+        Log.i("Route", myUrl);
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, myUrl,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        Toast.makeText(MapActivity.this, response.toString(), Toast.LENGTH_SHORT).show();
+                        Log.i("Route", response);
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MapActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                Log.e("Route", error.getMessage());
             }
         });
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-
 
     //creates the location callback which tells the app what to do when it receives new location data
     private void setMappingFunctionality() {
