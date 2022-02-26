@@ -50,7 +50,9 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.ninjadroid.app.utils.URLBuilder;
 import com.ninjadroid.app.utils.Utils;
+import com.ninjadroid.app.utils.containers.LocationContainer;
 import com.ninjadroid.app.utils.containers.RouteContainer;
+import com.ninjadroid.app.webLogic.SendRoute;
 
 import org.json.JSONObject;
 
@@ -70,12 +72,12 @@ public class MapActivity extends AppCompatActivity
     SupportMapFragment mapFrag;
     LocationRequest mLocationRequest;
     Location mLastLocation;
-    Marker mCurrLocationMarker;
+    Marker startMarker, endMarker;
     FusedLocationProviderClient mFusedLocationClient;
     LocationCallback mLocationCallback;
     Button btn_start, btn_stop;
     ImageButton ibtn_profile;
-    ArrayList<Location> routeCoordinates;
+    ArrayList<LocationContainer> routeCoordinates;
     //true when route route is being recorded
     Boolean trackingRoute;
     Polyline drawnRoute;
@@ -107,31 +109,45 @@ public class MapActivity extends AppCompatActivity
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                trackingRoute = true;
+                if(!trackingRoute){
+                    if(startMarker != null){
+                        startMarker.remove();
+                    }
+                    if(endMarker != null){
+                        endMarker.remove();
+                    }
+                    if(drawnRoute!=null){
+                        drawnRoute.remove();
+                    }
+                    trackingRoute = true;
+                    routeCoordinates = new ArrayList<>();
 
-                //Place current location marker
-                LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                markerOptions.title("Start");
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
+                    //Place current location marker
+                    LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                    MarkerOptions markerOptions = new MarkerOptions();
+                    markerOptions.position(latLng);
+                    markerOptions.title("Start");
+                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    startMarker = mGoogleMap.addMarker(markerOptions);
 
-                //sets the starting point for the route drawn on the screen
-                PolylineOptions options = new PolylineOptions()
-                        .color(Color.BLUE)
-                        .width(10)
-                        .startCap(new RoundCap())
-                        .endCap(new RoundCap())
-                        .add(latLng);
-                drawnRoute = mGoogleMap.addPolyline(options);
-            }
+                    //sets the starting point for the route drawn on the screen
+                    PolylineOptions options = new PolylineOptions()
+                            .color(Color.BLUE)
+                            .width(10)
+                            .startCap(new RoundCap())
+                            .endCap(new RoundCap())
+                            .add(latLng);
+                    drawnRoute = mGoogleMap.addPolyline(options);
+                }
+                }
+
         });
 
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(trackingRoute){
+
                     trackingRoute = false;
 
                     //Place current location marker
@@ -140,11 +156,10 @@ public class MapActivity extends AppCompatActivity
                     markerOptions.position(latLng);
                     markerOptions.title("Finish");
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                    mCurrLocationMarker = mGoogleMap.addMarker(markerOptions);
+                    endMarker = mGoogleMap.addMarker(markerOptions);
 
-                    RouteContainer route = routeDetails();
-                    postRoute(route);
-
+                    //todo replace 17 with user id
+                    SendRoute.sendNewRoute(routeCoordinates, getBaseContext(), 17);
                 } else {
                     Toast.makeText(MapActivity.this, "You haven't started a route yet!",
                             Toast.LENGTH_SHORT).show();
@@ -162,103 +177,6 @@ public class MapActivity extends AppCompatActivity
         });
     }
 
-    //collects all of the route details and adds them to a RouteContainer
-    private RouteContainer routeDetails() {
-        double startLat, startLon, endLat, endLon;
-        if(routeCoordinates.size()==0) {
-            return null;
-        }
-         startLat = routeCoordinates.get(0).getLatitude();
-         startLon = routeCoordinates.get(0).getLongitude();
-         endLat = routeCoordinates.get(routeCoordinates.size()-1).getLatitude();
-         endLon = routeCoordinates.get(routeCoordinates.size()-1).getLongitude();
-         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-         String cityName = "";
-         String stateName = "";
-         String countryName = "";
-         List<Address> addresses = null;
-        try {
-            addresses = geocoder.getFromLocation(startLat, startLon, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (addresses != null) {
-            cityName = addresses.get(0).getAddressLine(0);
-            stateName = addresses.get(0).getAddressLine(1);
-            countryName = addresses.get(0).getAddressLine(2);
-        }
-
-        double dist = Utils.calcDistanceTraveled(routeCoordinates);
-
-        Log.i("route", String.format("startLat:%s StartLon:%s EndLat:%s EndLon:%s City:%s Distance:%s",
-                startLat, startLon, endLat, endLon, cityName, dist));
-
-        RouteContainer route = new RouteContainer();
-        route.setVar_lat_start(startLat);
-        route.setVar_long_start(startLon);
-        route.setVar_lat_start(endLat);
-        route.setVar_long_start(endLon);
-        route.setVar_uid(17); //todo: change this once user functionality is done
-        route.setVar_dist(dist);
-        route.setVar_town(cityName);
-        //converts the list of Location objects to json
-        Log.i("Route", routeCoordinates.get(0).toString() );
-        Type listType = new TypeToken<ArrayList<Location>>() {}.getType();
-        String mRoute = new Gson().toJson(routeCoordinates, listType).replace('\"', '\'');
-        route.setVar_routf(mRoute);
-        Log.i("Route", route.getVar_routf() );
-
-
-        ArrayList<Location> fixedList = new Gson().fromJson(mRoute.replace('\'', '\"'),
-                listType);
-        Log.i("Route", fixedList.get(0).toString() );
-
-
-        return route;
-
-    }
-
-    //sends the route to the database
-    private void postRoute(RouteContainer route) {
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(this);
-
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme(URLBuilder.getScheme())
-                .encodedAuthority(URLBuilder.getEncodedAuthority())
-                .appendPath(URLBuilder.getSendRoutePath())
-                .appendQueryParameter("var_lat_start", String.valueOf(route.getVar_lat_start()))
-                .appendQueryParameter("var_long_start", String.valueOf(route.getVar_long_start()))
-                .appendQueryParameter("var_lat_end", String.valueOf(route.getVar_lat_end()))
-                .appendQueryParameter("var_long_end", String.valueOf(route.getVar_long_end()))
-                .appendQueryParameter("var_town", route.getVar_town())
-                .appendQueryParameter("var_dist", String.valueOf(route.getVar_dist()))
-                .appendQueryParameter("var_uid", String.valueOf(route.getVar_uid()))
-                .appendQueryParameter("var_routf", route.getVar_routf());
-
-        String myUrl = builder.build().toString();
-        Log.i("Route", myUrl);
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, myUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Log.i("Route", response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                Log.e("Route", error.getMessage());
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-
     //creates the location callback which tells the app what to do when it receives new location data
     private void setMappingFunctionality() {
         mLocationCallback = new LocationCallback() {
@@ -268,16 +186,16 @@ public class MapActivity extends AppCompatActivity
                 if (locationList.size() > 0) {
                     //The last location in the list is the newest
                     Location location = locationList.get(locationList.size() - 1);
-                    Log.i("MapsActivity", "Location: " + location.getLatitude() + " " +
-                            location.getLongitude());
+
                     mLastLocation = location;
 
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
                     if(trackingRoute) {
-                        routeCoordinates.add(mLastLocation);
-                        Log.i("Route", "Route point: " + location.getLatitude() + " " +
-                                location.getLongitude());
+                        LocationContainer lastLocation= new LocationContainer(
+                                mLastLocation.getLatitude(), mLastLocation.getLongitude(),
+                                mLastLocation.getAltitude(), mLastLocation.getSpeed(), mLastLocation.getTime());
+                        routeCoordinates.add(lastLocation);
                         List<LatLng> newRoute = drawnRoute.getPoints();
                         newRoute.add(latLng);
                         drawnRoute.setPoints(newRoute);

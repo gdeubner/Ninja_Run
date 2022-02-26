@@ -2,15 +2,17 @@ package com.ninjadroid.app.utils;
 
 import android.location.Location;
 
+import com.ninjadroid.app.utils.containers.LocationContainer;
+
 import java.util.ArrayList;
 
 public  class Utils {
     //used for calculating the distance between two lat/lon coordinates
-    public static double calcDistanceTraveled(ArrayList<Location> list){
+    public static double calcDistanceTraveled(ArrayList<LocationContainer> list){
         double dist = 0;
         for (int i = 0; i < list.size()-1; i++) {
-            dist += distance(list.get(i).getLatitude(), list.get(i).getLongitude(),
-                    list.get(i+1).getLatitude(), list.get(i+1).getLongitude(), 'M');
+            dist += distance(list.get(i).getLat(), list.get(i).getLon(),
+                    list.get(i+1).getLat(), list.get(i+1).getLon(), 'M');
         }
         return dist;
     }
