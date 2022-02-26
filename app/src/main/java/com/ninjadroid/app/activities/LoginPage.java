@@ -2,17 +2,30 @@ package com.ninjadroid.app.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
+import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.containers.RouteContainer;
 
 public class LoginPage extends AppCompatActivity {
 
     public static final String KEY = "key";
+    private String username = "";
+    private String password = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,26 +40,64 @@ public class LoginPage extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = usernameEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+                username = usernameEditText.getText().toString();
+                password = passwordEditText.getText().toString();
 
-                Intent intent = new Intent(LoginPage.this, MapActivity.class);
-                String message;
-                message = username;
-
-                intent.putExtra(KEY, message);
-                startActivity(intent);
-
+                queryID(getBaseContext(), username, password);
             }
         });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String usernameR = usernameEditText.getText().toString();
-                String passwordR = passwordEditText.getText().toString();
+                username = usernameEditText.getText().toString();
+                password = passwordEditText.getText().toString();
 
             }
         });
+    }
+
+    private void queryID(Context context, String username, String password) {
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(URLBuilder.getScheme())
+                .encodedAuthority(URLBuilder.getEncodedAuthority())
+                .appendPath(URLBuilder.getUserProfilePath())
+                .appendQueryParameter("username", username)
+                .appendQueryParameter("password", password);
+
+        String myUrl = builder.build().toString();
+        Log.i("Query", myUrl);
+        String message = "";
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, myUrl,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Log.i("Get Request Response", response);
+
+                        Intent intent = new Intent(LoginPage.this, ProfilePage.class);
+                        intent.putExtra(KEY, response);
+                        startActivity(intent);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                try {
+                    Log.e("Get Request Response", error.getMessage());
+
+                } catch (Error e){
+                    Log.e("Get Request Response", "Unspecified server error");
+                }
+
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 }
