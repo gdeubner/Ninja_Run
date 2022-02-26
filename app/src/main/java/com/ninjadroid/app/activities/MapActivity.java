@@ -164,8 +164,8 @@ public class MapActivity extends AppCompatActivity
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                     endMarker = mGoogleMap.addMarker(markerOptions);
 
-                    //todo replace 17 with user id
-                    SendRoute.sendNewRoute(routeCoordinates, getBaseContext(), 17);
+                    //todo replace 17 with user id ~~DONE~~
+                    SendRoute.sendNewRoute(routeCoordinates, getBaseContext(), Integer.valueOf(userID) );
                 } else {
                     Toast.makeText(MapActivity.this, "You haven't started a route yet!",
                             Toast.LENGTH_SHORT).show();
