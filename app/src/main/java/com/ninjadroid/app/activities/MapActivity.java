@@ -83,6 +83,9 @@ public class MapActivity extends AppCompatActivity
     Polyline drawnRoute;
     Boolean scrolling;
 
+    String userID;
+    public static final String KEY = "key";
+
     RequestQueue requestQueue;
 
     @Override
@@ -90,6 +93,9 @@ public class MapActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         getSupportActionBar().setTitle("Route Tracker");
+
+        Intent intent = getIntent();
+        userID = intent.getStringExtra((LoginPage.KEY));
 
         //sets up location tracking and map
         setMappingFunctionality();
@@ -172,6 +178,8 @@ public class MapActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, ProfilePage.class);
+
+                intent.putExtra(KEY, userID);
                 startActivity(intent);
             }
         });

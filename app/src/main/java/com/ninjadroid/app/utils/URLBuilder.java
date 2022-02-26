@@ -11,7 +11,9 @@ public class URLBuilder {
 
     public static String getTestPath() {return "test";}
 
-    public static String getUserProfilePath() {return "user_info";}
+    public static String getUserIDPath() {return "user_login";}
+
+    public static String getUserProfilePath() {return "user_stats";}
 
     public static String getNewUserPath() {return "new_user";}
 

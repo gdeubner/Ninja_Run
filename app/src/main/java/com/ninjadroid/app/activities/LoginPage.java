@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -64,7 +65,7 @@ public class LoginPage extends AppCompatActivity {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(URLBuilder.getScheme())
                 .encodedAuthority(URLBuilder.getEncodedAuthority())
-                .appendPath(URLBuilder.getUserProfilePath())
+                .appendPath(URLBuilder.getUserIDPath())
                 .appendQueryParameter("username", username)
                 .appendQueryParameter("password", password);
 
@@ -78,11 +79,18 @@ public class LoginPage extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
-                        Log.i("Get Request Response", response);
+                        if(response.length() > 4){
+                            String message = response.substring(2, response.length()-2);
+                            Log.i("Get Request Response", message);
 
-                        Intent intent = new Intent(LoginPage.this, ProfilePage.class);
-                        intent.putExtra(KEY, response);
-                        startActivity(intent);
+                            Intent intent = new Intent(LoginPage.this, MapActivity.class);
+                            intent.putExtra(KEY, message);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(LoginPage.this, "Please Enter A Valid Username and Password!",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
