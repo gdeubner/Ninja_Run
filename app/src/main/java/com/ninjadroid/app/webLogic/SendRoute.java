@@ -59,7 +59,7 @@ public class SendRoute {
             countryName = addresses.get(0).getAddressLine(2);
         }
 
-        double dist = Utils.calcDistanceTraveled(routeCoordinates);
+        double dist = Utils.calcDistanceTraveled(routeCoordinates );
 
         //Log.i("route", String.format("startLat:%s StartLon:%s EndLat:%s EndLon:%s City:%s Distance:%s",
         //        startLat, startLon, endLat, endLon, cityName, dist));
@@ -119,7 +119,7 @@ public class SendRoute {
                 try {
                     Log.e("Get Request Response", error.getMessage());
 
-                } catch (Error e){
+                } catch (Exception e){
                     Log.e("Get Request Response", "Unspecified server error");
                 }
 

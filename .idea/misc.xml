@@ -7,11 +7,12 @@
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/activity_map.xml" value="0.33" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/login.xml" value="0.23948717948717949" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/profile.xml" value="0.23948717948717949" />
+        <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/login.xml" value="0.17708333333333334" />
         <entry key="app/src/main/res/layout/profile.xml" value="0.27595367431640627" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_X" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

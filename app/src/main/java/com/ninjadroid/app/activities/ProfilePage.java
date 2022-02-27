@@ -124,7 +124,7 @@ public class ProfilePage extends AppCompatActivity {
                 try {
                     Log.e("Get Request Response", error.getMessage());
 
-                } catch (Error e){
+                } catch (Exception e){
                     Log.e("Get Request Response", "Unspecified server error");
                 }
 
