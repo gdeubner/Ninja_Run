@@ -9,10 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -22,15 +19,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.ninjadroid.app.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -48,19 +37,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
-import com.ninjadroid.app.utils.URLBuilder;
-import com.ninjadroid.app.utils.Utils;
 import com.ninjadroid.app.utils.containers.LocationContainer;
-import com.ninjadroid.app.utils.containers.RouteContainer;
-import com.ninjadroid.app.webLogic.SendRoute;
+import com.ninjadroid.app.webServices.PostRoute;
 
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class MapActivity extends AppCompatActivity
         implements OnMapReadyCallback {
@@ -164,10 +145,14 @@ public class MapActivity extends AppCompatActivity
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                     endMarker = mGoogleMap.addMarker(markerOptions);
 
-                    //todo replace 17 with user id ~~DONE~~
-                    SendRoute.sendNewRoute(routeCoordinates, getBaseContext(), Integer.valueOf(userID) );
+                    if(routeCoordinates.size() > 3){
+                        PostRoute.postRoute(routeCoordinates, getBaseContext(), Integer.parseInt(userID) );
+                    } else {
+                        Toast.makeText(MapActivity.this, "Wow, that was quick.",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 } else {
-                    Toast.makeText(MapActivity.this, "You haven't started a route yet!",
+                    Toast.makeText(MapActivity.this, "You haven't started a route yet.",
                             Toast.LENGTH_SHORT).show();
                 }
 
