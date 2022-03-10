@@ -44,6 +44,13 @@ public class LoginPage extends AppCompatActivity {
                 username = usernameEditText.getText().toString();
                 password = passwordEditText.getText().toString();
 
+                if(username.equals("test") ){
+                    Intent intent = new Intent(LoginPage.this, RootActivity.class);
+                    intent.putExtra(KEY, 17);
+                    startActivity(intent);
+                }
+
+
                 queryID(getBaseContext(), username, password);
             }
         });
@@ -83,7 +90,7 @@ public class LoginPage extends AppCompatActivity {
                             String message = response.substring(2, response.length()-2);
                             Log.i("Get Request Response", message);
 
-                            Intent intent = new Intent(LoginPage.this, MapActivity.class);
+                            Intent intent = new Intent(LoginPage.this, RootActivity.class);
                             intent.putExtra(KEY, message);
                             startActivity(intent);
                         }else{

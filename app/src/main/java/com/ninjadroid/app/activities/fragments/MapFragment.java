@@ -1,24 +1,26 @@
-package com.ninjadroid.app.activities;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+package com.ninjadroid.app.activities.fragments;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.ninjadroid.app.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -35,15 +37,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
+import com.ninjadroid.app.R;
+import com.ninjadroid.app.activities.MapActivity;
 import com.ninjadroid.app.utils.containers.LocationContainer;
-import com.ninjadroid.app.webServices.PostRoute;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapActivity extends AppCompatActivity
-        implements OnMapReadyCallback {
-
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link MapFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final int LOCATION_UPDATE_INTERVAL = 10;  //in seconds
     private static final int FAST_LOCATION_UPDATE_INTERVAL = 2;  //in seconds
@@ -55,37 +61,62 @@ public class MapActivity extends AppCompatActivity
     FusedLocationProviderClient mFusedLocationClient;
     LocationCallback mLocationCallback;
     Button btn_start, btn_stop;
-    ImageButton ibtn_profile;
     ArrayList<LocationContainer> routeCoordinates;
     //true when route route is being recorded
     Boolean trackingRoute;
     Polyline drawnRoute;
     Boolean scrolling;
 
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String USERID = "userId";
 
+    // TODO: Rename and change types of parameters
+    private String mUserId;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
-        getSupportActionBar().setTitle("Route Tracker");
-
-
-
-        //sets up location tracking and map
-        setMappingFunctionality();
-        setButtonAndTrackingFunctionality();
-
-
+    public MapFragment() {
+        // Required empty public constructor
     }
 
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param userId Parameter 1.
+     * @return A new instance of fragment MapFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static MapFragment newInstance(String userId) {
+        MapFragment fragment = new MapFragment();
+        Bundle args = new Bundle();
+        args.putString(USERID, userId);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mUserId = getArguments().getString(USERID);
+        }
+        setMappingFunctionality();
+        setButtonAndTrackingFunctionality();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_map, container, false);
+    }
 
 
     //sets the onclick listeners for the buttons
     private void setButtonAndTrackingFunctionality() {
-        btn_start = findViewById(R.id.btn_start);
-        btn_stop = findViewById(R.id.btn_stop);
-        ibtn_profile = findViewById(R.id.ibtn_profile);
+        btn_start = getView().findViewById(R.id.btn_start);
+        btn_stop = getView().findViewById(R.id.btn_stop);
 
         routeCoordinates = new ArrayList<>();
         trackingRoute = false;
@@ -124,7 +155,7 @@ public class MapActivity extends AppCompatActivity
                             .add(latLng);
                     drawnRoute = mGoogleMap.addPolyline(options);
                 }
-                }
+            }
 
         });
 
@@ -147,11 +178,11 @@ public class MapActivity extends AppCompatActivity
                         //todo: remove comment and get userID from root activity
                         //PostRoute.postRoute(routeCoordinates, getBaseContext(), Integer.parseInt(userID) );
                     } else {
-                        Toast.makeText(MapActivity.this, "Wow, that was quick.",
+                        Toast.makeText(getView().getContext(), "Wow, that was quick.",
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(MapActivity.this, "You haven't started a route yet.",
+                    Toast.makeText(getView().getContext(), "You haven't started a route yet.",
                             Toast.LENGTH_SHORT).show();
                 }
 
@@ -192,9 +223,12 @@ public class MapActivity extends AppCompatActivity
             }
         };
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        mapFrag = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
+        mapFrag = (SupportMapFragment) getParentFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
+        //MapFragment mapFragment = (MapFragment) getFragmentManager() .findFragmentById(R.id.map);
+        //mapFragment.getMapAsync(this);
+
     }
 
     @Override
@@ -228,7 +262,7 @@ public class MapActivity extends AppCompatActivity
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
+            if (ContextCompat.checkSelfPermission(getView().getContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 //Location Permission already granted
@@ -252,17 +286,17 @@ public class MapActivity extends AppCompatActivity
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private void checkLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(getView().getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
                 // sees the explanation, try again to request the permission.
-                new AlertDialog.Builder(this)
+                new AlertDialog.Builder(getView().getContext())
                         .setTitle("Location Permission Needed")
                         .setMessage("This app needs the Location permission, please accept to use " +
                                 "location functionality")
@@ -270,7 +304,7 @@ public class MapActivity extends AppCompatActivity
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 //Prompt the user once explanation has been shown
-                                ActivityCompat.requestPermissions(MapActivity.this,
+                                ActivityCompat.requestPermissions(getActivity(),
                                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                                         MY_PERMISSIONS_REQUEST_LOCATION );
                             }
@@ -281,7 +315,7 @@ public class MapActivity extends AppCompatActivity
 
             } else {
                 // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions(this,
+                ActivityCompat.requestPermissions(getActivity(),
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION );
             }
@@ -300,7 +334,7 @@ public class MapActivity extends AppCompatActivity
 
                     // permission was granted, yay! Do the
                     // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(this,
+                    if (ContextCompat.checkSelfPermission(getContext(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {
 
@@ -313,7 +347,7 @@ public class MapActivity extends AppCompatActivity
 
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toast.makeText(this, "permission denied", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "permission denied", Toast.LENGTH_LONG).show();
                 }
                 return;
             }
