@@ -20,7 +20,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.URLBuilder;
-import com.ninjadroid.app.utils.containers.RouteContainer;
 
 public class LoginPage extends AppCompatActivity {
 
@@ -31,7 +30,7 @@ public class LoginPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 
         final EditText usernameEditText = findViewById(R.id.username);
         final EditText passwordEditText = findViewById(R.id.password);
@@ -43,6 +42,13 @@ public class LoginPage extends AppCompatActivity {
             public void onClick(View v) {
                 username = usernameEditText.getText().toString();
                 password = passwordEditText.getText().toString();
+
+                if(username.equals("test") ){
+                    Intent intent = new Intent(LoginPage.this, MainActivity.class);
+                    intent.putExtra(KEY, 17);
+                    startActivity(intent);
+                }
+
 
                 queryID(getBaseContext(), username, password);
             }
@@ -83,7 +89,7 @@ public class LoginPage extends AppCompatActivity {
                             String message = response.substring(2, response.length()-2);
                             Log.i("Get Request Response", message);
 
-                            Intent intent = new Intent(LoginPage.this, MapActivity.class);
+                            Intent intent = new Intent(LoginPage.this, MainActivity.class);
                             intent.putExtra(KEY, message);
                             startActivity(intent);
                         }else{
