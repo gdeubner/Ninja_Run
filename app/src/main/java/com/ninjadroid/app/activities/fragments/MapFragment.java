@@ -9,6 +9,8 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -18,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,8 +39,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.MapActivity;
 import com.ninjadroid.app.utils.containers.LocationContainer;
+import com.ninjadroid.app.webServices.PostRoute;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,18 +101,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (getArguments() != null) {
             mUserId = getArguments().getString(USERID);
         }
-        setMappingFunctionality();
-        setButtonAndTrackingFunctionality();
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setMappingFunctionality();
+        setButtonAndTrackingFunctionality();
+    }
 
     //sets the onclick listeners for the buttons
     private void setButtonAndTrackingFunctionality() {
@@ -175,8 +180,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     endMarker = mGoogleMap.addMarker(markerOptions);
 
                     if(routeCoordinates.size() > 3){
-                        //todo: remove comment and get userID from root activity
-                        //PostRoute.postRoute(routeCoordinates, getBaseContext(), Integer.parseInt(userID) );
+                        PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId) );
                     } else {
                         Toast.makeText(getView().getContext(), "Wow, that was quick.",
                                 Toast.LENGTH_SHORT).show();
@@ -224,7 +228,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         };
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-        mapFrag = (SupportMapFragment) getParentFragmentManager().findFragmentById(R.id.map);
+        mapFrag = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFrag.getMapAsync(this);
         //MapFragment mapFragment = (MapFragment) getFragmentManager() .findFragmentById(R.id.map);
         //mapFragment.getMapAsync(this);

@@ -18,25 +18,26 @@ import com.google.android.material.navigation.NavigationView;
 import com.ninjadroid.app.activities.fragments.MapFragment;
 import com.ninjadroid.app.activities.fragments.ProfileFragment;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.databinding.ActivityRootBinding;
+import com.ninjadroid.app.databinding.ActivityMainBinding;
 
-public class RootActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
-    private ActivityRootBinding binding;
+    private NavigationView navigationView;
+    private ActivityMainBinding binding;
 
     String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityRootBinding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
 
         drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
+        navigationView = binding.navView;
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -47,6 +48,11 @@ public class RootActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = getIntent();
         userID = intent.getStringExtra((LoginPage.KEY));
 
+        if(savedInstanceState == null) {
+            MapFragment fmapFragment = MapFragment.newInstance(userID);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    fmapFragment, "MAP_FRAGMENT").commit();
+        }
     }
 
     @Override
@@ -60,19 +66,28 @@ public class RootActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.nav_profile:
-                ProfileFragment profileFragment = ProfileFragment.newInstance(userID);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        profileFragment, "PROFILE_FRAGMENT").commit();
-                break;
-            case R.id.nav_map:
-                MapFragment fmapFragment = MapFragment.newInstance(userID);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        fmapFragment, "MAP_FRAGMENT").commit();
-                break;
+        if(!navigationView.getMenu().findItem(item.getItemId()).isChecked()){
+            switch (item.getItemId()) {
+                case R.id.nav_profile:
+                    ProfileFragment profileFragment = ProfileFragment.newInstance(userID);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            profileFragment, "PROFILE_FRAGMENT").commit();
+                    break;
+                case R.id.nav_map:
+                    MapFragment fmapFragment = MapFragment.newInstance(userID);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            fmapFragment, "MAP_FRAGMENT").commit();
+                    break;
+                case R.id.nav_history:
+                    //todo: create and replace the history fragment here Justin!
+                    break;
+            }
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
+        } else {
+            drawer.closeDrawer(GravityCompat.START);
+            return false;
         }
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
+
     }
 }
