@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/drawable-xhdpi/ic_baseline_shared.xml" value="0.196" />
         <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/layout/activity_main.xml" value="0.14722222222222223" />
         <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/layout/fragment_history.xml" value="0.18802083333333333" />
         <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/layout/fragment_profile.xml" value="0.14722222222222223" />
