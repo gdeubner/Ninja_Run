@@ -15,9 +15,11 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.ninjadroid.app.activities.fragments.HistoryFragment;
 import com.ninjadroid.app.activities.fragments.MapFragment;
 import com.ninjadroid.app.activities.fragments.ProfileFragment;
 import com.ninjadroid.app.R;
+import com.ninjadroid.app.activities.fragments.SharedFragment;
 import com.ninjadroid.app.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -80,6 +82,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
                 case R.id.nav_history:
                     //todo: create and replace the history fragment here Justin!
+                    HistoryFragment histFrag = HistoryFragment.newInstance(userID);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            histFrag,"HIST_FRAGMENT").commit();
+                    break;
+
+                case R.id.nav_shared:
+                    SharedFragment sharedFrag = SharedFragment.newInstance(userID);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            sharedFrag,"SHARED_FRAGMENT").commit();
                     break;
             }
             drawer.closeDrawer(GravityCompat.START);

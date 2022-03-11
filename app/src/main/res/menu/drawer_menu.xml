@@ -19,6 +19,11 @@
             android:icon="@drawable/ic_baseline_history_24"
             android:title="My History" />
 
+        <item
+            android:id="@+id/nav_shared"
+            android:icon="@drawable/ic_baseline_history_24"
+            android:title="Shared Routes" />
+
     </group>
 
 

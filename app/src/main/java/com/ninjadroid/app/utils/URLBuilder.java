@@ -21,6 +21,12 @@ public class URLBuilder {
 
     public static String getUpdateUserPath() {return "update_user";}
 
+    public static String getShareRoute() { return "share_route";}
+
+    public static String getSharedHist() { return "shared_routes";}
+
+    public static String getRouteHistoryPath() {return "route_history";}
+
 
     public static String getScheme() {
         return scheme;
