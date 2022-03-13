@@ -47,9 +47,13 @@ public class LoginPage extends AppCompatActivity {
                     Intent intent = new Intent(LoginPage.this, MainActivity.class);
                     intent.putExtra(KEY, 17);
                     startActivity(intent);
+                }else if(username.equals("") || password.equals("")){
+                    Toast.makeText(LoginPage.this, "Please Enter Username and Password!",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+                    queryID(getBaseContext(), username, password);
                 }
 
-                queryID(getBaseContext(), username, password);
             }
         });
 
@@ -58,7 +62,14 @@ public class LoginPage extends AppCompatActivity {
             public void onClick(View v) {
                 username = usernameEditText.getText().toString();
                 password = passwordEditText.getText().toString();
-                registerUser(getBaseContext(), username, password);
+
+                if(username.equals("") || password.equals("")){
+                    Toast.makeText(LoginPage.this, "Please Enter A Username and Password!",
+                            Toast.LENGTH_SHORT).show();
+                }else{
+                    registerUser(getBaseContext(), username, password);
+                }
+
             }
         });
     }

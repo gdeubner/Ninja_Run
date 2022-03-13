@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
+import com.ninjadroid.app.activities.fragments.FollowersFragment;
 import com.ninjadroid.app.activities.fragments.HistoryFragment;
 import com.ninjadroid.app.activities.fragments.MapFragment;
 import com.ninjadroid.app.activities.fragments.ProfileFragment;
@@ -97,6 +98,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             followingFrag,"FOLLOWING_FRAGMENT").commit();
+                    break;
+
+                case R.id.nav_followers:
+                    FollowersFragment follFrag = FollowersFragment.newInstance(userID);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            follFrag,"FOLL_FRAGMENT").commit();
                     break;
             }
             drawer.closeDrawer(GravityCompat.START);

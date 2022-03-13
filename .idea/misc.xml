@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20989583333333334" />
         <entry key="app/src/main/res/layout/fragment_addfriend.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_followers.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_following.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_history.xml" value="0.20989583333333334" />
         <entry key="app/src/main/res/layout/fragment_map.xml" value="0.1" />

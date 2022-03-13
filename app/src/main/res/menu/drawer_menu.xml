@@ -28,6 +28,10 @@
             android:id="@+id/nav_following"
             android:icon="@android:drawable/ic_input_get"
             android:title="Following" />
+        <item
+            android:id="@+id/nav_followers"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="Followers" />
 
     </group>
 

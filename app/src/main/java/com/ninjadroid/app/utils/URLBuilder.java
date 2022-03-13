@@ -37,6 +37,8 @@ public class URLBuilder {
 
     public static String updateProfile() {return "update_userprofile";}
 
+    public static String getFollowerList() {return "show_followerlist";}
+
 
     public static String getScheme() {
         return scheme;

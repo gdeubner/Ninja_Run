@@ -216,11 +216,11 @@ public class ProfileFragment extends Fragment {
                         weightstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         SpannableStringBuilder heightstr = new SpannableStringBuilder("Height: " + result[heightFtIndex]+"ft "+ result[heightInIndex]+"in");
                         heightstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        SpannableStringBuilder pointsstr = new SpannableStringBuilder("Points: " + String.valueOf(pointsIndex));
+                        SpannableStringBuilder pointsstr = new SpannableStringBuilder("Points: " + String.valueOf(result[pointsIndex]));
                         pointsstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        SpannableStringBuilder totCalstr = new SpannableStringBuilder("Total Calories: " + String.valueOf(totCalIndex));
+                        SpannableStringBuilder totCalstr = new SpannableStringBuilder("Total Calories: " + String.valueOf(result[totCalIndex]));
                         totCalstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        SpannableStringBuilder totDiststr = new SpannableStringBuilder("Total Distance: " + String.valueOf(totDistIndex));
+                        SpannableStringBuilder totDiststr = new SpannableStringBuilder("Total Distance: " + String.valueOf(result[totDistIndex]));
                         totDiststr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                         nameView.setText(result[nameIndex].substring(1,result[nameIndex].length()-1));
