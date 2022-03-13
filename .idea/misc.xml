@@ -3,37 +3,27 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/drawable-xhdpi/ic_baseline_shared.xml" value="0.196" />
-        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/layout/activity_main.xml" value="0.14722222222222223" />
-        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/layout/fragment_history.xml" value="0.18802083333333333" />
-        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/layout/fragment_profile.xml" value="0.14722222222222223" />
-        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/layout/history.xml" value="0.14722222222222223" />
-        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/layout/list_item.xml" value="0.14722222222222223" />
-        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/layout/nav_header.xml" value="0.18802083333333333" />
-        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/menu/drawer_menu.xml" value="0.18802083333333333" />
-        <entry key="..\:/Projects/NinjaDroid/ninjadroid/app/src/main/res/menu/popup_menu.xml" value="0.14722222222222223" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.12" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/drawable/ic_account_box.xml" value="0.338" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/drawable/ic_baseline_map_24.xml" value="0.338" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/drawable/ic_launcher_background.xml" value="0.12" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/drawable/roundcorner.xml" value="0.1935" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/activity_map.xml" value="0.1" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/activity_root.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/content_demo.xml" value="0.2682291666666667" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/fragment_map.xml" value="0.215625" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/fragment_profile.xml" value="0.36102564102564105" />
+        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/activity_map.xml" value="0.33" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/login.xml" value="0.23948717948717949" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/nav_header.xml" value="0.225" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/profile.xml" value="0.23948717948717949" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/menu/activity_main_drawer.xml" value="0.2682291666666667" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/menu/drawer_menu.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/menu/nav_drawer_menu.xml" value="0.225" />
-        <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/login.xml" value="0.17708333333333334" />
+        <entry key="app/src/main/res/layout/activity_edit.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_login.xml" value="0.18385416666666668" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.20989583333333334" />
+        <entry key="app/src/main/res/layout/fragment_addfriend.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_following.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_history.xml" value="0.20989583333333334" />
+        <entry key="app/src/main/res/layout/fragment_map.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/list_item.xml" value="0.18385416666666668" />
+        <entry key="app/src/main/res/layout/nav_header.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/layout/profile.xml" value="0.27595367431640627" />
+        <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.18385416666666668" />
+        <entry key="app/src/main/res/menu/popup_menu.xml" value="0.1" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_16_PREVIEW" project-jdk-name="16" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_16" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

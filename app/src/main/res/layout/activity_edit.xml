@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true">
+
+    <TextView
+        android:id="@+id/heightinTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="52dp"
+        android:text="Height In:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heightftTitle" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="313dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="7dp"
+        android:text="Username"
+        android:textSize="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/nameTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="26dp"
+        android:text="Name: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username" />
+
+    <TextView
+        android:id="@+id/passwordTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="54dp"
+        android:text="Password:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameTitle" />
+
+    <TextView
+        android:id="@+id/weightTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="50dp"
+        android:text="Weight:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTitle" />
+
+    <TextView
+        android:id="@+id/heightftTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="52dp"
+        android:text="Height ft:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightTitle" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/nameEdit"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="12dp"
+        android:hint="Enter New Name"
+        app:layout_constraintStart_toEndOf="@+id/nameTitle"
+        app:layout_constraintTop_toBottomOf="@+id/username" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/passwordEdit"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="26dp"
+        android:hint="Enter New Password"
+        app:layout_constraintStart_toEndOf="@+id/passwordTitle"
+        app:layout_constraintTop_toBottomOf="@+id/nameEdit" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/weightEdit"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="26dp"
+        android:hint="Enter New Weight"
+        app:layout_constraintStart_toEndOf="@+id/weightTitle"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEdit" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/heightftEdit"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginTop="26dp"
+        android:hint="Enter New Feet"
+        app:layout_constraintStart_toEndOf="@+id/heightftTitle"
+        app:layout_constraintTop_toBottomOf="@+id/weightEdit" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/heightinEdit"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="26dp"
+        android:hint="Enter New Inches"
+        app:layout_constraintStart_toEndOf="@+id/heightinTitle"
+        app:layout_constraintTop_toBottomOf="@+id/heightftEdit" />
+
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="162dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="114dp"
+        android:layout_marginTop="25dp"
+        android:text="Edit Profile"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heightinEdit" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

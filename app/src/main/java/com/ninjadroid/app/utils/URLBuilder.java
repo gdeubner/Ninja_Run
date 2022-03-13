@@ -13,6 +13,8 @@ public class URLBuilder {
 
     public static String getUserIDPath() {return "user_login";}
 
+    public static String getUserNamePath() {return "user_info";}
+
     public static String getUserProfilePath() {return "user_stats";}
 
     public static String getNewUserPath() {return "new_user";}
@@ -26,6 +28,14 @@ public class URLBuilder {
     public static String getSharedHist() { return "shared_routes";}
 
     public static String getRouteHistoryPath() {return "route_history";}
+
+    public static String addFollow() {return "add_follow";}
+
+    public static String showFollowingList() {return "show_followinglist";}
+
+    public static String registerUser() {return "register_user";}
+
+    public static String updateProfile() {return "update_userprofile";}
 
 
     public static String getScheme() {

@@ -1,9 +1,12 @@
 package com.ninjadroid.app.activities.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.Spannable;
@@ -12,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -21,7 +25,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
+import com.ninjadroid.app.activities.EditProfile;
+import com.ninjadroid.app.activities.LoginPage;
+import com.ninjadroid.app.activities.MainActivity;
 import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.containers.ProfileContainer;
+import com.ninjadroid.app.webServices.GetProfile;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,6 +45,7 @@ public class ProfileFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mUserID;
+    private String username;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -65,15 +75,93 @@ public class ProfileFragment extends Fragment {
         }
     }
 
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        // Inflate the layout for this fragment
+//        return inflater.inflate(R.layout.fragment_profile, container, false);
+//    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i("HIII", "make it?");
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         // Inflate the layout for this fragment
-        queryInfo(getContext(), mUserID);
+        //setInfo(getContext(), mUserID, view);
 
+        Button editPButton = view.findViewById(R.id.editPButton);
+        editPButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), EditProfile.class);
+                intent.putExtra("key", username);
+                startActivity(intent);
+            }
+        });
+
+        queryInfo(getContext(), mUserID);
         return view;
     }
+//@Override
+//public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+//    super.onViewCreated(view, savedInstanceState);
+//    queryInfo(getContext(), mUserID);
+//
+//    editButton = view.findViewById(R.id.editButton);
+//    editButton.setOnClickListener(new View.OnClickListener() {
+//        @Override
+//        public void onClick(View v) {
+//            Intent intent = new Intent(getActivity(), EditProfile.class);
+//            intent.putExtra("key", username);
+//            startActivity(intent);
+//        }
+//    });
+//
+//}
+
+    private void setInfo(Context context, String mUserID, View view){
+        Log.i("Amy", "before query");
+        ProfileContainer userProfile;
+        userProfile = GetProfile.getProfile(context, mUserID);
+        Log.i("Amy", "FINISHED");
+        Log.i("Amy", String.valueOf(userProfile));
+
+        final TextView nameView = view.findViewById(R.id.username);
+        final TextView usernameView = view.findViewById(R.id.usernameP);
+        final TextView userIDView = view.findViewById(R.id.UserIDP);
+        final TextView weightView= view.findViewById(R.id.weightP);
+        final TextView heightView= view.findViewById(R.id.heightP);
+        final TextView pointsView= view.findViewById(R.id.pointsP);
+        final TextView totCalView= view.findViewById(R.id.totalCaloriesP);
+        final TextView totDistView= view.findViewById(R.id.totalDistanceP);
+
+        SpannableStringBuilder userNamestr = new SpannableStringBuilder("Username: "+ userProfile.getUsername());
+        userNamestr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder userIDstr = new SpannableStringBuilder("User ID: "+ userProfile.getUserId());
+        userIDstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder weightstr = new SpannableStringBuilder("Weight: " + userProfile.getWeight()+"lbs");
+        weightstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder heightstr = new SpannableStringBuilder("Height: " + userProfile.getHeightft()+"ft "+userProfile.getHeightin()+"in");
+        heightstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder pointsstr = new SpannableStringBuilder("Points: " + userProfile.getPoints());
+        pointsstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder totCalstr = new SpannableStringBuilder("Total Calories: " + userProfile.getCalories());
+        totCalstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        SpannableStringBuilder totDiststr = new SpannableStringBuilder("Total Distance: " + userProfile.getDistance());
+        totDiststr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        nameView.setText(userProfile.getName());
+        usernameView.setText(userNamestr);
+        userIDView.setText(userIDstr);
+        weightView.setText(weightstr);
+        heightView.setText(heightstr);
+        pointsView.setText(pointsstr);
+        totCalView.setText(totCalstr);
+        totDistView.setText(totDiststr);
+    }
+
+
 
     private void queryInfo(Context context, String userID) {
         // Instantiate the RequestQueue.
@@ -99,7 +187,7 @@ public class ProfileFragment extends Fragment {
                         Log.i("Get Request Response", response);
                         String[] result = response.split(",");
 
-                        final TextView nameView = getView().findViewById(R.id.nameP);
+                        final TextView nameView = getView().findViewById(R.id.username);
                         final TextView usernameView = getView().findViewById(R.id.usernameP);
                         final TextView userIDView = getView().findViewById(R.id.UserIDP);
                         final TextView weightView= getView().findViewById(R.id.weightP);
@@ -118,7 +206,9 @@ public class ProfileFragment extends Fragment {
                         int totDistIndex = 8;
                         int nameIndex = 9;
 
-                        SpannableStringBuilder userNamestr = new SpannableStringBuilder("Username: "+ result[userNameIndex].substring(1,result[userNameIndex].length()-1));
+                        username = result[userNameIndex].substring(1,result[userNameIndex].length()-1);
+
+                        SpannableStringBuilder userNamestr = new SpannableStringBuilder("Username: "+ username);
                         userNamestr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         SpannableStringBuilder userIDstr = new SpannableStringBuilder("User ID: "+ result[userIdIndex].substring(2));
                         userIDstr.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -159,4 +249,5 @@ public class ProfileFragment extends Fragment {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
+
 }

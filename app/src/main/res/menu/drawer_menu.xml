@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
@@ -23,6 +24,10 @@
             android:id="@+id/nav_shared"
             android:icon="@drawable/ic_baseline_shared"
             android:title="Shared Routes" />
+        <item
+            android:id="@+id/nav_following"
+            android:icon="@android:drawable/ic_input_get"
+            android:title="Following" />
 
     </group>
 

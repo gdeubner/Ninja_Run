@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ninjadroid.app.activities.fragments.HistoryFragment;
@@ -20,6 +19,7 @@ import com.ninjadroid.app.activities.fragments.MapFragment;
 import com.ninjadroid.app.activities.fragments.ProfileFragment;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.fragments.SharedFragment;
+import com.ninjadroid.app.activities.fragments.FollowingFragment;
 import com.ninjadroid.app.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         Intent intent = getIntent();
-        userID = intent.getStringExtra((LoginPage.KEY));
+        userID = intent.getStringExtra("key");
 
         if(savedInstanceState == null) {
             MapFragment fmapFragment = MapFragment.newInstance(userID);
@@ -91,6 +91,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     SharedFragment sharedFrag = SharedFragment.newInstance(userID);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             sharedFrag,"SHARED_FRAGMENT").commit();
+                    break;
+
+                case R.id.nav_following:
+                    FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            followingFrag,"FOLLOWING_FRAGMENT").commit();
                     break;
             }
             drawer.closeDrawer(GravityCompat.START);
