@@ -44,7 +44,7 @@ public class EditProfile extends AppCompatActivity {
 
         queryInfo(getBaseContext(), username);
 
-        Button editButton = findViewById(R.id.editButton);
+        Button editButton = findViewById(R.id.saveButton);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,6 @@ public class EditProfile extends AppCompatActivity {
                 final EditText weightEdit = findViewById(R.id.weightEdit);
                 final EditText heightftEdit = findViewById(R.id.heightftEdit);
                 final EditText heightinEdit = findViewById(R.id.heightinEdit);
-                final Button editButton = findViewById(R.id.editButton);
 
                 name = nameEdit.getText().toString();
                 password = passwordEdit.getText().toString();
@@ -65,7 +64,18 @@ public class EditProfile extends AppCompatActivity {
                 editInfo(getBaseContext(),userID,username, password,weight,heightft,heightin,name);
             }
         });
+
+        Button cancelButton = findViewById(R.id.cancelButton);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EditProfile.this, MainActivity.class);
+                intent.putExtra("key", userID);
+                startActivity(intent);
+            }
+        });
     }
+
 
     private void queryInfo(Context context, String username) {
         // Instantiate the RequestQueue.
@@ -98,7 +108,7 @@ public class EditProfile extends AppCompatActivity {
                             final EditText weightEdit = findViewById(R.id.weightEdit);
                             final EditText heightftEdit = findViewById(R.id.heightftEdit);
                             final EditText heightinEdit = findViewById(R.id.heightinEdit);
-                            final Button editButton = findViewById(R.id.editButton);
+                            final Button editButton = findViewById(R.id.saveButton);
 
                             userID = result[0].substring(18);
                             password = result[2].substring(12, result[2].length()-1);

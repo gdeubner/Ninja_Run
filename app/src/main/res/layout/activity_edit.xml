@@ -96,6 +96,7 @@
         android:layout_marginStart="22dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Weight"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toEndOf="@+id/weightTitle"
         app:layout_constraintTop_toBottomOf="@+id/passwordEdit" />
 
@@ -106,6 +107,7 @@
         android:layout_marginStart="11dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Feet"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toEndOf="@+id/heightftTitle"
         app:layout_constraintTop_toBottomOf="@+id/weightEdit" />
 
@@ -116,16 +118,27 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Inches"
+        android:inputType="numberDecimal"
         app:layout_constraintStart_toEndOf="@+id/heightinTitle"
         app:layout_constraintTop_toBottomOf="@+id/heightftEdit" />
 
     <Button
-        android:id="@+id/editButton"
+        android:id="@+id/saveButton"
         android:layout_width="162dp"
         android:layout_height="51dp"
-        android:layout_marginStart="114dp"
-        android:layout_marginTop="25dp"
-        android:text="Edit Profile"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="28dp"
+        android:text="Save Changes"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heightinEdit" />
+
+    <Button
+        android:id="@+id/cancelButton"
+        android:layout_width="162dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="208dp"
+        android:layout_marginTop="28dp"
+        android:text="Cancel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/heightinEdit" />
 
