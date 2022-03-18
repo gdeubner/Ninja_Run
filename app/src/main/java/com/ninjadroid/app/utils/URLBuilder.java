@@ -21,6 +21,8 @@ public class URLBuilder {
 
     public static String getSendRoutePath() {return "send_route";}
 
+    public static String getGetRoutePath() {return "get_route";}
+
     public static String getUpdateUserPath() {return "update_user";}
 
     public static String getShareRoute() { return "share_route";}
@@ -39,6 +41,7 @@ public class URLBuilder {
 
     public static String getFollowerList() {return "show_followerlist";}
 
+    public static String getAddHistory() {return "add_history";}
 
     public static String getScheme() {
         return scheme;

@@ -211,7 +211,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     if(trackingRoute) {
                         LocationContainer lastLocation= new LocationContainer(
                                 mLastLocation.getLatitude(), mLastLocation.getLongitude(),
-                                mLastLocation.getAltitude(), mLastLocation.getSpeed(), mLastLocation.getTime());
+                                mLastLocation.getAltitude(), mLastLocation.getSpeed(),
+                                mLastLocation.getTime(), mLastLocation.getElapsedRealtimeNanos());
                         routeCoordinates.add(lastLocation);
                         List<LatLng> newRoute = drawnRoute.getPoints();
                         newRoute.add(latLng);

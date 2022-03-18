@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UserProfiles"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activities.RouteActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -22,7 +25,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar"/>
+            android:theme="@style/Theme.Design.NoActionBar" />
         <activity
             android:name=".activities.LoginPage"
             android:exported="true"
@@ -33,7 +36,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.EditProfile"/>
+        <activity android:name=".activities.EditProfile" />
     </application>
 
 </manifest>

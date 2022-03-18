@@ -4,6 +4,11 @@ import android.location.Location;
 
 import com.ninjadroid.app.utils.containers.LocationContainer;
 
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public  class Utils {
@@ -19,7 +24,8 @@ public  class Utils {
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
         double theta = lon1 - lon2;
-        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1))
+                * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
         dist = Math.acos(dist);
         dist = rad2deg(dist);
         dist = dist * 60 * 1.1515;
@@ -38,4 +44,20 @@ public  class Utils {
     private static double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
+
+    private static double nano2Seconds(double nano){return nano * Math.pow(10,9);}
+
+    public static int getRunDuration(ArrayList<LocationContainer> list){
+        return (int) nano2Seconds((list.get(list.size()-1).getElapsedRealtimeNs()
+                - list.get(0).getElapsedRealtimeNs()));
+    }
+
+    //time is in miliseconds since Unix epoch time
+    public static String formatDateTime(long time){
+        //DateTimeFormatter formatterIn = DateTimeFormatter.ofPattern("HH:mm:ss M dd, uuuu Z");
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatter.format(time);
+    }
+
 }

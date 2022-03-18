@@ -27,12 +27,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PostRoute {
 
     public static void postRoute(ArrayList<LocationContainer> routeCoordinates, Context context, int uid){
         String url = buildUrl(routeCoordinates, context, uid);
-        postDataUsingVolley(context, url, routeCoordinates);
+        postDataUsingVolley(context, url, routeCoordinates, uid);
     }
 
     private static String buildUrl(ArrayList<LocationContainer> routeCoordinates, Context context, int uid){
@@ -79,7 +81,7 @@ public class PostRoute {
         return builder.build().toString();
     }
 
-    private static void postDataUsingVolley(Context context, String url, ArrayList<LocationContainer> routeCoordinates) {
+    private static void postDataUsingVolley(Context context, String url, ArrayList<LocationContainer> routeCoordinates, int uid) {
         // creating a new variable for our request queue
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -88,7 +90,12 @@ public class PostRoute {
             public void onResponse(String response) {
 
                 try {
+                    int route_id = Integer.parseInt(response.substring(2, response.length()-2));
+
                     Toast.makeText(context, "Route saved!", Toast.LENGTH_SHORT).show();
+                    AddHistory.sendHistoryUsingVolley(context, uid, Utils.formatDateTime(routeCoordinates.get(0).getTime()),
+                            -1, Utils.getRunDuration(routeCoordinates), Utils.calcDistanceTraveled(routeCoordinates),
+                            route_id);
 
                 } catch (Exception e) {
                     e.printStackTrace();

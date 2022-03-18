@@ -102,6 +102,7 @@ public class HistoryFragment extends Fragment {
 
                         final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        //todo: replace 17 with actual userID
                         recyclerView.setAdapter(new CustomAdapter(17, context,data)); //change later from 17 to uid
                         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 

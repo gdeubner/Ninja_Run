@@ -3,6 +3,7 @@ package com.ninjadroid.app.utils;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.text.InputType;
 import android.util.Log;
@@ -21,6 +22,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
+import com.ninjadroid.app.activities.LoginPage;
+import com.ninjadroid.app.activities.MainActivity;
+import com.ninjadroid.app.activities.RouteActivity;
 
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +36,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private static Context activity;
     private static int user_id;
     private static String inp_text;
+    private static final String KEY = "routeID";
 
     public CustomAdapter (int user_id, Context activity, List<String> data){
         this.activity = activity;
@@ -67,21 +72,30 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         @Override
         public void onClick(View view) {
-            PopupMenu popup = new PopupMenu(view.getContext(),textView);
+            //todo: this is a temporary fix for getting the routeID until this recycler view is fully implemented
+            //************
+            TextView tv = view.findViewById(R.id.textview);
+            String routeID = tv.getText().toString().split("\n")[0].split(":")[1];
+            //************
 
-            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+            Intent intent = new Intent(activity, RouteActivity.class);
+            intent.putExtra(KEY, routeID);
+            activity.startActivity(intent);
 
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch(item.getItemId()) {
-                        case R.id.share:
-                            shareFunc();
-                    }
-                    return true;
-                }
-            });
-            popup.show();
+            //todo: this should probably happen when the user presses and holds a list item
+//            PopupMenu popup = new PopupMenu(view.getContext(),textView);
+//            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+//            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                @Override
+//                public boolean onMenuItemClick(MenuItem item) {
+//                    switch(item.getItemId()) {
+//                        case R.id.share:
+//                            shareFunc();
+//                    }
+//                    return true;
+//                }
+//            });
+//            popup.show();
         }
 
         public void shareFunc() {

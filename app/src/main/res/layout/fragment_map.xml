@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_stop"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="4dp"
+        android:layout_marginLeft="3dp"
         android:layout_marginRight="2dp"/>
 
     <Button
@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btn_start"
         app:layout_constraintStart_toEndOf="@id/btn_start"
-        android:layout_marginRight="4dp"
+        android:layout_marginRight="3dp"
         android:layout_marginLeft="2dp"/>
 
 
