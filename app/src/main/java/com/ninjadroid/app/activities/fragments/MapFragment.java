@@ -192,20 +192,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 if(creatingRoute && !followingRoute){
-
-                    creatingRoute = false;
-
-                    //Place current location marker
-                    LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title("Finish");
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                    endMarker = mGoogleMap.addMarker(markerOptions);
-
                     if(routeCoordinates.size() > 3){
+                        creatingRoute = false;
+
+                        //Place current location marker
+                        LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng);
+                        markerOptions.title("Finish");
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                        endMarker = mGoogleMap.addMarker(markerOptions);
                         PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId) );
-                    } else {
+                    } else {//route was too short. remove all map objects and dont post route
+                        drawnRoute.remove();
+                        creatingRoute = false;
+                        startMarker.remove();
                         Toast.makeText(getView().getContext(), "Wow, that was quick.",
                                 Toast.LENGTH_SHORT).show();
                     }
