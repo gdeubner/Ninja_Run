@@ -1,5 +1,6 @@
 package com.ninjadroid.app.utils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +38,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private static int user_id;
     private static String inp_text;
     private static final String KEY = "routeID";
+
+    private static final int Activity_REQUEST_CODE = 1;
 
     public CustomAdapter (int user_id, Context activity, List<String> data){
         this.activity = activity;
@@ -80,7 +83,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
             Intent intent = new Intent(activity, RouteActivity.class);
             intent.putExtra(KEY, routeID);
-            activity.startActivity(intent);
+            ((Activity)activity).startActivityForResult(intent, Activity_REQUEST_CODE);
 
             //todo: this should probably happen when the user presses and holds a list item
 //            PopupMenu popup = new PopupMenu(view.getContext(),textView);

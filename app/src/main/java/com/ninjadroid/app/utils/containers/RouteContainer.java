@@ -19,7 +19,7 @@ public class RouteContainer implements Serializable {
         return route.getTown();
     }
 
-    public int getDistance() {
+    public double getDistance() {
         return route.getDistance();
     }
 
@@ -62,7 +62,7 @@ class userContainer implements Serializable {
 
 class routeInfoContainer implements Serializable {
     private String town;
-    private int distance;
+    private double distance;
     private int user_id;
     private int route_id;
     private double lat_start;
@@ -75,7 +75,7 @@ class routeInfoContainer implements Serializable {
         return town;
     }
 
-    public int getDistance() {
+    public double getDistance() {
         return distance;
     }
 

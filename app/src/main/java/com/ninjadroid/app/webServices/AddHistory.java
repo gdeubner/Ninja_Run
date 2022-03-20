@@ -30,10 +30,11 @@ public class AddHistory {
         builder.scheme(URLBuilder.getScheme())
                 .encodedAuthority(URLBuilder.getEncodedAuthority())
                 .appendPath(URLBuilder.getAddHistory())
-                .appendQueryParameter("user_id", String.valueOf(route_id))
+                .appendQueryParameter("user_id", String.valueOf(user_id))
+                .appendQueryParameter("datetime", datetime)
                 .appendQueryParameter("calories", String.valueOf(calories))
-                .appendQueryParameter("duration_of_run", String.valueOf(duration))
-                .appendQueryParameter("distance_run", String.valueOf(distance))
+                .appendQueryParameter("duration", String.valueOf(duration))
+                .appendQueryParameter("distance", String.valueOf(distance))
                 .appendQueryParameter("route_id", String.valueOf(route_id));
 
         String url = builder.build().toString();

@@ -23,7 +23,7 @@ import com.ninjadroid.app.utils.URLBuilder;
 
 public class LoginPage extends AppCompatActivity {
 
-    public static final String KEY = "key";
+    public static final String KEY = "userID";
     private String username = "";
     private String password = "";
 
@@ -43,11 +43,7 @@ public class LoginPage extends AppCompatActivity {
                 username = usernameEditText.getText().toString();
                 password = passwordEditText.getText().toString();
 
-                if(username.equals("test") ){
-                    Intent intent = new Intent(LoginPage.this, MainActivity.class);
-                    intent.putExtra(KEY, 17);
-                    startActivity(intent);
-                }else if(username.equals("") || password.equals("")){
+                if(username.equals("") || password.equals("")){
                     Toast.makeText(LoginPage.this, "Please Enter Username and Password!",
                             Toast.LENGTH_SHORT).show();
                 }else{

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -116,6 +117,8 @@ public class PostRoute {
                 Type listType = new TypeToken<ArrayList<LocationContainer>>() {}.getType();
                 String mRoute = new Gson().toJson(routeCoordinates, listType).replace('\"', '\'');
                 params.put("route", mRoute);
+
+                ArrayList<LocationContainer> newList = new Gson().fromJson(mRoute.replace('\'', '\"'), listType);
 
                 return params;
             }

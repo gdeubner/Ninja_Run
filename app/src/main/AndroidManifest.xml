@@ -25,7 +25,8 @@
         <activity
             android:name=".activities.MainActivity"
             android:exported="false"
-            android:theme="@style/Theme.Design.NoActionBar" />
+            android:theme="@style/Theme.Design.NoActionBar"
+            android:launchMode="singleInstance"/>
         <activity
             android:name=".activities.LoginPage"
             android:exported="true"

@@ -17,11 +17,15 @@ import com.google.gson.Gson;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.databinding.ActivityRouteBinding;
 import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.VolleyRouteCallback;
 import com.ninjadroid.app.utils.containers.RouteContainer;
+
+import java.nio.charset.StandardCharsets;
 
 public class GetRoute {
 
-    public static void getRoute(Context context, int route_id, ActivityRouteBinding binding){
+    public static void getRoute(Context context, int route_id,
+                                final VolleyRouteCallback callBack){
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(URLBuilder.getScheme())
                 .encodedAuthority(URLBuilder.getEncodedAuthority())
@@ -37,10 +41,12 @@ public class GetRoute {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Log.i("getRoute", response);
                         try{
-                            updateView(response, context, binding);
+                            String decoded = java.net.URLDecoder.decode(response, StandardCharsets.UTF_8.name());
+                            //updateView(response, context, binding);
+                            Gson gson = new Gson();
+                            RouteContainer route = gson.fromJson(decoded, RouteContainer.class);
+                            callBack.onSuccess(route);
                         } catch (Exception e) {
                             Log.e("getRoute", e.getMessage());
                         }
@@ -54,17 +60,5 @@ public class GetRoute {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-    }
-
-    private static void updateView(String response, Context context, ActivityRouteBinding binding){
-        Gson gson = new Gson();
-        RouteContainer route = gson.fromJson(response, RouteContainer.class);
-        binding.tvCreator.setText(route.getUsername());
-        binding.tvLocation.setText(route.getTown());
-        binding.tvDistance.setText(route.getDistance());
-        //todo: need to implement still
-        //binding.tvElevation.setText(route.getElevation);
-        //binding.tvDateCreated.setText(route.getDate());
-
     }
 }
