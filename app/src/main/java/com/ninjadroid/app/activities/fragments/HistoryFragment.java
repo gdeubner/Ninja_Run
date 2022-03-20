@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -102,6 +103,7 @@ public class HistoryFragment extends Fragment {
 
                         final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
                         recyclerView.setAdapter(new CustomAdapter(Integer.parseInt(userID), context,data)); //change later from 17 to uid
                         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
@@ -160,4 +162,6 @@ public class HistoryFragment extends Fragment {
 
         return data;
     }
+
+
 }

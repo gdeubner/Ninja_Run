@@ -1,6 +1,7 @@
 package com.ninjadroid.app.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -49,12 +51,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         Intent intent = getIntent();
-        userID = intent.getStringExtra("key");
+        userID = intent.getStringExtra("userID");
+        Log.i("MainActivity", userID);
 
         if(savedInstanceState == null) {
-            MapFragment fmapFragment = MapFragment.newInstance(userID);
+            MapFragment fmapFragment = MapFragment.newInstance(userID, -1);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     fmapFragment, "MAP_FRAGMENT").commit();
+            navigationView.getMenu().getItem(1).setChecked(true);
         }
     }
 
@@ -77,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             profileFragment, "PROFILE_FRAGMENT").commit();
                     break;
                 case R.id.nav_map:
-                    MapFragment fmapFragment = MapFragment.newInstance(userID);
+                    MapFragment fmapFragment = MapFragment.newInstance(userID, -1);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             fmapFragment, "MAP_FRAGMENT").commit();
                     break;
@@ -114,4 +118,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int routeID = data.getExtras().getInt("routeID");
+
+        MapFragment fmapFragment = MapFragment.newInstance(userID, routeID);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                fmapFragment, "MAP_FRAGMENT").commit();
+        navigationView.getMenu().getItem(1).setChecked(true);
+
+    }
+
 }

@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     >
 
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -17,6 +18,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
         tools:context=".map.MapsActivity" />
 
     <Button
@@ -27,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_stop"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginLeft="4dp"
+        android:layout_marginLeft="3dp"
         android:layout_marginRight="2dp"/>
 
     <Button
@@ -39,8 +41,47 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btn_start"
         app:layout_constraintStart_toEndOf="@id/btn_start"
-        android:layout_marginRight="4dp"
+        android:layout_marginRight="3dp"
         android:layout_marginLeft="2dp"/>
+
+    <RadioGroup
+        android:id="@+id/rg_mapMode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:checkedButton="@id/rb_create"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/map">
+
+        <RadioButton
+            android:id="@+id/rb_create"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_left_side"
+            android:button="@null"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:text="Create"
+            android:textColor="@color/white"/>
+
+        <RadioButton
+            android:id="@+id/rb_follow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/btn_right_side"
+            android:button="@null"
+            android:layoutDirection="ltr"
+            android:paddingStart="20dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="20dp"
+            android:paddingBottom="10dp"
+            android:text="Follow"
+            android:textColor="@color/white"/>
+    </RadioGroup>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

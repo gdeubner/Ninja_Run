@@ -3,9 +3,9 @@ package com.ninjadroid.app.utils;
 public class URLBuilder {
     private static String scheme = "http";
 
-    private static String encodedAuthority = "cs431-08.cs.rutgers.edu:3000";
+    private static String encodedAuthority = "cs431-08.cs.rutgers.edu:3001";
 
-    private static String baseUrl = " http://cs431-08.cs.rutgers.edu:3000/";
+    private static String baseUrl = " http://cs431-08.cs.rutgers.edu:3001/";
 
     public static String getBaseUrl() { return baseUrl;}
 
@@ -20,6 +20,8 @@ public class URLBuilder {
     public static String getNewUserPath() {return "new_user";}
 
     public static String getSendRoutePath() {return "send_route";}
+
+    public static String getGetRoutePath() {return "get_route";}
 
     public static String getUpdateUserPath() {return "update_user";}
 
@@ -39,6 +41,7 @@ public class URLBuilder {
 
     public static String getFollowerList() {return "show_followerlist";}
 
+    public static String getAddHistory() {return "add_history";}
 
     public static String getScheme() {
         return scheme;

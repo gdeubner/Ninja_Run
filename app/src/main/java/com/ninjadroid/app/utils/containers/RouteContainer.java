@@ -3,91 +3,107 @@ package com.ninjadroid.app.utils.containers;
 import java.io.Serializable;
 
 public class RouteContainer implements Serializable {
-    double var_lat_start;
-    double var_long_start;
-    double var_lat_end;
-    double var_long_end;
-    String var_town;
-    double var_dist;
-    int var_uid;
-    String var_routf;
 
-    public RouteContainer(){ }
+    private userContainer user;
+    private routeInfoContainer route;
 
-    public RouteContainer(double var_lat_start, double var_long_start, double var_lat_end,
-                          double var_long_end, String var_town, double var_dist, int var_uid,
-                          String var_routf){
-        this.var_lat_start = var_lat_start;
-        this.var_long_start =var_long_start;
-        this.var_lat_end =var_lat_end;
-        this.var_long_end =var_long_end;
-        this.var_town =var_town;
-        this.var_dist =var_dist;
-        this.var_uid =var_uid;
-        this.var_routf =var_routf;
+    public int getUser_id() {
+        return user.getUser_id();
     }
 
-    public double getVar_lat_start() {
-        return var_lat_start;
+    public String getUsername() {
+        return user.getUsername();
     }
 
-    public void setVar_lat_start(double var_lat_start) {
-        this.var_lat_start = var_lat_start;
+    public String getTown() {
+        return route.getTown();
     }
 
-    public double getVar_long_start() {
-        return var_long_start;
+    public double getDistance() {
+        return route.getDistance();
     }
 
-    public void setVar_long_start(double var_long_start) {
-        this.var_long_start = var_long_start;
+    public int getRoute_id() {
+        return route.getRoute_id();
     }
 
-    public double getVar_lat_end() {
-        return var_lat_end;
+    public double getLat_start() {
+        return route.getLat_start();
     }
 
-    public void setVar_lat_end(double var_lat_end) {
-        this.var_lat_end = var_lat_end;
+    public double getLong_start() {
+        return route.getLong_start();
     }
 
-    public double getVar_long_end() {
-        return var_long_end;
+    public double getLat_end() {
+        return route.getLat_end();
     }
 
-    public void setVar_long_end(double var_long_end) {
-        this.var_long_end = var_long_end;
+    public double getLong_end() {
+        return route.getLong_end();
     }
 
-    public String getVar_town() {
-        return var_town;
+    public String getRoute_f() {
+        return route.getRoute_f();
+    }
+}
+class userContainer implements Serializable {
+    private int user_id;
+    private String username;
+
+    public int getUser_id() {
+        return user_id;
     }
 
-    public void setVar_town(String var_town) {
-        this.var_town = var_town;
+    public String getUsername() {
+        return username;
+    }
+}
+
+class routeInfoContainer implements Serializable {
+    private String town;
+    private double distance;
+    private int user_id;
+    private int route_id;
+    private double lat_start;
+    private double long_start;
+    private double lat_end;
+    private double long_end;
+    private String route_f;
+
+    public String getTown() {
+        return town;
     }
 
-    public double getVar_dist() {
-        return var_dist;
+    public double getDistance() {
+        return distance;
     }
 
-    public void setVar_dist(double var_dist) {
-        this.var_dist = var_dist;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public int getVar_uid() {
-        return var_uid;
+    public int getRoute_id() {
+        return route_id;
     }
 
-    public void setVar_uid(int var_uid) {
-        this.var_uid = var_uid;
+    public double getLat_start() {
+        return lat_start;
     }
 
-    public String getVar_routf() {
-        return var_routf;
+    public double getLong_start() {
+        return long_start;
     }
 
-    public void setVar_routf(String var_routf) {
-        this.var_routf = var_routf;
+    public double getLat_end() {
+        return lat_end;
+    }
+
+    public double getLong_end() {
+        return long_end;
+    }
+
+    public String getRoute_f() {
+        return route_f;
     }
 }

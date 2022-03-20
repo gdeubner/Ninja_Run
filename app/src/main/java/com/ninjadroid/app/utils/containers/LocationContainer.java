@@ -5,14 +5,15 @@ import java.io.Serializable;
 public class LocationContainer implements Serializable {
     double lon, lat, altitude;
     float speed;
-    long time;
+    long time, elapsedRealtimeNs;
 
-    public LocationContainer(double lat, double lon, double altitude, float speed, long time) {
+    public LocationContainer(double lat, double lon, double altitude, float speed, long time, long elapsedRealtimeNs) {
         this.lon = lon;
         this.lat = lat;
         this.altitude = altitude;
         this.speed = speed;
         this.time = time;
+        this.elapsedRealtimeNs = elapsedRealtimeNs;
     }
 
     public double getLon() {
@@ -53,6 +54,10 @@ public class LocationContainer implements Serializable {
 
     public void setTime(long time) {
         this.time = time;
+    }
+
+    public long getElapsedRealtimeNs() {
+        return elapsedRealtimeNs;
     }
 
     @Override

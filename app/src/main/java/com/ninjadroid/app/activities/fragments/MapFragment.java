@@ -1,6 +1,7 @@
 package com.ninjadroid.app.activities.fragments;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -16,10 +17,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,10 +42,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ninjadroid.app.R;
+import com.ninjadroid.app.utils.VolleyRouteCallback;
 import com.ninjadroid.app.utils.containers.LocationContainer;
+import com.ninjadroid.app.utils.containers.RouteContainer;
+import com.ninjadroid.app.webServices.GetRoute;
 import com.ninjadroid.app.webServices.PostRoute;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,13 +74,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     Button btn_start, btn_stop;
     ArrayList<LocationContainer> routeCoordinates;
     //true when route route is being recorded
-    Boolean trackingRoute;
+    Boolean creatingRoute;
+    Boolean followingRoute;
     Polyline drawnRoute;
+    Polyline followedRoute;
     Boolean scrolling;
+    int routeId;
+    RadioGroup radioGroup;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String USERID = "userId";
+    private static final String ROUTE_ID = "routeId";
 
     // TODO: Rename and change types of parameters
     private String mUserId;
@@ -87,10 +103,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * @return A new instance of fragment MapFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String userId) {
+    public static MapFragment newInstance(String userId, int routeId) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         args.putString(USERID, userId);
+        args.putInt(ROUTE_ID, routeId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -100,6 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mUserId = getArguments().getString(USERID);
+            routeId = getArguments().getInt(ROUTE_ID);
         }
 
     }
@@ -116,6 +134,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         setMappingFunctionality();
         setButtonAndTrackingFunctionality();
+        setRadioGroupFunctionality();
     }
 
     //sets the onclick listeners for the buttons
@@ -124,13 +143,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         btn_stop = getView().findViewById(R.id.btn_stop);
 
         routeCoordinates = new ArrayList<>();
-        trackingRoute = false;
+        creatingRoute = false;
         scrolling = false;
+        followingRoute = false;
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!trackingRoute){
+                if(followingRoute){
+                    Toast.makeText(getContext(), "You're still following a route", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(!creatingRoute ){
                     if(startMarker != null){
                         startMarker.remove();
                     }
@@ -140,7 +164,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     if(drawnRoute!=null){
                         drawnRoute.remove();
                     }
-                    trackingRoute = true;
+                    creatingRoute = true;
                     routeCoordinates = new ArrayList<>();
 
                     //Place current location marker
@@ -167,9 +191,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(trackingRoute){
+                if(creatingRoute && !followingRoute){
 
-                    trackingRoute = false;
+                    creatingRoute = false;
 
                     //Place current location marker
                     LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
@@ -208,10 +232,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                    if(trackingRoute) {
+                    if(creatingRoute) {
                         LocationContainer lastLocation= new LocationContainer(
                                 mLastLocation.getLatitude(), mLastLocation.getLongitude(),
-                                mLastLocation.getAltitude(), mLastLocation.getSpeed(), mLastLocation.getTime());
+                                mLastLocation.getAltitude(), mLastLocation.getSpeed(),
+                                mLastLocation.getTime(), mLastLocation.getElapsedRealtimeNanos());
                         routeCoordinates.add(lastLocation);
                         List<LatLng> newRoute = drawnRoute.getPoints();
                         newRoute.add(latLng);
@@ -360,4 +385,83 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             // permissions this app might request
         }
     }
+
+    private void setRadioGroupFunctionality(){
+        radioGroup = ((Activity)getContext()).findViewById(R.id.rg_mapMode);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                View radioButton = radioGroup.findViewById(checkedId);
+                int index = radioGroup.indexOfChild(radioButton);
+                switch (index) {
+                    case 0: // create route selected
+                        createRouteMode();
+                        break;
+                    case 1: // follow route selected
+                        if(routeId == -1){
+                            Toast.makeText(getContext(), "No route selected", Toast.LENGTH_SHORT).show();
+                            ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
+                        } else {
+                            if(creatingRoute){
+                                Toast.makeText(getContext(), "End current run first", Toast.LENGTH_SHORT).show();
+                            } else {
+                                followRouteMode(routeId);
+                            }
+                        }
+
+                        break;
+                }
+            }
+        });
+    }
+
+    private void createRouteMode() {
+        if (followedRoute != null){
+            followedRoute.remove();
+        }
+        followingRoute = false;
+    }
+
+    private void followRouteMode(int routeId) {
+        if (followedRoute != null){
+            followedRoute.remove();
+        }
+        followingRoute = true;
+        GetRoute.getRoute(getContext(), routeId, new VolleyRouteCallback() {
+            @Override
+            public void onSuccess(RouteContainer route) {
+                List<LatLng> latLngRoute = getLatLngList(route.getRoute_f().substring(6, route.getRoute_f().length()-1));
+
+
+
+                PolylineOptions options = new PolylineOptions()
+                        .color(Color.RED)
+                        .width(10)
+                        .startCap(new RoundCap())
+                        .endCap(new RoundCap())
+                        .addAll(latLngRoute);
+                followedRoute = mGoogleMap.addPolyline(options);
+            }
+        });
+
+    }
+
+    private List<LatLng> getLatLngList(String route) {
+        //undoing this
+        //String mRoute = new Gson().toJson(routeCoordinates, listType).replace('\"', '\'');
+
+        Type listType = new TypeToken<ArrayList<LocationContainer>>() {}.getType();
+        route = route.replace('\'', '\"');
+        ArrayList<LocationContainer> locationList = new Gson().fromJson(route, listType);
+        List<LatLng> finalRoute = new ArrayList<>();
+
+        for(LocationContainer loc : locationList) {
+            LatLng ll = new LatLng(loc.getLat(), loc.getLon());
+            finalRoute.add(ll);
+        }
+        return finalRoute;
+    }
+
+
 }
