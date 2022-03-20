@@ -74,14 +74,14 @@ public class SharedFragment extends Fragment {
 
     private void queryInfo(Context context, String userID,View view) {
         // Instantiate the RequestQueue.
-        Log.i("Justin", "17"); //replace with userID
+        Log.i("Justin", userID); //replace with userID
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(URLBuilder.getScheme())
                 .encodedAuthority(URLBuilder.getEncodedAuthority())
                 .appendPath(URLBuilder.getSharedHist())
-                .appendQueryParameter("user_id", "17"); //replace with userID
+                .appendQueryParameter("user_id", userID); //replace with userID
 
         String myUrl = builder.build().toString();
         Log.i("Query", myUrl);
@@ -101,7 +101,7 @@ public class SharedFragment extends Fragment {
 
                         final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(new CustomAdapter(17, context,data)); //change later from 17 to uid
+                        recyclerView.setAdapter(new CustomAdapter(Integer.parseInt(userID), context,data)); //change later from 17 to uid
                         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
 
