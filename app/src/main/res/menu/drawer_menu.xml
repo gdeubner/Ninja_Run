@@ -8,30 +8,35 @@
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_account_box"
-            android:title="Profile" />
+            android:title="@string/nav_profile" />
 
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_baseline_map_24"
-            android:title="Map" />
+            android:title="@string/map" />
 
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_baseline_history_24"
-            android:title="My History" />
+            android:title="@string/my_history" />
 
         <item
             android:id="@+id/nav_shared"
             android:icon="@drawable/ic_baseline_shared"
-            android:title="Shared Routes" />
+            android:title="@string/shared_routes" />
         <item
             android:id="@+id/nav_following"
             android:icon="@android:drawable/ic_input_get"
-            android:title="Following" />
+            android:title="@string/following" />
         <item
             android:id="@+id/nav_followers"
             android:icon="@android:drawable/ic_menu_view"
-            android:title="Followers" />
+            android:title="@string/followers" />
+
+        <item
+            android:id="@+id/nav_logOut"
+            android:icon="@drawable/ic_baseline_login_24"
+            android:title="@string/log_out" />
 
     </group>
 
