@@ -27,15 +27,20 @@ public class LoginPage extends AppCompatActivity {
     private String username = "";
     private String password = "";
 
+     EditText usernameEditText;
+     EditText passwordEditText;
+     Button loginButton;
+     Button registerButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        final EditText usernameEditText = findViewById(R.id.username);
-        final EditText passwordEditText = findViewById(R.id.password);
-        final Button loginButton = findViewById(R.id.signin);
-        final Button registerButton = findViewById(R.id.register);
+          usernameEditText = findViewById(R.id.username);
+          passwordEditText = findViewById(R.id.password);
+          loginButton = findViewById(R.id.signin);
+          registerButton = findViewById(R.id.register);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,5 +178,11 @@ public class LoginPage extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        passwordEditText.setText("");
     }
 }

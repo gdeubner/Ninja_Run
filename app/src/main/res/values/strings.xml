@@ -26,4 +26,13 @@
     <!--Route page -->
     <string name="distance_string">%1$f miles</string>
 
+    <!--Side Bar Menue -->
+    <string name="log_out">Log Out</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <string name="shared_routes">Shared Routes</string>
+    <string name="my_history">My History</string>
+    <string name="map">Map</string>
+    <string name="nav_profile">Profile</string>
+
 </resources>
