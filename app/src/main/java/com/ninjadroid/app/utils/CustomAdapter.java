@@ -10,6 +10,7 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -64,12 +65,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         return this.data.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private TextView textView;
 
         public ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
             this.textView = view.findViewById(R.id.textview);
         }
 
@@ -84,21 +86,26 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             Intent intent = new Intent(activity, RouteActivity.class);
             intent.putExtra(KEY, routeID);
             ((Activity)activity).startActivityForResult(intent, Activity_REQUEST_CODE);
+        }
 
-            //todo: this should probably happen when the user presses and holds a list item
-//            PopupMenu popup = new PopupMenu(view.getContext(),textView);
-//            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
-//            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                @Override
-//                public boolean onMenuItemClick(MenuItem item) {
-//                    switch(item.getItemId()) {
-//                        case R.id.share:
-//                            shareFunc();
-//                    }
-//                    return true;
-//                }
-//            });
-//            popup.show();
+        @Override
+        public boolean onLongClick(View view) {
+            // Handle long click
+            // Return true to indicate the click was handled
+            PopupMenu popup = new PopupMenu(view.getContext(),textView);
+            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch(item.getItemId()) {
+                        case R.id.share:
+                            shareFunc();
+                    }
+                    return true;
+                }
+            });
+            popup.show();
+            return true;
         }
 
         public void shareFunc() {

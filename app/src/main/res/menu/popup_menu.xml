@@ -6,11 +6,7 @@
         android:title="Share" />
 
     <item
-        android:id="@+id/inspect"
-        android:title="Inspect" />
-
-    <item
-        android:id="@+id/delete"
-        android:title="Delete" />
+        android:id="@+id/remove"
+        android:title="Remove" />
 
 </menu>
