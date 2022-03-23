@@ -43,6 +43,8 @@ public class URLBuilder {
 
     public static String getAddHistory() {return "add_history";}
 
+    public static String deleteShared() {return "delete_shared";}
+
     public static String getScheme() {
         return scheme;
     }
