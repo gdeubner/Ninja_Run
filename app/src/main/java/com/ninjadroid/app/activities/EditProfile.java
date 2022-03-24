@@ -22,8 +22,15 @@ import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.URLBuilder;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 public class EditProfile extends AppCompatActivity {
     public static final String KEY = "key";
+
     private String userID;
     private String username;
     private String password;
@@ -31,6 +38,14 @@ public class EditProfile extends AppCompatActivity {
     private String heightft;
     private String heightin;
     private String name;
+
+    final TextView usernameTitle = findViewById(R.id.username);
+    final EditText passwordEdit = findViewById(R.id.passwordEdit);
+    final EditText nameEdit = findViewById(R.id.nameEdit);
+    final EditText weightEdit = findViewById(R.id.weightEdit);
+    final EditText heightftEdit = findViewById(R.id.heightftEdit);
+    final EditText heightinEdit = findViewById(R.id.heightinEdit);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,18 +57,14 @@ public class EditProfile extends AppCompatActivity {
         //username = intent.getStringExtra((LoginPage.KEY));
         username = intent.getStringExtra("key");
 
-        queryInfo(getBaseContext(), username);
+        //queryInfo(getBaseContext(), username);
+        String userInfo = getInfo(getBaseContext());
+        Log.i("yoooooooooo it worked???", userInfo);
 
         Button editButton = findViewById(R.id.saveButton);
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final TextView usernameTitle = findViewById(R.id.username);
-                final EditText passwordEdit = findViewById(R.id.passwordEdit);
-                final EditText nameEdit = findViewById(R.id.nameEdit);
-                final EditText weightEdit = findViewById(R.id.weightEdit);
-                final EditText heightftEdit = findViewById(R.id.heightftEdit);
-                final EditText heightinEdit = findViewById(R.id.heightinEdit);
 
                 name = nameEdit.getText().toString();
                 password = passwordEdit.getText().toString();
@@ -146,6 +157,37 @@ public class EditProfile extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+    }
+
+    private String getInfo(Context context) {
+
+        String ret = "";
+        String filename = "profileInfo";
+
+        try {
+            InputStream inputStream = context.openFileInput(filename);
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    stringBuilder.append("\n").append(receiveString);
+                }
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            Log.e("login activity", "File not found: " + e.toString());
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+
+        return ret;
     }
 
     private void editInfo(Context context, String userID,String username, String password, String weight, String heightft, String heightin, String name) {

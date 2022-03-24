@@ -21,16 +21,18 @@ import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.URLBuilder;
 
+import java.io.File;
+
 public class LoginPage extends AppCompatActivity {
 
     public static final String KEY = "userID";
     private String username = "";
     private String password = "";
 
-     EditText usernameEditText;
-     EditText passwordEditText;
-     Button loginButton;
-     Button registerButton;
+    EditText usernameEditText;
+    EditText passwordEditText;
+    Button loginButton;
+    Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
