@@ -36,6 +36,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -48,6 +49,7 @@ import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.VolleyRouteCallback;
 import com.ninjadroid.app.utils.containers.LocationContainer;
 import com.ninjadroid.app.utils.containers.RouteContainer;
+import com.ninjadroid.app.webServices.GetProfile;
 import com.ninjadroid.app.webServices.GetRoute;
 import com.ninjadroid.app.webServices.PostRoute;
 
@@ -202,6 +204,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         markerOptions.title("Finish");
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                         endMarker = mGoogleMap.addMarker(markerOptions);
+                        //int calories = GetProfile.getProfile()
                         PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId) );
                     } else {//route was too short. remove all map objects and dont post route
                         drawnRoute.remove();
@@ -415,11 +418,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
+        if(routeId != -1){
+            Log.i("followRoute", "Setting followRouteMode");
+            ((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
+        }
     }
 
     private void createRouteMode() {
         if (followedRoute != null){
+            Log.i("followRoute", "should be removed");
             followedRoute.remove();
+            Log.i("followRoute",followedRoute.toString());
         }
         followingRoute = false;
     }
@@ -449,8 +458,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private List<LatLng> getLatLngList(String route) {
-        //undoing this
-        //String mRoute = new Gson().toJson(routeCoordinates, listType).replace('\"', '\'');
 
         Type listType = new TypeToken<ArrayList<LocationContainer>>() {}.getType();
         route = route.replace('\'', '\"');

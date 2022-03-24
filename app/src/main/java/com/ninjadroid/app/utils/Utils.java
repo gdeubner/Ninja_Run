@@ -45,10 +45,21 @@ public  class Utils {
         return (rad * 180.0 / Math.PI);
     }
 
-    private static double nano2Seconds(double nano){return nano * Math.pow(10,9);}
+    private static double nano2seconds(double nano){
+        return nano * Math.pow(10,9);
+    }
+
+    public static double pound2kilogram(double lb) {
+        return lb * 0.453592;
+    }
+
+    public static double second2minute(double sec) {
+        return sec / 60;
+    }
+
 
     public static int getRunDuration(ArrayList<LocationContainer> list){
-        return (int) nano2Seconds((list.get(list.size()-1).getElapsedRealtimeNs()
+        return (int) nano2seconds((list.get(list.size()-1).getElapsedRealtimeNs()
                 - list.get(0).getElapsedRealtimeNs()));
     }
 
@@ -60,4 +71,18 @@ public  class Utils {
         return formatter.format(time);
     }
 
+    /**
+     * @param time  - the duration of the run in seconds
+     * @param weight - weight of the runner in lb
+     * @return Estimates the calories burned during the course of a run.
+     *     Assumes an average constant speed of 8 km/h (which = 13.5 MET).
+     */
+    public static double simpleCalorieCalc(double time, double weight) {
+        //convert lb to kg
+        weight = Utils.pound2kilogram(weight);
+        //convert time to minutes
+        time = Utils.second2minute(time);
+        double MET = 13.5;
+        return time * (MET * 3.5 * weight) / 200;
+    }
 }
