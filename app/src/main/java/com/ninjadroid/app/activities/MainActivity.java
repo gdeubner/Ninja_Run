@@ -63,6 +63,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+//        MapFragment fmapFragment = MapFragment.newInstance(userID, -1);
+//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                fmapFragment, "MAP_FRAGMENT").commit();
+//        navigationView.getMenu().getItem(1).setChecked(true);
+    }
+
+    @Override
     public void onBackPressed() {
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);  //closes drawer on left side of screen

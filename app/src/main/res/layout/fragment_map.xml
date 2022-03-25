@@ -66,7 +66,7 @@
             android:paddingEnd="20dp"
             android:paddingBottom="10dp"
             android:text="Create"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
 
         <RadioButton
             android:id="@+id/rb_follow"
@@ -80,8 +80,22 @@
             android:paddingEnd="20dp"
             android:paddingBottom="10dp"
             android:text="Follow"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
     </RadioGroup>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:text="Route Mode"
+        android:textAllCaps="false"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/rg_mapMode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,11 +31,13 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -66,6 +68,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final int LOCATION_UPDATE_INTERVAL = 10;  //in seconds
     private static final int FAST_LOCATION_UPDATE_INTERVAL = 2;  //in seconds
+    private static final int ZOOM_DEFAULT = 16;
+    private static final int ZOOM_IN = 16;//19;  todo this is temporary
+    int zoomLevel;
     GoogleMap mGoogleMap;
     SupportMapFragment mapFrag;
     LocationRequest mLocationRequest;
@@ -82,6 +87,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     Polyline followedRoute;
     Boolean scrolling;
     int routeId;
+
     RadioGroup radioGroup;
 
 
@@ -224,6 +230,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     //creates the location callback which tells the app what to do when it receives new location data
     private void setMappingFunctionality() {
+        zoomLevel = ZOOM_DEFAULT;
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -247,9 +254,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         drawnRoute.setPoints(newRoute);
                     }
                     if(!scrolling){
-                        //move map camera
-                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-
+                        //focus map on user location
+                        setCameraPosition(latLng);
                     }
 
                 }
@@ -262,6 +268,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         //MapFragment mapFragment = (MapFragment) getFragmentManager() .findFragmentById(R.id.map);
         //mapFragment.getMapAsync(this);
 
+    }
+
+    private void setCameraPosition(LatLng latLng){
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng)
+                .zoom(zoomLevel)
+                .build();
+        CameraUpdate cu = CameraUpdateFactory.newCameraPosition(cameraPosition);
+        mGoogleMap.animateCamera(cu);
     }
 
     @Override
@@ -282,6 +297,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public boolean onMyLocationButtonClick() {
                 scrolling = false;
                 return false;
+            }
+        });
+
+        mGoogleMap.setOnCameraMoveStartedListener(new GoogleMap.OnCameraMoveStartedListener() {
+            @Override
+            public void onCameraMoveStarted(int reason) {
+                if (reason ==REASON_GESTURE) {
+                    scrolling=true;
+
+                }
             }
         });
 
@@ -396,6 +421,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                Log.i("followRoute", "Choosing route mode");
                 View radioButton = radioGroup.findViewById(checkedId);
                 int index = radioGroup.indexOfChild(radioButton);
                 switch (index) {
@@ -409,6 +435,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         } else {
                             if(creatingRoute){
                                 Toast.makeText(getContext(), "End current run first", Toast.LENGTH_SHORT).show();
+                                ((RadioButton)radioGroup.getChildAt(0)).setChecked(true);
                             } else {
                                 followRouteMode(routeId);
                             }
@@ -420,8 +447,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
         if(routeId != -1){
             Log.i("followRoute", "Setting followRouteMode");
+            zoomLevel = ZOOM_IN;
             ((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
         }
+        Log.i("followRoute", routeId + "");
+
     }
 
     private void createRouteMode() {
@@ -429,6 +459,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Log.i("followRoute", "should be removed");
             followedRoute.remove();
             Log.i("followRoute",followedRoute.toString());
+        }
+        zoomLevel = ZOOM_DEFAULT;
+        if(mLastLocation != null){
+            setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
         }
         followingRoute = false;
     }
@@ -438,12 +472,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             followedRoute.remove();
         }
         followingRoute = true;
+        zoomLevel = ZOOM_IN;
+        if(mLastLocation != null){
+            setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+        }
         GetRoute.getRoute(getContext(), routeId, new VolleyRouteCallback() {
             @Override
             public void onSuccess(RouteContainer route) {
                 List<LatLng> latLngRoute = getLatLngList(route.getRoute_f().substring(6, route.getRoute_f().length()-1));
 
-
+//                LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+//                latLngRoute.add(0, latLng);
 
                 PolylineOptions options = new PolylineOptions()
                         .color(Color.RED)
@@ -452,6 +491,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         .endCap(new RoundCap())
                         .addAll(latLngRoute);
                 followedRoute = mGoogleMap.addPolyline(options);
+
+                mGoogleMap.addMarker(new MarkerOptions().position(latLngRoute.get(latLngRoute.size()-1))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_flag_24)));
             }
         });
 
