@@ -3,9 +3,13 @@ package com.ninjadroid.app.activities.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +40,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Cap;
@@ -498,18 +503,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 //                latLngRoute.add(0, latLng);
 
                 PolylineOptions options = new PolylineOptions()
-                        .color(Color.RED)
-                        .width(10)
+                        .color(Color.BLUE)
+                        .width(12)
                         .startCap(new RoundCap())
                         .endCap(new RoundCap())
                         .addAll(latLngRoute);
                 followedRoute = mGoogleMap.addPolyline(options);
 
-                mGoogleMap.addMarker(new MarkerOptions().position(latLngRoute.get(latLngRoute.size()-1))
-                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_flag_24)));
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .anchor(0.26f, 0.9f)
+                        .position(latLngRoute.get(latLngRoute.size()-1))
+                        .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_flag_24)));
+                mGoogleMap.addMarker(new MarkerOptions()
+                        .anchor(0.5f, 0.5f)
+                        .position(latLngRoute.get(0))
+                        .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_circle_green)));
+
+                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_flag_24)));
             }
         });
 
+    }
+
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     private List<LatLng> getLatLngList(String route) {
