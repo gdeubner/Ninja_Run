@@ -81,11 +81,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     Button btn_start, btn_stop;
     ArrayList<LocationContainer> routeCoordinates;
     //true when route route is being recorded
-    Boolean creatingRoute;
-    Boolean followingRoute;
+    boolean creatingRoute;
+    boolean followingRoute;
     Polyline drawnRoute;
     Polyline followedRoute;
-    Boolean scrolling;
+    boolean scrolling;
+    boolean initialMapLoad;
     int routeId;
 
     RadioGroup radioGroup;
@@ -236,6 +237,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onLocationResult(LocationResult locationResult) {
                 List<Location> locationList = locationResult.getLocations();
                 if (locationList.size() > 0) {
+
                     //The last location in the list is the newest
                     Location location = locationList.get(locationList.size() - 1);
 
@@ -252,6 +254,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         List<LatLng> newRoute = drawnRoute.getPoints();
                         newRoute.add(latLng);
                         drawnRoute.setPoints(newRoute);
+                    }
+
+                    if(initialMapLoad){
+                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+                        initialMapLoad = false;
                     }
                     if(!scrolling){
                         //focus map on user location
@@ -286,6 +293,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (mFusedLocationClient != null) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initialMapLoad = true;
     }
 
     @Override
