@@ -1,4 +1,4 @@
-package com.ninjadroid.app.activities.fragments;
+package com.ninjadroid.app.activities.menuFragments;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,14 +20,18 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.os.CountDownTimer;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -43,7 +47,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
-import com.google.android.gms.maps.model.Cap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -53,10 +56,11 @@ import com.google.android.gms.maps.model.RoundCap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ninjadroid.app.R;
+import com.ninjadroid.app.utils.Utils;
 import com.ninjadroid.app.utils.VolleyRouteCallback;
 import com.ninjadroid.app.utils.containers.LocationContainer;
 import com.ninjadroid.app.utils.containers.RouteContainer;
-import com.ninjadroid.app.webServices.GetProfile;
+import com.ninjadroid.app.webServices.AddHistory;
 import com.ninjadroid.app.webServices.GetRoute;
 import com.ninjadroid.app.webServices.PostRoute;
 
@@ -86,13 +90,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     Button btn_start, btn_stop;
     ArrayList<LocationContainer> routeCoordinates;
     //true when route route is being recorded
-    boolean creatingRoute;
-    boolean followingRoute;
-    Polyline drawnRoute;
-    Polyline followedRoute;
+    boolean creatingRoute; // only true after user clicked "Start Run"
+    boolean followingRouteMode;
+    boolean running; //only true when followingRouteMode==true and actively running
     boolean scrolling;
     boolean initialMapLoad;
+    Polyline drawnRoute;
+    Polyline followedRoute;
     int routeId;
+    Marker startRouteMarker;
+    Marker endRouteMarker;
+    Chronometer clock;
+    long clockPauseTime;
 
     RadioGroup radioGroup;
 
@@ -155,29 +164,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void setButtonAndTrackingFunctionality() {
         btn_start = getView().findViewById(R.id.btn_start);
         btn_stop = getView().findViewById(R.id.btn_stop);
+        clock = getView().findViewById(R.id.cro_clock);
+        clock.setFormat("%s");
+        clock.stop();
 
         routeCoordinates = new ArrayList<>();
         creatingRoute = false;
         scrolling = false;
-        followingRoute = false;
+        followingRouteMode = false;
+        running = false;
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(followingRoute){
-                    Toast.makeText(getContext(), "You're still following a route", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(!creatingRoute ){
-                    if(startMarker != null){
-                        startMarker.remove();
-                    }
-                    if(endMarker != null){
-                        endMarker.remove();
-                    }
-                    if(drawnRoute!=null){
-                        drawnRoute.remove();
-                    }
+                if(followingRouteMode && !running){
+                    running = true;
+                    Toast.makeText(getContext(), "Run started", Toast.LENGTH_SHORT).show();
+                    routeCoordinates = new ArrayList<>();
+                    clock.setBase(SystemClock.elapsedRealtime());
+                    clock.start();
+
+                } else if(!creatingRoute ){
+                    clearCreatedRoute();
                     creatingRoute = true;
                     routeCoordinates = new ArrayList<>();
 
@@ -205,7 +213,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(creatingRoute && !followingRoute){
+                if(creatingRoute && !followingRouteMode){
                     if(routeCoordinates.size() > 3){
                         creatingRoute = false;
 
@@ -217,7 +225,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                         endMarker = mGoogleMap.addMarker(markerOptions);
                         //int calories = GetProfile.getProfile()
-                        PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId) );
+                        startRouteFinishDialog();
                     } else {//route was too short. remove all map objects and dont post route
                         drawnRoute.remove();
                         creatingRoute = false;
@@ -225,13 +233,82 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         Toast.makeText(getView().getContext(), "Wow, that was quick.",
                                 Toast.LENGTH_SHORT).show();
                     }
+                } else if(followingRouteMode && running){
+                    running = false;
+                    clock.stop();
+                    clockPauseTime = SystemClock.elapsedRealtime();
+                    startRunFinishedDialog();
                 } else {
-                    Toast.makeText(getView().getContext(), "You haven't started a route yet.",
+                    Toast.makeText(getView().getContext(), "You haven't started a run yet.",
                             Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
+    }
+
+    private void startRunFinishedDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Do you want to log this workout?")
+                .setTitle("Run Finished");
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                //send run to history table
+                AddHistory.sendHistoryUsingVolley(getContext(), Integer.parseInt(mUserId),
+                        Utils.formatDateTime(routeCoordinates.get(0).getTime()),
+                        -1, Utils.getRunDuration(routeCoordinates),
+                        Utils.calcDistanceTraveled(routeCoordinates), routeId);
+            }
+        });
+        builder.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                clearCreatedRoute();
+                Toast.makeText(getContext(), "Discarded", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNeutralButton("Continue Running", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                Toast.makeText(getContext(), "Keep on going!", Toast.LENGTH_SHORT).show();
+                running = true;
+                clock.setBase(clockPauseTime - SystemClock.elapsedRealtime() + clock.getBase());
+                clock.start();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void clearCreatedRoute() {
+        if(startMarker != null){
+            startMarker.remove();
+            endMarker.remove();
+            drawnRoute.remove();
+        }
+    }
+
+    private void startRouteFinishDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Do you want to save your route?")
+                .setTitle("Route Complete");
+        builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId) );
+            }
+        });
+        builder.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                clearCreatedRoute();
+                Toast.makeText(getContext(), "Discarded", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setNeutralButton("Continue Route", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                creatingRoute = true;
+                endMarker.remove();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     //creates the location callback which tells the app what to do when it receives new location data
@@ -250,15 +327,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                    if(creatingRoute) {
+                    if(creatingRoute || running) {
                         LocationContainer lastLocation= new LocationContainer(
                                 mLastLocation.getLatitude(), mLastLocation.getLongitude(),
                                 mLastLocation.getAltitude(), mLastLocation.getSpeed(),
                                 mLastLocation.getTime(), mLastLocation.getElapsedRealtimeNanos());
                         routeCoordinates.add(lastLocation);
-                        List<LatLng> newRoute = drawnRoute.getPoints();
-                        newRoute.add(latLng);
-                        drawnRoute.setPoints(newRoute);
+                        if(creatingRoute){
+                            List<LatLng> newRoute = drawnRoute.getPoints();
+                            newRoute.add(latLng);
+                            drawnRoute.setPoints(newRoute);
+                        }
                     }
 
                     if(initialMapLoad){
@@ -444,7 +523,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 int index = radioGroup.indexOfChild(radioButton);
                 switch (index) {
                     case 0: // create route selected
-                        createRouteMode();
+                        if(running){
+                            Toast.makeText(getContext(), "End current run first.", Toast.LENGTH_SHORT).show();
+                            ((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
+                        } else {
+                            createRouteMode();
+                        }
                         break;
                     case 1: // follow route selected
                         if(routeId == -1){
@@ -458,7 +542,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 followRouteMode(routeId);
                             }
                         }
-
                         break;
                 }
             }
@@ -474,23 +557,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void createRouteMode() {
         if (followedRoute != null){
-            Log.i("followRoute", "should be removed");
             followedRoute.remove();
+            endRouteMarker.remove();
+            startRouteMarker.remove();
             Log.i("followRoute",followedRoute.toString());
         }
         zoomLevel = ZOOM_DEFAULT;
         if(mLastLocation != null){
             setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
         }
-        followingRoute = false;
+        followingRouteMode = false;
+        clock.setVisibility(View.INVISIBLE);
     }
 
     private void followRouteMode(int routeId) {
         if (followedRoute != null){
             followedRoute.remove();
         }
-        followingRoute = true;
+        followingRouteMode = true;
         zoomLevel = ZOOM_IN;
+        clock.setVisibility(View.VISIBLE);
         if(mLastLocation != null){
             setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
         }
@@ -510,16 +596,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         .addAll(latLngRoute);
                 followedRoute = mGoogleMap.addPolyline(options);
 
-                mGoogleMap.addMarker(new MarkerOptions()
+                endRouteMarker = mGoogleMap.addMarker(new MarkerOptions()
                         .anchor(0.26f, 0.9f)
                         .position(latLngRoute.get(latLngRoute.size()-1))
                         .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_flag_24)));
-                mGoogleMap.addMarker(new MarkerOptions()
+
+                startRouteMarker = mGoogleMap.addMarker(new MarkerOptions()
                         .anchor(0.5f, 0.5f)
                         .position(latLngRoute.get(0))
                         .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_circle_green)));
-
-                //.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_baseline_flag_24)));
             }
         });
 

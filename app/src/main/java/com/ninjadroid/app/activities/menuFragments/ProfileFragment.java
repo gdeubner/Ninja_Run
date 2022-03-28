@@ -1,12 +1,10 @@
-package com.ninjadroid.app.activities.fragments;
+package com.ninjadroid.app.activities.menuFragments;
 
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.Spannable;
@@ -26,8 +24,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.EditProfile;
-import com.ninjadroid.app.activities.LoginPage;
-import com.ninjadroid.app.activities.MainActivity;
 import com.ninjadroid.app.utils.URLBuilder;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
 import com.ninjadroid.app.webServices.GetProfile;
