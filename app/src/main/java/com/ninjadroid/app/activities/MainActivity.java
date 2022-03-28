@@ -13,16 +13,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.material.navigation.NavigationView;
-import com.ninjadroid.app.activities.fragments.FollowersFragment;
-import com.ninjadroid.app.activities.fragments.HistoryFragment;
-import com.ninjadroid.app.activities.fragments.MapFragment;
-import com.ninjadroid.app.activities.fragments.ProfileFragment;
+import com.ninjadroid.app.activities.menuFragments.FollowersFragment;
+import com.ninjadroid.app.activities.menuFragments.HistoryFragment;
+import com.ninjadroid.app.activities.menuFragments.MapFragment;
+import com.ninjadroid.app.activities.menuFragments.ProfileFragment;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.fragments.SharedFragment;
-import com.ninjadroid.app.activities.fragments.FollowingFragment;
+import com.ninjadroid.app.activities.menuFragments.SharedFragment;
+import com.ninjadroid.app.activities.menuFragments.FollowingFragment;
 import com.ninjadroid.app.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -134,13 +133,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        int routeID = data.getExtras().getInt("routeID");
+        if(data != null){
+            int routeID = data.getExtras().getInt("routeID");
 
-        MapFragment fmapFragment = MapFragment.newInstance(userID, routeID);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                fmapFragment, "MAP_FRAGMENT").commit();
-        navigationView.getMenu().getItem(1).setChecked(true);
-
+            MapFragment fmapFragment = MapFragment.newInstance(userID, routeID);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    fmapFragment, "MAP_FRAGMENT").commit();
+            navigationView.getMenu().getItem(1).setChecked(true);
+        }
     }
+
+
+
 
 }
