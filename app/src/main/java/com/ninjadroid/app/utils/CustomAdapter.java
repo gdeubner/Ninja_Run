@@ -24,7 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.LoginPage;
+import com.ninjadroid.app.activities.LoginActivity;
 import com.ninjadroid.app.activities.MainActivity;
 import com.ninjadroid.app.activities.RouteActivity;
 

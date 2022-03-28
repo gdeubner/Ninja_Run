@@ -7,17 +7,17 @@
     android:clickable="true">
 
     <TextView
-        android:id="@+id/heightinTitle"
+        android:id="@+id/heightinTitleE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="52dp"
         android:text="Height In:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/heightftTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/heightftTitleE" />
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/usernameE"
         android:layout_width="313dp"
         android:layout_height="80dp"
         android:layout_marginStart="50dp"
@@ -30,117 +30,117 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/nameTitle"
+        android:id="@+id/usernameTitleE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="26dp"
         android:text="Name: "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/usernameE" />
 
     <TextView
-        android:id="@+id/passwordTitle"
+        android:id="@+id/passwordTitleE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="54dp"
         android:text="Password:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/usernameTitleE" />
 
     <TextView
-        android:id="@+id/weightTitle"
+        android:id="@+id/weightTitleE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="50dp"
         android:text="Weight:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/passwordTitleE" />
 
     <TextView
-        android:id="@+id/heightftTitle"
+        android:id="@+id/heightftTitleE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="35dp"
         android:layout_marginTop="52dp"
         android:text="Height ft:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/weightTitleE" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/nameEdit"
+        android:id="@+id/nameEditE"
         android:layout_width="266dp"
         android:layout_height="44dp"
         android:layout_marginStart="25dp"
         android:layout_marginTop="12dp"
         android:hint="Enter New Name"
-        app:layout_constraintStart_toEndOf="@+id/nameTitle"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintStart_toEndOf="@+id/usernameTitleE"
+        app:layout_constraintTop_toBottomOf="@+id/usernameE" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/passwordEdit"
+        android:id="@+id/passwordEditE"
         android:layout_width="266dp"
         android:layout_height="44dp"
         android:layout_marginStart="3dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Password"
-        app:layout_constraintStart_toEndOf="@+id/passwordTitle"
-        app:layout_constraintTop_toBottomOf="@+id/nameEdit" />
+        app:layout_constraintStart_toEndOf="@+id/passwordTitleE"
+        app:layout_constraintTop_toBottomOf="@+id/nameEditE" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/weightEdit"
+        android:id="@+id/weightEditE"
         android:layout_width="266dp"
         android:layout_height="44dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Weight"
         android:inputType="numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/weightTitle"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEdit" />
+        app:layout_constraintStart_toEndOf="@+id/weightTitleE"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditE" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/heightftEdit"
+        android:id="@+id/heightftEditE"
         android:layout_width="266dp"
         android:layout_height="44dp"
         android:layout_marginStart="11dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Feet"
         android:inputType="numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/heightftTitle"
-        app:layout_constraintTop_toBottomOf="@+id/weightEdit" />
+        app:layout_constraintStart_toEndOf="@+id/heightftTitleE"
+        app:layout_constraintTop_toBottomOf="@+id/weightEditE" />
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/heightinEdit"
+        android:id="@+id/heightinEditE"
         android:layout_width="266dp"
         android:layout_height="44dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Inches"
         android:inputType="numberDecimal"
-        app:layout_constraintStart_toEndOf="@+id/heightinTitle"
-        app:layout_constraintTop_toBottomOf="@+id/heightftEdit" />
+        app:layout_constraintStart_toEndOf="@+id/heightinTitleE"
+        app:layout_constraintTop_toBottomOf="@+id/heightftEditE" />
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/registerButtonE"
         android:layout_width="162dp"
         android:layout_height="51dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="28dp"
         android:text="Save Changes"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/heightinEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/heightinEditE" />
 
     <Button
-        android:id="@+id/cancelButton"
+        android:id="@+id/backButtonE"
         android:layout_width="162dp"
         android:layout_height="51dp"
         android:layout_marginStart="208dp"
         android:layout_marginTop="28dp"
         android:text="Cancel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/heightinEdit" />
+        app:layout_constraintTop_toBottomOf="@+id/heightinEditE" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

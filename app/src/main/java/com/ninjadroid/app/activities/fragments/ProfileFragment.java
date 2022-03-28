@@ -27,8 +27,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.EditProfile;
-import com.ninjadroid.app.activities.LoginPage;
+import com.ninjadroid.app.activities.EditProfileActivity;
+import com.ninjadroid.app.activities.LoginActivity;
 import com.ninjadroid.app.activities.MainActivity;
 import com.ninjadroid.app.utils.URLBuilder;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
@@ -61,7 +61,7 @@ public class ProfileFragment extends Fragment {
     private double distance;
     private String name;
 
-    private ProfileContainer profile;
+    private ProfileContainer profileC;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -76,6 +76,8 @@ public class ProfileFragment extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance(ProfileContainer profile) {
+        Log.i("PROFILE PAGE", "MADE IT");
+
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
         args.putInt("userID", profile.getUserId());
@@ -87,6 +89,7 @@ public class ProfileFragment extends Fragment {
         args.putDouble("calories", profile.getCalories());
         args.putDouble("distance", profile.getDistance());
         args.putString("name", profile.getName());
+        args.putSerializable("container", profile);
 
         fragment.setArguments(args);
         return fragment;
@@ -105,7 +108,9 @@ public class ProfileFragment extends Fragment {
             calories = getArguments().getDouble("calories", 0);
             distance = getArguments().getDouble("distance", 0);
             name = getArguments().getString("name");
+            profileC = (ProfileContainer) getArguments().getSerializable("container");
         }
+
     }
 
     @Override
@@ -120,11 +125,13 @@ public class ProfileFragment extends Fragment {
         editPButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), EditProfile.class);
-                intent.putExtra("key", profile);
+                Intent intent = new Intent(getActivity(), EditProfileActivity.class);
+                intent.putExtra("profileObject", profileC);
                 startActivity(intent);
             }
         });
+
+        name = profileC.getName();
 
         final TextView nameView = view.findViewById(R.id.username);
         final TextView usernameView = view.findViewById(R.id.usernameP);

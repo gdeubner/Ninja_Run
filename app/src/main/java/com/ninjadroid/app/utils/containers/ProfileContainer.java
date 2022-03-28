@@ -23,6 +23,10 @@ public class ProfileContainer implements Serializable {
       return username;
    }
 
+   public String getPassword() {
+      return password;
+   }
+
    public double getWeight() {
       return weight;
    }

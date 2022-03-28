@@ -48,6 +48,7 @@ public class GetProfile {
                             Gson gson = new Gson();
                             //Gson gson = new GsonBuilder().serializeNulls().create();
                             ProfileContainer profile = gson.fromJson(response, ProfileContainer.class);
+                            Log.i("BRO PLZ", "AHHHHHHHHHHHHhh");
                             callBack.onSuccess(profile);
 
                         } catch (Exception e) {

@@ -55,8 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        Intent intent = getIntent();
-        userID = intent.getStringExtra("userID");
+        userID = getIntent().getStringExtra("userID");
         Log.i("MainActivity", userID);
 
         GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
@@ -123,6 +122,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             follFrag,"FOLL_FRAGMENT").commit();
                     break;
                 case R.id.nav_logOut:
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
                     finish();
                     break;
             }
@@ -145,6 +146,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fmapFragment, "MAP_FRAGMENT").commit();
         navigationView.getMenu().getItem(1).setChecked(true);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(getIntent().getIntExtra("ProfileFragment",0)==1){
+            Log.i("Profile page first", "came directly");
+            userID = getIntent().getStringExtra("userID");
+
+            GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
+                @Override
+                public void onSuccess(ProfileContainer profile) {
+                    userProfile = profile;
+                    ProfileFragment profileFragment = ProfileFragment.newInstance(profile);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            profileFragment, "PROFILE_FRAGMENT").commit();
+                }
+            });
+       }else{
+            Log.i("itttt", "didnt workkkkk");
+        }
+    }
+
+    @Override
+    public void onNewIntent (Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 
 }
