@@ -20,7 +20,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import android.os.CountDownTimer;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
@@ -31,7 +30,6 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -55,12 +53,16 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.RoundCap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.maps.android.PolyUtil;
 import com.ninjadroid.app.R;
+import com.ninjadroid.app.utils.DirectionsCallback;
 import com.ninjadroid.app.utils.Utils;
-import com.ninjadroid.app.utils.VolleyRouteCallback;
+import com.ninjadroid.app.utils.RouteCallback;
+import com.ninjadroid.app.utils.containers.DirectionsContainer;
 import com.ninjadroid.app.utils.containers.LocationContainer;
 import com.ninjadroid.app.utils.containers.RouteContainer;
 import com.ninjadroid.app.webServices.AddHistory;
+import com.ninjadroid.app.webServices.GetDirections;
 import com.ninjadroid.app.webServices.GetRoute;
 import com.ninjadroid.app.webServices.PostRoute;
 
@@ -97,6 +99,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     boolean initialMapLoad;
     Polyline drawnRoute;
     Polyline followedRoute;
+    Polyline mDirections;
     int routeId;
     Marker startRouteMarker;
     Marker endRouteMarker;
@@ -236,7 +239,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 } else if(followingRouteMode && running){
                     running = false;
                     clock.stop();
-                    clockPauseTime = SystemClock.elapsedRealtime();
+                    clockPauseTime = SystemClock.elapsedRealtime() - clock.getBase();
                     startRunFinishedDialog();
                 } else {
                     Toast.makeText(getView().getContext(), "You haven't started a run yet.",
@@ -269,7 +272,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(DialogInterface dialog, int id) {
                 Toast.makeText(getContext(), "Keep on going!", Toast.LENGTH_SHORT).show();
                 running = true;
-                clock.setBase(clockPauseTime - SystemClock.elapsedRealtime() + clock.getBase());
+                clock.setBase(SystemClock.elapsedRealtime() - clockPauseTime);
                 clock.start();
             }
         });
@@ -343,6 +346,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     if(initialMapLoad){
                         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
                         initialMapLoad = false;
+
+                        if(followingRouteMode){
+                           addDirectionsToMap();
+                        }
                     }
                     if(!scrolling){
                         //focus map on user location
@@ -358,6 +365,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapFrag.getMapAsync(this);
         //MapFragment mapFragment = (MapFragment) getFragmentManager() .findFragmentById(R.id.map);
         //mapFragment.getMapAsync(this);
+
+    }
+
+    private void addDirectionsToMap() {
+        Log.i("directions", mLastLocation.toString());
+        GetDirections.getWalkingDirections(getContext(),
+                new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()),
+                new LatLng(routeCoordinates.get(0).getLat(), routeCoordinates.get(0).getLon()), new DirectionsCallback() {
+                    @Override
+                    public void onSuccess(DirectionsContainer directions) {
+                        Log.i("directions", "Status code: " + directions.getStatus());
+                        String polyline = directions.getPolyline();
+                        List<LatLng> list = PolyUtil.decode(polyline);
+                        PolylineOptions options = new PolylineOptions()
+                                .color(Color.BLACK)
+                                .width(12)
+                                .startCap(new RoundCap())
+                                .endCap(new RoundCap())
+                                .addAll(list);
+                        mDirections = mGoogleMap.addPolyline(options);
+                    }
+                });
 
     }
 
@@ -580,13 +609,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if(mLastLocation != null){
             setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
         }
-        GetRoute.getRoute(getContext(), routeId, new VolleyRouteCallback() {
+        GetRoute.getRoute(getContext(), routeId, new RouteCallback() {
             @Override
             public void onSuccess(RouteContainer route) {
                 List<LatLng> latLngRoute = getLatLngList(route.getRoute_f().substring(6, route.getRoute_f().length()-1));
-
-//                LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-//                latLngRoute.add(0, latLng);
 
                 PolylineOptions options = new PolylineOptions()
                         .color(Color.BLUE)
@@ -605,6 +631,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         .anchor(0.5f, 0.5f)
                         .position(latLngRoute.get(0))
                         .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_circle_green)));
+
             }
         });
 
@@ -623,10 +650,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         Type listType = new TypeToken<ArrayList<LocationContainer>>() {}.getType();
         route = route.replace('\'', '\"');
-        ArrayList<LocationContainer> locationList = new Gson().fromJson(route, listType);
+        routeCoordinates = new Gson().fromJson(route, listType);
         List<LatLng> finalRoute = new ArrayList<>();
 
-        for(LocationContainer loc : locationList) {
+        for(LocationContainer loc : routeCoordinates) {
             LatLng ll = new LatLng(loc.getLat(), loc.getLon());
             finalRoute.add(ll);
         }
