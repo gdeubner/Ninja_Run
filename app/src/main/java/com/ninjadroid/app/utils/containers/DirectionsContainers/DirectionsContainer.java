@@ -1,9 +1,9 @@
-package com.ninjadroid.app.utils.containers;
+package com.ninjadroid.app.utils.containers.DirectionsContainers;
 
 import java.util.ArrayList;
 
 public class DirectionsContainer {
-    ArrayList<GeocodedWaypoints> geocoded_waypoints = new ArrayList<GeocodedWaypoints>();
+    ArrayList<GeocodedWaypoint> geocoded_waypoints = new ArrayList<GeocodedWaypoint>();
     ArrayList <Route> routes = new ArrayList<Route>();
     private String status;
 
@@ -12,7 +12,7 @@ public class DirectionsContainer {
         return status;
     }
 
-    public ArrayList<GeocodedWaypoints> getGeocoded_waypoints() {
+    public ArrayList<GeocodedWaypoint> getGeocoded_waypoints() {
         return geocoded_waypoints;
     }
 
@@ -20,12 +20,12 @@ public class DirectionsContainer {
         return routes;
     }
 
-    public String getPolyline(){
-        return routes.get(0).getLegs().get(0).getSteps().get(0).getPolyline().getPoints();
+    public ArrayList<Step> getSteps(){
+        return routes.get(0).getLegs().get(0).getSteps();
     }
 }
 
-class GeocodedWaypoints {
+class GeocodedWaypoint {
     private String geocoder_status;
     private String place_id;
     ArrayList<String> types = new ArrayList<String>();
@@ -40,16 +40,15 @@ class GeocodedWaypoints {
     public ArrayList<String> getTypes(){
         return types;
     }
-
 }
 
 class Route{
     Bounds bounds;
     private String copyrights;
     ArrayList <Leg> legs = new ArrayList<Leg>();
-    OverviewPolyline Overview_polylineObject;
+    OverviewPolyline overview_polyline;
     private String summary;
-    ArrayList < Object > warnings = new ArrayList < Object > ();
+    ArrayList<String> warnings = new ArrayList<String>();
     ArrayList < Object > waypoint_order = new ArrayList < Object > ();
     // Getter Methods
     public Bounds getBounds() {
@@ -61,7 +60,7 @@ class Route{
     }
 
     public OverviewPolyline getOverview_polyline() {
-        return Overview_polylineObject;
+        return overview_polyline;
     }
 
     public String getSummary() {
@@ -120,9 +119,9 @@ class Leg{
     Distance distance;
     Duration duration;
     private String end_address;
-    EndLocation endLocation;
+    EndLocation end_location;
     private String start_address;
-    StartLocation startLocation;
+    StartLocation start_location;
     ArrayList <Step> steps = new ArrayList<Step>();
     ArrayList < Object > traffic_speed_entry = new ArrayList < Object > ();
     ArrayList < Object > via_waypoint = new ArrayList < Object > ();
@@ -141,7 +140,7 @@ class Leg{
     }
 
     public EndLocation getEnd_location() {
-        return endLocation;
+        return end_location;
     }
 
     public String getStart_address() {
@@ -149,7 +148,7 @@ class Leg{
     }
 
     public StartLocation getStart_location() {
-        return startLocation;
+        return start_location;
     }
 
     public ArrayList<Step> getSteps() {
@@ -205,101 +204,3 @@ class Distance {
     }
 }
 
-class Step {
-    Distance DistanceObject;
-    Duration DurationObject;
-    StepEndLocation endLocationObject;
-    private String html_instructions;
-    Polyline PolylineObject;
-    StepStartLocation startLocationObject;
-    private String travel_mode;
-
-    // Getter Methods
-    public Distance getDistance() {
-        return DistanceObject;
-    }
-
-    public Duration getDuration() {
-        return DurationObject;
-    }
-
-    public StepEndLocation getEnd_location() {
-        return endLocationObject;
-    }
-
-    public String getHtml_instructions() {
-        return html_instructions;
-    }
-
-    public Polyline getPolyline() {
-        return PolylineObject;
-    }
-
-    public StepStartLocation getStart_location() {
-        return startLocationObject;
-    }
-
-    public String getTravel_mode() {
-        return travel_mode;
-    }
-}
-class StepStartLocation {
-    private float lat;
-    private float lng;
-
-    // Getter Methods
-    public float getLat() {
-        return lat;
-    }
-
-    public float getLng() {
-        return lng;
-    }
-}
-class Polyline {
-    private String points;
-
-    // Getter Methods
-    public String getPoints() {
-        return points;
-    }
-}
-class StepEndLocation {
-    private float lat;
-    private float lng;
-
-    // Getter Methods
-    public float getLat() {
-        return lat;
-    }
-
-    public float getLng() {
-        return lng;
-    }
-}
-class StepDuration {
-    private String text;
-    private float value;
-
-    // Getter Methods
-    public String getText() {
-        return text;
-    }
-
-    public float getValue() {
-        return value;
-    }
-}
-class StepDistance {
-    private String text;
-    private float value;
-
-    // Getter Methods
-    public String getText() {
-        return text;
-    }
-
-    public float getValue() {
-        return value;
-    }
-}

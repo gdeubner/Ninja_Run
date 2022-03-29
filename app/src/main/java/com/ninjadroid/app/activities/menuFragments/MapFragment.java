@@ -58,7 +58,8 @@ import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.DirectionsCallback;
 import com.ninjadroid.app.utils.Utils;
 import com.ninjadroid.app.utils.RouteCallback;
-import com.ninjadroid.app.utils.containers.DirectionsContainer;
+import com.ninjadroid.app.utils.containers.DirectionsContainers.DirectionsContainer;
+import com.ninjadroid.app.utils.containers.DirectionsContainers.Step;
 import com.ninjadroid.app.utils.containers.LocationContainer;
 import com.ninjadroid.app.utils.containers.RouteContainer;
 import com.ninjadroid.app.webServices.AddHistory;
@@ -80,7 +81,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final int LOCATION_UPDATE_INTERVAL = 10;  //in seconds
     private static final int FAST_LOCATION_UPDATE_INTERVAL = 2;  //in seconds
     private static final int ZOOM_DEFAULT = 16;
-    private static final int ZOOM_IN = 16;//19;  todo this is temporary
+    private static final int ZOOM_IN = 16;//19; temporary
     int zoomLevel;
     GoogleMap mGoogleMap;
     SupportMapFragment mapFrag;
@@ -99,12 +100,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     boolean initialMapLoad;
     Polyline drawnRoute;
     Polyline followedRoute;
-    Polyline mDirections;
+    ArrayList<Polyline> mDirectionsList;
     int routeId;
     Marker startRouteMarker;
     Marker endRouteMarker;
     Chronometer clock;
     long clockPauseTime;
+    List<LatLng> latLngFollowedRoute;
+
 
     RadioGroup radioGroup;
 
@@ -344,18 +347,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     }
 
                     if(initialMapLoad){
-                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
-                        initialMapLoad = false;
+                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_DEFAULT));
 
-                        if(followingRouteMode){
-                           addDirectionsToMap();
-                        }
+                        initialMapLoad = false;
                     }
                     if(!scrolling){
                         //focus map on user location
                         setCameraPosition(latLng);
                     }
-
                 }
             }
         };
@@ -368,35 +367,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    private void addDirectionsToMap() {
-        Log.i("directions", mLastLocation.toString());
-        GetDirections.getWalkingDirections(getContext(),
-                new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()),
-                new LatLng(routeCoordinates.get(0).getLat(), routeCoordinates.get(0).getLon()), new DirectionsCallback() {
-                    @Override
-                    public void onSuccess(DirectionsContainer directions) {
-                        Log.i("directions", "Status code: " + directions.getStatus());
-                        String polyline = directions.getPolyline();
-                        List<LatLng> list = PolyUtil.decode(polyline);
-                        PolylineOptions options = new PolylineOptions()
-                                .color(Color.BLACK)
-                                .width(12)
-                                .startCap(new RoundCap())
-                                .endCap(new RoundCap())
-                                .addAll(list);
-                        mDirections = mGoogleMap.addPolyline(options);
-                    }
-                });
-
-    }
-
     private void setCameraPosition(LatLng latLng){
-        CameraPosition cameraPosition = new CameraPosition.Builder()
-                .target(latLng)
-                .zoom(zoomLevel)
-                .build();
-        CameraUpdate cu = CameraUpdateFactory.newCameraPosition(cameraPosition);
-        mGoogleMap.animateCamera(cu);
+//        if(followingRouteMode){
+//            // Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
+//            CameraPosition cameraPosition = new CameraPosition.Builder()
+//                    .target(latLng)      // Sets the center of the map to Mountain View
+//                    .zoom(ZOOM_IN)                   // Sets the zoom
+//                    .bearing(90)                // Sets the orientation of the camera to east
+//                    .tilt(45)                   // Sets the tilt of the camera to 30 degrees
+//                    .build();                   // Creates a CameraPosition from the builder
+//            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+//        } else {
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(latLng)
+                    .zoom(zoomLevel)
+                    .build();
+            CameraUpdate cu = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            mGoogleMap.animateCamera(cu);
+        //}
     }
 
     @Override
@@ -589,6 +577,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             followedRoute.remove();
             endRouteMarker.remove();
             startRouteMarker.remove();
+            for(Polyline pol : mDirectionsList){
+                pol.remove();
+            }
             Log.i("followRoute",followedRoute.toString());
         }
         zoomLevel = ZOOM_DEFAULT;
@@ -612,28 +603,56 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         GetRoute.getRoute(getContext(), routeId, new RouteCallback() {
             @Override
             public void onSuccess(RouteContainer route) {
-                List<LatLng> latLngRoute = getLatLngList(route.getRoute_f().substring(6, route.getRoute_f().length()-1));
+                latLngFollowedRoute = getLatLngList(route.getRoute_f().substring(6, route.getRoute_f().length()-1));
 
                 PolylineOptions options = new PolylineOptions()
                         .color(Color.BLUE)
                         .width(12)
                         .startCap(new RoundCap())
                         .endCap(new RoundCap())
-                        .addAll(latLngRoute);
+                        .addAll(latLngFollowedRoute);
                 followedRoute = mGoogleMap.addPolyline(options);
 
                 endRouteMarker = mGoogleMap.addMarker(new MarkerOptions()
                         .anchor(0.26f, 0.9f)
-                        .position(latLngRoute.get(latLngRoute.size()-1))
+                        .position(latLngFollowedRoute.get(latLngFollowedRoute.size()-1))
                         .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_baseline_flag_24)));
 
                 startRouteMarker = mGoogleMap.addMarker(new MarkerOptions()
                         .anchor(0.5f, 0.5f)
-                        .position(latLngRoute.get(0))
+                        .position(latLngFollowedRoute.get(0))
                         .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_circle_green)));
-
+                addDirectionsToMap();
             }
         });
+    }
+
+    private void addDirectionsToMap() {
+        Log.i("directions", mLastLocation.toString());
+        mDirectionsList = new ArrayList<>();
+        LatLng currentLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        LatLng startRouteLatLng = new LatLng(latLngFollowedRoute.get(0).latitude, latLngFollowedRoute.get(0).longitude);
+        GetDirections.getWalkingDirections(getContext(),currentLatLng,startRouteLatLng,
+                new DirectionsCallback() {
+                    @Override
+                    public void onSuccess(DirectionsContainer directions) {
+                        Log.i("directions", "Status code: " + directions.getStatus());
+                        ArrayList<Step> directionsStepList = directions.getSteps();
+                        for(int i = 0; i < directionsStepList.size(); i++){
+                            List<LatLng> list = PolyUtil.decode(directionsStepList.get(i).getPolyline().getPoints());
+                            if(i == directionsStepList.size()-1){
+                                list.add(startRouteLatLng);
+                            }
+                            PolylineOptions options = new PolylineOptions()
+                                    .color(Color.BLACK)
+                                    .width(12)
+                                    .startCap(new RoundCap())
+                                    .endCap(new RoundCap())
+                                    .addAll(list);
+                            mDirectionsList.add( mGoogleMap.addPolyline(options));
+                        }
+                    }
+                });
 
     }
 
