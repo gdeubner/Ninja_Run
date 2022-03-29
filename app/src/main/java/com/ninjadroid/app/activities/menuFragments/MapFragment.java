@@ -81,8 +81,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final int LOCATION_UPDATE_INTERVAL = 10;  //in seconds
     private static final int FAST_LOCATION_UPDATE_INTERVAL = 2;  //in seconds
     private static final int ZOOM_DEFAULT = 16;
-    private static final int ZOOM_IN = 16;//19; temporary
-    int zoomLevel;
+    private static final int ZOOM_IN = 19;
     GoogleMap mGoogleMap;
     SupportMapFragment mapFrag;
     LocationRequest mLocationRequest;
@@ -98,6 +97,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     boolean running; //only true when followingRouteMode==true and actively running
     boolean scrolling;
     boolean initialMapLoad;
+    boolean directionsAddedToMap;
     Polyline drawnRoute;
     Polyline followedRoute;
     ArrayList<Polyline> mDirectionsList;
@@ -319,7 +319,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     //creates the location callback which tells the app what to do when it receives new location data
     private void setMappingFunctionality() {
-        zoomLevel = ZOOM_DEFAULT;
         mLocationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(LocationResult locationResult) {
@@ -353,7 +352,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     }
                     if(!scrolling){
                         //focus map on user location
-                        setCameraPosition(latLng);
+                        if(directionsAddedToMap){
+                            setFollowingCameraPosition(latLng, followedRoute.getPoints().get(0));
+                        } else {
+                            setCameraPosition(latLng);
+                        }
                     }
                 }
             }
@@ -367,24 +370,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    private void setCameraPosition(LatLng latLng){
-//        if(followingRouteMode){
-//            // Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
-//            CameraPosition cameraPosition = new CameraPosition.Builder()
-//                    .target(latLng)      // Sets the center of the map to Mountain View
-//                    .zoom(ZOOM_IN)                   // Sets the zoom
-//                    .bearing(90)                // Sets the orientation of the camera to east
-//                    .tilt(45)                   // Sets the tilt of the camera to 30 degrees
-//                    .build();                   // Creates a CameraPosition from the builder
-//            mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-//        } else {
+    private void setCameraPosition(LatLng curPos){
             CameraPosition cameraPosition = new CameraPosition.Builder()
-                    .target(latLng)
-                    .zoom(zoomLevel)
+                    .target(curPos)
+                    .zoom(ZOOM_DEFAULT)
                     .build();
             CameraUpdate cu = CameraUpdateFactory.newCameraPosition(cameraPosition);
             mGoogleMap.animateCamera(cu);
-        //}
+    }
+
+    private void setFollowingCameraPosition(LatLng curPos, LatLng routePnt){
+        // Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
+        LatLng oldCurPos = mGoogleMap.getCameraPosition().target;
+        float bearing = mGoogleMap.getCameraPosition().bearing;
+        final double MIN_LAT_LNG_DIFF = 0.000001;
+        if(Math.abs(oldCurPos.latitude - curPos.latitude) > MIN_LAT_LNG_DIFF &&
+                Math.abs(oldCurPos.longitude - curPos.longitude) > MIN_LAT_LNG_DIFF){
+            bearing = Utils.findBearing2(curPos, routePnt);
+        }
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(curPos)      // Sets the center of the map to Mountain View
+                .zoom(ZOOM_IN)                   // Sets the zoom
+                .bearing(bearing)  //sets camera orientation
+                .tilt(45)                   // Sets the tilt of the camera to 30 degrees
+                .build();                   // Creates a CameraPosition from the builder
+        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     @Override
@@ -565,7 +575,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
         if(routeId != -1){
             Log.i("followRoute", "Setting followRouteMode");
-            zoomLevel = ZOOM_IN;
             ((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
         }
         Log.i("followRoute", routeId + "");
@@ -577,16 +586,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             followedRoute.remove();
             endRouteMarker.remove();
             startRouteMarker.remove();
-            for(Polyline pol : mDirectionsList){
-                pol.remove();
+            if(mDirectionsList != null) {
+                for (Polyline pol : mDirectionsList) {
+                    pol.remove();
+                }
             }
             Log.i("followRoute",followedRoute.toString());
         }
-        zoomLevel = ZOOM_DEFAULT;
         if(mLastLocation != null){
             setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
         }
         followingRouteMode = false;
+        directionsAddedToMap = false;
         clock.setVisibility(View.INVISIBLE);
     }
 
@@ -595,10 +606,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             followedRoute.remove();
         }
         followingRouteMode = true;
-        zoomLevel = ZOOM_IN;
         clock.setVisibility(View.VISIBLE);
         if(mLastLocation != null){
-            setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+            //setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+
+            setFollowingCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()),
+                    followedRoute.getPoints().get(0));
         }
         GetRoute.getRoute(getContext(), routeId, new RouteCallback() {
             @Override
@@ -651,9 +664,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                     .addAll(list);
                             mDirectionsList.add( mGoogleMap.addPolyline(options));
                         }
+                        directionsAddedToMap = true;
                     }
                 });
-
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
@@ -666,7 +679,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private List<LatLng> getLatLngList(String route) {
-
         Type listType = new TypeToken<ArrayList<LocationContainer>>() {}.getType();
         route = route.replace('\'', '\"');
         routeCoordinates = new Gson().fromJson(route, listType);
@@ -678,6 +690,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         return finalRoute;
     }
-
-
 }
