@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.ninjadroid.app.activities.menuFragments.FollowersFragment;
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onSuccess(ProfileContainer profile) {
                 userProfile = profile;
+                TextView tv_profile = navigationView.findViewById(R.id.tv_profileNameNav);
+                tv_profile.setText(userProfile.getName());
             }
         });
 
@@ -69,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     fmapFragment, "MAP_FRAGMENT").commit();
             navigationView.getMenu().getItem(1).setChecked(true);
         }
-
     }
 
     @Override

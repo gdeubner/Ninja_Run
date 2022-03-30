@@ -61,6 +61,7 @@ import com.ninjadroid.app.utils.RouteCallback;
 import com.ninjadroid.app.utils.containers.DirectionsContainers.DirectionsContainer;
 import com.ninjadroid.app.utils.containers.DirectionsContainers.Step;
 import com.ninjadroid.app.utils.containers.LocationContainer;
+import com.ninjadroid.app.utils.containers.ProfileContainer;
 import com.ninjadroid.app.utils.containers.RouteContainer;
 import com.ninjadroid.app.webServices.AddHistory;
 import com.ninjadroid.app.webServices.GetDirections;
