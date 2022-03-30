@@ -3,116 +3,59 @@ package com.ninjadroid.app.utils.containers;
 import java.io.Serializable;
 
 public class ProfileContainer implements Serializable {
-    String userId;
-    String username;
-    String password;
-    String name;
-    String weight;
-    String heightft;
-    String heightin;
-    String points;
-    String calories;
-    String distance;
-    String isAdmin;
+   private int user_id;
+   private String username;
+   private String password;
+   private double weight;
+   private int height_ft;
+   private double height_in;
+   private int points;
+   private double calories;
+   private double distance;
+   private String Name;
+   private int isAdmin;
 
-    public ProfileContainer(){
-        this.userId = "";
-    }
+   public int getUserId() {
+      return user_id;
+   }
 
-    public ProfileContainer(String userId,String username, String password, String weight,String heightft,
-            String heightin, String points, String calories, String distance, String name, String isAdmin){
-        this.userId = userId;
-        this.username = username;
-        this.password = password;
-        this.weight = weight;
-        this.heightft = heightft;
-        this.heightin = heightin;
-        this.points = points;
-        this.calories =calories;
-        this.distance =distance;
-        this.name = name;
-        this.isAdmin =isAdmin;
-    }
+   public String getUsername() {
+      return username;
+   }
 
-    public void setUserId(String uid){
-        this.userId = uid;
-    }
+   public String getPassword() {
+      return password;
+   }
 
-    public void setname(String name){
-        this.name = name;
-    }
+   public double getWeight() {
+      return weight;
+   }
 
-    public void setUsername(String username){
-        this.username = username;
-    }
+   public int getHeight_ft() {
+      return height_ft;
+   }
 
-    public void setWeight(String weight){
-        this.weight = weight;
-    }
+   public double getHeight_in() {
+      return height_in;
+   }
 
-    public void setHeightft(String heightft){
-        this.heightft = heightft;
-    }
+   public int getPoints() {
+      return points;
+   }
 
-    public void setHeightin(String heightin){
-        this.heightin = heightin;
-    }
+   public double getCalories() {
+      return calories;
+   }
 
-    public void setPoints(String points){
-        this.points = points;
-    }
+   public double getDistance() {
+      return distance;
+   }
 
-    public void setCalories(String calories){
-        this.calories = calories;
-    }
+   public String getName() {
+      return Name;
+   }
 
-    public void setDistance(String distance){
-        this.distance = distance;
-    }
-
-    public void setIsAdmin(String isAdmin){
-        this.isAdmin = isAdmin;
-    }
-
-
-    public String getUserId(){
-        return userId;
-    }
-
-    public String getName(){
-        return name;
-    }
-
-    public String getUsername(){
-        return this.username;
-    }
-
-    public String getWeight(){
-        return weight;
-    }
-
-    public String getHeightft(){
-        return heightft;
-    }
-
-    public String getHeightin(){
-        return heightin;
-    }
-
-    public String getPoints(){
-        return points;
-    }
-
-    public String getCalories(){
-        return calories;
-    }
-
-    public String getDistance(){
-        return distance;
-    }
-
-    public String getIsAdmin(){
-        return isAdmin;
-    }
-
+   public int getIsAdmin() {
+      return isAdmin;
+   }
 }

@@ -10,12 +10,14 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -24,16 +26,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.LoginActivity;
-import com.ninjadroid.app.activities.MainActivity;
 import com.ninjadroid.app.activities.RouteActivity;
-
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder> {
     private static List<String> data;
     private static Context activity;
     private static int user_id;
@@ -42,34 +39,28 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     private static final int Activity_REQUEST_CODE = 1;
 
-    public CustomAdapter (int user_id, Context activity, List<String> data){
+    public SharedAdapter(int user_id, Context activity, List<String> data){
         this.activity = activity;
         this.data = data;
         this.user_id = user_id;
     }
 
     @Override
-    public CustomAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item2, parent, false);
         return new ViewHolder(rowItem);
     }
 
     @Override
-    public void onBindViewHolder(CustomAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         String result[] = this.data.get(position).split(";");
         if (result.length == 0) {
             return;
         }
-        holder.textView.setText(result[0]);
-        if (result[1].equals("null")) {
-            holder.textView7.setText("Date: N/A");
-        } else {
-            holder.textView7.setText("Date" + result[1].substring(result[1].indexOf(":"),result[1].indexOf("T")));
-        }
+        holder.textView.setText(result[1]);
+        holder.textView7.setText(result[0]);
         holder.textView3.setText(result[2]);
-        holder.textView4.setText(result[3]);
-        holder.textView5.setText(result[4]);
-        holder.textView12.setText(result[5]);
+        holder.textView4.setText("Shared by:" + result[3].substring(result[3].indexOf(":") + 1));
     }
 
 
@@ -82,9 +73,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         private TextView textView;
         private TextView textView3;
         private TextView textView4;
-        private TextView textView5;
         private TextView textView7;
-        private TextView textView12;
 
         public ViewHolder(View view) {
             super(view);
@@ -93,9 +82,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             this.textView = view.findViewById(R.id.textview);
             this.textView3 = view.findViewById(R.id.textview3);
             this.textView4 = view.findViewById(R.id.textview4);
-            this.textView5 = view.findViewById(R.id.textview5);
             this.textView7 = view.findViewById(R.id.textview7);
-            this.textView12 = view.findViewById(R.id.textview12);
         }
 
         @Override
@@ -116,12 +103,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             // Handle long click
             // Return true to indicate the click was handled
             PopupMenu popup = new PopupMenu(view.getContext(),textView);
-            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+            popup.getMenuInflater().inflate(R.menu.popup_menu2, popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     switch(item.getItemId()) {
-                        case R.id.share:
+                        case R.id.remove:
                             shareFunc();
                     }
                     return true;
@@ -133,18 +120,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         public void shareFunc() {
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("Please specify who you'd like to share the route with");
+            builder.setTitle("Are you sure you want to delete this route?");
 
-            final EditText input1 = new EditText(activity);
-            input1.setHint("Username of Friend");
-
-            input1.setInputType(InputType.TYPE_CLASS_TEXT);
-            builder.setView(input1);
 
             builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    inp_text = input1.getText().toString();
                     shareFunc2(getLayoutPosition(),activity);
                 }
             });
@@ -163,15 +144,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         String s = data.get(pos);
         int pos2 = s.indexOf(';');
         int pos3 = s.indexOf(':');
-        int uid = user_id;
 
-        System.out.println(s);
-        queryInfo(activity,"" + uid,inp_text,s.substring(pos3+1,pos2));
+        queryInfo(activity,s.substring(pos3+1,pos2));
 
 
     }
 
-    private static void queryInfo(Context context, String userID, String sharedUn, String routeID) {
+    private static void queryInfo(Context context,String routeID) {
         // Instantiate the RequestQueue.
         Log.i("Justin", "17"); //replace with userID
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -179,10 +158,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(URLBuilder.getScheme())
                 .encodedAuthority(URLBuilder.getEncodedAuthority())
-                .appendPath(URLBuilder.getShareRoute())
-                .appendQueryParameter("user_id", userID)
-                .appendQueryParameter("shared_username",sharedUn)
-                .appendQueryParameter("route_id",routeID); //replace with userID
+                .appendPath(URLBuilder.deleteShared())
+                .appendQueryParameter("route_id",routeID)
+                .appendQueryParameter("user_id","" + user_id);//replace with userID
 
         String myUrl = builder.build().toString();
         Log.i("Query", myUrl);
@@ -195,13 +173,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
                         Log.i("Get Request Response", response);
-                        if (response.equals("\"success\"")) {
-                            Toast.makeText(activity,"Successfully shared route with " + inp_text,Toast.LENGTH_SHORT).show();
-                        } else if (response.equals("\"duplicate\"")) {
-                            Toast.makeText(activity,"Route already shared with " + inp_text,Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(activity,"User " + inp_text + " does not exist",Toast.LENGTH_SHORT).show();
-                        }
+                        Toast.makeText(activity,"Successfully deleted route " + routeID,Toast.LENGTH_SHORT).show();
+
 
 
                     }

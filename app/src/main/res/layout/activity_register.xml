@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true">
+
+    <TextView
+        android:id="@+id/registerTitleR"
+        android:layout_width="313dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:text="Register!"
+        android:textSize="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/heightinTitleR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="48dp"
+        android:text="Height In:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heightftTitleR" />
+
+    <TextView
+        android:id="@+id/usernameTitleR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="52dp"
+        android:text="Username: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameTitleR" />
+
+    <TextView
+        android:id="@+id/passwordTitleR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="52dp"
+        android:text="Password:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameTitleR" />
+
+    <TextView
+        android:id="@+id/weightTitleR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="52dp"
+        android:text="Weight:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordTitleR" />
+
+    <TextView
+        android:id="@+id/heightftTitleR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="55dp"
+        android:text="Height ft:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightTitleR" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/usernameEditR"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="38dp"
+        android:hint="Enter A Username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameEditR" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/nameEditR"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="38dp"
+        android:hint="Enter Your Name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerTitleR" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/passwordEditR"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="38dp"
+        android:hint="Enter A Password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/usernameEditR" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/weightEditR"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="26dp"
+        android:layout_marginEnd="38dp"
+        android:hint="Enter A Weight"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditR" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/heightftEditR"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="38dp"
+        android:hint="Enter Feet"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/weightEditR" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/heightinEditR"
+        android:layout_width="266dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="38dp"
+        android:hint="Enter Inches"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heightftEditR" />
+
+    <Button
+        android:id="@+id/registerButtonR"
+        android:layout_width="162dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:text="Register"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heightinEditR" />
+
+    <Button
+        android:id="@+id/backButtonR"
+        android:layout_width="162dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="208dp"
+        android:layout_marginTop="20dp"
+        android:text="Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heightinEditR" />
+
+    <TextView
+        android:id="@+id/nameTitleR"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:text="Name:"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerTitleR" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

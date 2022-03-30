@@ -23,6 +23,9 @@ import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.menuFragments.SharedFragment;
 import com.ninjadroid.app.activities.menuFragments.FollowingFragment;
 import com.ninjadroid.app.databinding.ActivityMainBinding;
+import com.ninjadroid.app.utils.VolleyProfileCallback;
+import com.ninjadroid.app.utils.containers.ProfileContainer;
+import com.ninjadroid.app.webServices.GetProfile;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
@@ -30,6 +33,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ActivityMainBinding binding;
 
     String userID;
+    ProfileContainer userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +53,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        Intent intent = getIntent();
-        userID = intent.getStringExtra("userID");
+        userID = getIntent().getStringExtra("userID");
         Log.i("MainActivity", userID);
+
+        GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
+            @Override
+            public void onSuccess(ProfileContainer profile) {
+                userProfile = profile;
+            }
+        });
 
         if(savedInstanceState == null) {
             MapFragment fmapFragment = MapFragment.newInstance(userID, -1);
@@ -59,15 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     fmapFragment, "MAP_FRAGMENT").commit();
             navigationView.getMenu().getItem(1).setChecked(true);
         }
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        MapFragment fmapFragment = MapFragment.newInstance(userID, -1);
-//        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                fmapFragment, "MAP_FRAGMENT").commit();
-//        navigationView.getMenu().getItem(1).setChecked(true);
     }
 
     @Override
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(!navigationView.getMenu().findItem(item.getItemId()).isChecked()){
             switch (item.getItemId()) {
                 case R.id.nav_profile:
-                    ProfileFragment profileFragment = ProfileFragment.newInstance(userID);
+                    ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             profileFragment, "PROFILE_FRAGMENT").commit();
                     break;
@@ -118,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             follFrag,"FOLL_FRAGMENT").commit();
                     break;
                 case R.id.nav_logOut:
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
                     finish();
                     break;
             }
@@ -143,7 +147,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(getIntent().getIntExtra("ProfileFragment",0)==1){
+            Log.i("Profile page first", "came directly");
+            userID = getIntent().getStringExtra("userID");
 
+            GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
+                @Override
+                public void onSuccess(ProfileContainer profile) {
+                    userProfile = profile;
+                    ProfileFragment profileFragment = ProfileFragment.newInstance(profile);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            profileFragment, "PROFILE_FRAGMENT").commit();
+                }
+            });
+       }else{
+            Log.i("itttt", "didnt workkkkk");
+        }
+    }
 
-
+    @Override
+    public void onNewIntent (Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
 }

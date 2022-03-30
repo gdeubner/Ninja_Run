@@ -141,20 +141,14 @@ public class HistoryFragment extends Fragment {
             s = s.replace("\"","");
             String s1 = (s.charAt(0) + "").toUpperCase() + s.substring(1);
             //System.out.println(s1);
-            if (count % 2 == 0) {
-                temp += s1 + "\n";
-            } else if (count != 5){
-                temp += s1 + "\t ▀▀▀ \t";
-            } else {
-                temp += s1 + "\n";
-            }
+            temp += s1 + ";";
             count++;
         }
         temp = temp.replace("]","");
         temp =  temp.replace("{","");
         temp = temp.replace("}","");
         temp = temp.replace("\"","");
-        //System.out.println(temp);
+        System.out.println(temp);
         data.add(temp);
 
         return data;

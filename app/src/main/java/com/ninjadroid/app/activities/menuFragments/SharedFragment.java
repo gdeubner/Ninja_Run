@@ -20,7 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.utils.CustomAdapter;
+import com.ninjadroid.app.utils.SharedAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
 
 import java.util.ArrayList;
@@ -98,7 +98,7 @@ public class SharedFragment extends Fragment {
 
                         final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(new CustomAdapter(Integer.parseInt(userID), context,data)); //change later from 17 to uid
+                        recyclerView.setAdapter(new SharedAdapter(Integer.parseInt(userID), context,data)); //change later from 17 to uid
                         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
 
@@ -139,13 +139,7 @@ public class SharedFragment extends Fragment {
             String s1 = (s.charAt(0) + "").toUpperCase() + s.substring(1);
             s1 = s1.replace("_"," ");
             //System.out.println(s1);
-            if (count % 2 == 0) {
-                temp += s1 + "\n";
-            } else if (count != 3){
-                temp += s1 + "\t ▀▀▀ \t";
-            } else {
-                temp += s1 + "\n";
-            }
+            temp += s1 + ";";
             count++;
         }
         temp = temp.replace("]","");

@@ -21,16 +21,18 @@ import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.URLBuilder;
 
-public class LoginPage extends AppCompatActivity {
+import java.io.File;
+
+public class LoginActivity extends AppCompatActivity {
 
     public static final String KEY = "userID";
     private String username = "";
     private String password = "";
 
-     EditText usernameEditText;
-     EditText passwordEditText;
-     Button loginButton;
-     Button registerButton;
+    EditText usernameEditText;
+    EditText passwordEditText;
+    Button loginButton;
+    Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,7 @@ public class LoginPage extends AppCompatActivity {
                 password = passwordEditText.getText().toString();
 
                 if(username.equals("") || password.equals("")){
-                    Toast.makeText(LoginPage.this, "Please Enter Username and Password!",
+                    Toast.makeText(LoginActivity.this, "Please Enter Username and Password!",
                             Toast.LENGTH_SHORT).show();
                 }else{
                     queryID(getBaseContext(), username, password);
@@ -64,12 +66,10 @@ public class LoginPage extends AppCompatActivity {
                 username = usernameEditText.getText().toString();
                 password = passwordEditText.getText().toString();
 
-                if(username.equals("") || password.equals("")){
-                    Toast.makeText(LoginPage.this, "Please Enter A Username and Password!",
-                            Toast.LENGTH_SHORT).show();
-                }else{
-                    registerUser(getBaseContext(), username, password);
-                }
+                String content = username + "," + password;
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                intent.putExtra("info", content);
+                startActivity(intent);
 
             }
         });
@@ -100,11 +100,11 @@ public class LoginPage extends AppCompatActivity {
                             String message = response.substring(2, response.length()-2);
                             Log.i("Get Request Response", message);
 
-                            Intent intent = new Intent(LoginPage.this, MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             intent.putExtra(KEY, message);
                             startActivity(intent);
                         }else{
-                            Toast.makeText(LoginPage.this, "Please Enter A Valid Username and Password!",
+                            Toast.makeText(LoginActivity.this, "Please Enter A Valid Username and Password!",
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -113,60 +113,8 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 try {
-                    Log.e("Get Request Response", error.getMessage());
-
-                } catch (Exception e){
-                    Log.e("Get Request Response", "Unspecified server error");
-                }
-
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
-    }
-    private void registerUser(Context context, String username, String password) {
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme(URLBuilder.getScheme())
-                .encodedAuthority(URLBuilder.getEncodedAuthority())
-                .appendPath(URLBuilder.registerUser())
-                .appendQueryParameter("var_un", username)
-                .appendQueryParameter("var_pw", password)
-                .appendQueryParameter("var_lb","0")
-                .appendQueryParameter("var_ft","0")
-                .appendQueryParameter("var_in","0")
-                .appendQueryParameter("var_nam","Name");
-
-        String myUrl = builder.build().toString();
-        Log.i("Query", myUrl);
-        String message = "";
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, myUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        if(response.length() > 6){
-                            String message = response.substring(1, response.length()-1);
-                            Log.i("Get Request Response", message);
-
-                            Intent intent = new Intent(LoginPage.this, EditProfile.class);
-                            intent.putExtra(KEY, username);
-                            startActivity(intent);
-                        }else{
-                            Toast.makeText(LoginPage.this, "That Username is Taken!",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
+                    Toast.makeText(LoginActivity.this, "Sorry! Our Server is Down!",
+                            Toast.LENGTH_SHORT).show();
                     Log.e("Get Request Response", error.getMessage());
 
                 } catch (Exception e){
