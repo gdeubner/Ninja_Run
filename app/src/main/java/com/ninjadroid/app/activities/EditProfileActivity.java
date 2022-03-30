@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,17 +19,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.fragments.ProfileFragment;
 import com.ninjadroid.app.utils.URLBuilder;
-import com.ninjadroid.app.utils.VolleyProfileCallback;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
-import com.ninjadroid.app.webServices.GetProfile;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class EditProfileActivity extends AppCompatActivity {
     public static final String KEY = "key";

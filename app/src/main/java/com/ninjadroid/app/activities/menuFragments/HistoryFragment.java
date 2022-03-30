@@ -1,7 +1,6 @@
-package com.ninjadroid.app.activities.fragments;
+package com.ninjadroid.app.activities.menuFragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,13 +25,13 @@ import com.ninjadroid.app.utils.URLBuilder;
 
 import java.util.ArrayList;
 
-public class FollowersFragment extends Fragment {
+public class HistoryFragment extends Fragment {
     private static final String USERID = "key";
 
     // TODO: Rename and change types of parameters
     private String mUserID;
 
-    public FollowersFragment() {
+    public HistoryFragment() {
         // Required empty public constructor
     }
 
@@ -44,8 +43,8 @@ public class FollowersFragment extends Fragment {
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FollowersFragment newInstance(String userID) {
-        FollowersFragment fragment = new FollowersFragment();
+    public static HistoryFragment newInstance(String userID) {
+        HistoryFragment fragment = new HistoryFragment();
         Bundle args = new Bundle();
         args.putString(USERID, userID);
         fragment.setArguments(args);
@@ -63,24 +62,25 @@ public class FollowersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_followers, container, false);
+        View view = inflater.inflate(R.layout.fragment_history, container, false);
         // Inflate the layout for this fragment
         queryInfo(getContext(), mUserID,view);
+
         return view;
     }
 
     private void queryInfo(Context context, String userID,View view) {
         // Instantiate the RequestQueue.
 
-        RecyclerView recyclerView = view.findViewById(R.id.Followers);
-        Log.i("user_id", userID); //replace with userID
+        RecyclerView recyclerView = view.findViewById(R.id.histRec);
+        Log.i("Justin", userID); //replace with userID
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(URLBuilder.getScheme())
                 .encodedAuthority(URLBuilder.getEncodedAuthority())
-                .appendPath(URLBuilder.getFollowerList())
-                .appendQueryParameter( "user_id", userID); //replace with userID
+                .appendPath(URLBuilder.getRouteHistoryPath())
+                .appendQueryParameter("user_id", userID); //replace with userID
 
         String myUrl = builder.build().toString();
         Log.i("Query", myUrl);
@@ -95,14 +95,15 @@ public class FollowersFragment extends Fragment {
                         Log.i("Get Request Response", response);
                         String[] result = response.split(",");
 
-                        int userIDint = Integer.valueOf(userID);
-                        ArrayList<String> username = populateusernameList(result);
-                        ArrayList<String> userid = populateuseridList(result);
 
-                        final RecyclerView recyclerView = getView().findViewById(R.id.Followers);
+                        ArrayList<String> data = populateList(result);
+
+                        final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(new CustomAdapter(userIDint, context,username));
+
+                        recyclerView.setAdapter(new CustomAdapter(Integer.parseInt(userID), context,data)); //change later from 17 to uid
                         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+
 
                     }
                 }, new Response.ErrorListener() {
@@ -117,46 +118,41 @@ public class FollowersFragment extends Fragment {
 
             }
         });
+
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
 
+    public ArrayList<String> populateList(String[] str) {
+        int count = 0;
+        String temp = "";
+        ArrayList<String> data = new ArrayList<>();
+        for (String s : str) {
+            if (count == 6) {
+                count = 0;
 
-    public ArrayList<String> populateusernameList(String[] str) {
-        int count = 0;
-        ArrayList<String> data = new ArrayList<>();
-        for (String s : str) {
-            if(count%2 == 0) {
-                String temp;
-                if(count  == 0){
-                    temp = s.substring(14, s.length()-1);
-                }
-                else {
-                    temp = s.substring(13, s.length() - 1);
-                }
+                //System.out.println(temp);
                 data.add(temp);
+                temp = "";
             }
+            s = s.replace("[", "");
+            s = s.replace("{","");
+            s = s.replace("}","");
+            s = s.replace("\"","");
+            String s1 = (s.charAt(0) + "").toUpperCase() + s.substring(1);
+            //System.out.println(s1);
+            temp += s1 + ";";
             count++;
         }
+        temp = temp.replace("]","");
+        temp =  temp.replace("{","");
+        temp = temp.replace("}","");
+        temp = temp.replace("\"","");
+        System.out.println(temp);
+        data.add(temp);
+
         return data;
     }
-    public ArrayList<String> populateuseridList(String[] str) {
-        int count = 0;
-        ArrayList<String> data = new ArrayList<>();
-        for (String s : str) {
-            if(count%2 == 1) {
-                String temp;
-                if(s.contains("]")){
-                    temp = s.substring(10,s.length()-2);
-                }
-                else {
-                    temp = s.substring( 10,s.length() - 1);
-                }
-                Log.i("temp is", temp);
-                data.add(temp);
-            }
-            count++;
-        }
-        return data;
-    }
+
+
 }

@@ -15,18 +15,16 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
-import com.ninjadroid.app.activities.fragments.FollowersFragment;
-import com.ninjadroid.app.activities.fragments.HistoryFragment;
-import com.ninjadroid.app.activities.fragments.MapFragment;
-import com.ninjadroid.app.activities.fragments.ProfileFragment;
+import com.ninjadroid.app.activities.menuFragments.FollowersFragment;
+import com.ninjadroid.app.activities.menuFragments.HistoryFragment;
+import com.ninjadroid.app.activities.menuFragments.MapFragment;
+import com.ninjadroid.app.activities.menuFragments.ProfileFragment;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.fragments.SharedFragment;
-import com.ninjadroid.app.activities.fragments.FollowingFragment;
+import com.ninjadroid.app.activities.menuFragments.SharedFragment;
+import com.ninjadroid.app.activities.menuFragments.FollowingFragment;
 import com.ninjadroid.app.databinding.ActivityMainBinding;
 import com.ninjadroid.app.utils.VolleyProfileCallback;
-import com.ninjadroid.app.utils.VolleyRouteCallback;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
-import com.ninjadroid.app.utils.containers.RouteContainer;
 import com.ninjadroid.app.webServices.GetProfile;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -139,13 +137,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        int routeID = data.getExtras().getInt("routeID");
+        if(data != null){
+            int routeID = data.getExtras().getInt("routeID");
 
-        MapFragment fmapFragment = MapFragment.newInstance(userID, routeID);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                fmapFragment, "MAP_FRAGMENT").commit();
-        navigationView.getMenu().getItem(1).setChecked(true);
-
+            MapFragment fmapFragment = MapFragment.newInstance(userID, routeID);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    fmapFragment, "MAP_FRAGMENT").commit();
+            navigationView.getMenu().getItem(1).setChecked(true);
+        }
     }
 
     @Override
@@ -174,5 +173,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onNewIntent(intent);
         setIntent(intent);
     }
-
 }

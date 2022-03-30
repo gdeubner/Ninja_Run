@@ -2,6 +2,7 @@ package com.ninjadroid.app.utils;
 
 import android.location.Location;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.ninjadroid.app.utils.containers.LocationContainer;
 
 import java.text.SimpleDateFormat;
@@ -45,10 +46,21 @@ public  class Utils {
         return (rad * 180.0 / Math.PI);
     }
 
-    private static double nano2Seconds(double nano){return nano * Math.pow(10,9);}
+    private static double nano2seconds(double nano){
+        return nano * Math.pow(10,9);
+    }
+
+    public static double pound2kilogram(double lb) {
+        return lb * 0.453592;
+    }
+
+    public static double second2minute(double sec) {
+        return sec / 60;
+    }
+
 
     public static int getRunDuration(ArrayList<LocationContainer> list){
-        return (int) nano2Seconds((list.get(list.size()-1).getElapsedRealtimeNs()
+        return (int) nano2seconds((list.get(list.size()-1).getElapsedRealtimeNs()
                 - list.get(0).getElapsedRealtimeNs()));
     }
 
@@ -60,4 +72,66 @@ public  class Utils {
         return formatter.format(time);
     }
 
+    /**
+     * @param time  - the duration of the run in seconds
+     * @param weight - weight of the runner in lb
+     * @return Estimates the calories burned during the course of a run.
+     *     Assumes an average constant speed of 8 km/h (which = 13.5 MET).
+     */
+    public static double simpleCalorieCalc(double time, double weight) {
+        //convert lb to kg
+        weight = Utils.pound2kilogram(weight);
+        //convert time to minutes
+        time = Utils.second2minute(time);
+        double MET = 13.5;
+        return time * (MET * 3.5 * weight) / 200;
+    }
+
+    public static float findBearing(LatLng curPos, LatLng routePnt){
+        //vector 1 (U)
+        double u1 = routePnt.latitude - curPos.latitude;
+        double u2 = routePnt.longitude - curPos.longitude;
+
+        //vector 2 (V)
+        double v1 = 0;
+        double v2 = 1;
+
+        double dotProd = u1*v1 + u2*v2;
+
+        double vMag = Math.sqrt(Math.pow(v1, 2) + Math.pow(v2, 2));
+        double uMag = Math.sqrt(Math.pow(u1, 2) + Math.pow(u2, 2));
+
+        double angleRad = Math.acos(dotProd/(vMag * uMag));
+
+        double angleDeg = Math.toDegrees(angleRad);
+        return (float) angleDeg + 90;
+    }
+
+    public static float findBearing2(LatLng curPos, LatLng routePnt){
+        double lat1 = curPos.latitude;
+        double long1 = curPos.longitude;
+        double lat2 = routePnt.latitude;
+        double long2 = routePnt.longitude;
+
+        double dLon = (long2 - long1);
+
+        double y = Math.sin(dLon) * Math.cos(lat2);
+        double x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1)
+                * Math.cos(lat2) * Math.cos(dLon);
+
+        double brng = Math.atan2(y, x);
+
+        brng = Math.toDegrees(brng);
+        brng = (brng + 360) % 360;
+        brng = 360 - brng; // count degrees counter-clockwise - remove to make clockwise
+
+        return (float)brng;
+    }
+
+    public static float distanceBetweenLatLng(LatLng center, LatLng target){
+        float[] results = new float[1];
+        Location.distanceBetween(center.latitude, center.longitude,
+                target.latitude, target.longitude, results);
+        return  results[0];
+    }
 }

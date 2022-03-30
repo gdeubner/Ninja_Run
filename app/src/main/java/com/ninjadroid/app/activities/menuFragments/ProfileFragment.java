@@ -1,4 +1,4 @@
-package com.ninjadroid.app.activities.fragments;
+package com.ninjadroid.app.activities.menuFragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -6,8 +6,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.text.Spannable;
@@ -19,25 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.EditProfileActivity;
-import com.ninjadroid.app.activities.LoginActivity;
-import com.ninjadroid.app.activities.MainActivity;
-import com.ninjadroid.app.utils.URLBuilder;
-import com.ninjadroid.app.utils.containers.ProfileContainer;
-import com.ninjadroid.app.webServices.GetProfile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import com.ninjadroid.app.activities.EditProfileActivity;
+import com.ninjadroid.app.utils.containers.ProfileContainer;
 
 /**
  * A simple {@link Fragment} subclass.

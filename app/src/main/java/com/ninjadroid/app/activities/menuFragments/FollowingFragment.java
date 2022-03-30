@@ -1,4 +1,4 @@
-package com.ninjadroid.app.activities.fragments;
+package com.ninjadroid.app.activities.menuFragments;
 
 import android.content.Context;
 import android.net.Uri;

@@ -4,15 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.databinding.ActivityMainBinding;
 import com.ninjadroid.app.databinding.ActivityRouteBinding;
-import com.ninjadroid.app.utils.VolleyRouteCallback;
+import com.ninjadroid.app.utils.RouteCallback;
 import com.ninjadroid.app.utils.containers.RouteContainer;
 import com.ninjadroid.app.webServices.GetRoute;
 
@@ -31,7 +27,7 @@ public class RouteActivity extends AppCompatActivity {
         binding = ActivityRouteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         routeID = Integer.parseInt(getIntent().getStringExtra(ROUTE_ID_KEY));
-        GetRoute.getRoute(this, routeID, new VolleyRouteCallback() {
+        GetRoute.getRoute(this, routeID, new RouteCallback() {
             @Override
             public void onSuccess(RouteContainer route) {
                 binding.tvCreator.setText(route.getUsername());
