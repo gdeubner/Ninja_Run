@@ -127,4 +127,11 @@ public  class Utils {
 
         return (float)brng;
     }
+
+    public static float distanceBetweenLatLng(LatLng center, LatLng target){
+        float[] results = new float[1];
+        Location.distanceBetween(center.latitude, center.longitude,
+                target.latitude, target.longitude, results);
+        return  results[0];
+    }
 }

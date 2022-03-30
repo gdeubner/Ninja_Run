@@ -98,19 +98,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     boolean scrolling;
     boolean initialMapLoad;
     boolean directionsAddedToMap;
+    boolean followingRoute;
+    boolean routeCompleted;
     Polyline drawnRoute;
     Polyline followedRoute;
-    ArrayList<Polyline> mDirectionsList;
     int routeId;
     Marker startRouteMarker;
     Marker endRouteMarker;
     Chronometer clock;
     long clockPauseTime;
-    List<LatLng> latLngFollowedRoute;
-
-
     RadioGroup radioGroup;
-
+    int nextRouteIndex;
+    int previousRoutIndex;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -161,9 +160,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setRadioGroupFunctionality();
         setMappingFunctionality();
         setButtonAndTrackingFunctionality();
-        setRadioGroupFunctionality();
     }
 
     //sets the onclick listeners for the buttons
@@ -179,38 +178,48 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         scrolling = false;
         followingRouteMode = false;
         running = false;
+        followingRoute = false;
+        routeCompleted = false;
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(followingRouteMode && !running){
-                    running = true;
-                    Toast.makeText(getContext(), "Run started", Toast.LENGTH_SHORT).show();
-                    routeCoordinates = new ArrayList<>();
-                    clock.setBase(SystemClock.elapsedRealtime());
-                    clock.start();
+                if(followingRouteMode){
+                    if(!running){
+                        running = true;
+                        Toast.makeText(getContext(), "Run started", Toast.LENGTH_SHORT).show();
+                        routeCoordinates = new ArrayList<>();
+                        clock.setBase(SystemClock.elapsedRealtime());
+                        clock.start();
+                        followingRoute = true;
+                    } else {
+                        Toast.makeText(getContext(), "Already on a run ", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if(!creatingRoute ){
+                        clearCreatedRoute();
+                        creatingRoute = true;
+                        routeCoordinates = new ArrayList<>();
 
-                } else if(!creatingRoute ){
-                    clearCreatedRoute();
-                    creatingRoute = true;
-                    routeCoordinates = new ArrayList<>();
+                        //Place current location marker
+                        LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                        MarkerOptions markerOptions = new MarkerOptions();
+                        markerOptions.position(latLng);
+                        markerOptions.title("Start");
+                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                        startMarker = mGoogleMap.addMarker(markerOptions);
 
-                    //Place current location marker
-                    LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title("Start");
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    startMarker = mGoogleMap.addMarker(markerOptions);
-
-                    //sets the starting point for the route drawn on the screen
-                    PolylineOptions options = new PolylineOptions()
-                            .color(Color.BLUE)
-                            .width(10)
-                            .startCap(new RoundCap())
-                            .endCap(new RoundCap())
-                            .add(latLng);
-                    drawnRoute = mGoogleMap.addPolyline(options);
+                        //sets the starting point for the route drawn on the screen
+                        PolylineOptions options = new PolylineOptions()
+                                .color(Color.BLUE)
+                                .width(10)
+                                .startCap(new RoundCap())
+                                .endCap(new RoundCap())
+                                .add(latLng);
+                        drawnRoute = mGoogleMap.addPolyline(options);
+                    } else {
+                        Toast.makeText(getContext(), "Already creating a run", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
 
@@ -219,46 +228,57 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(creatingRoute && !followingRouteMode){
-                    if(routeCoordinates.size() > 3){
-                        creatingRoute = false;
+                //create mode
+                if(!followingRouteMode){
+                    if(creatingRoute){
+                        if(routeCoordinates.size() > 3){
+                            creatingRoute = false;
 
-                        //Place current location marker
-                        LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                        MarkerOptions markerOptions = new MarkerOptions();
-                        markerOptions.position(latLng);
-                        markerOptions.title("Finish");
-                        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-                        endMarker = mGoogleMap.addMarker(markerOptions);
-                        //int calories = GetProfile.getProfile()
-                        startRouteFinishDialog();
-                    } else {//route was too short. remove all map objects and dont post route
-                        drawnRoute.remove();
-                        creatingRoute = false;
-                        startMarker.remove();
-                        Toast.makeText(getView().getContext(), "Wow, that was quick.",
+                            //Place current location marker
+                            LatLng latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                            MarkerOptions markerOptions = new MarkerOptions();
+                            markerOptions.position(latLng);
+                            markerOptions.title("Finish");
+                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+                            endMarker = mGoogleMap.addMarker(markerOptions);
+                            //int calories = GetProfile.getProfile()
+                            startRouteFinishDialog();
+                        } else {//route was too short. remove all map objects and dont post route
+                            drawnRoute.remove();
+                            creatingRoute = false;
+                            startMarker.remove();
+                            Toast.makeText(getView().getContext(), "Wow, that was quick.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(getView().getContext(), "You haven't started a run yet.",
                                 Toast.LENGTH_SHORT).show();
                     }
-                } else if(followingRouteMode && running){
-                    running = false;
-                    clock.stop();
-                    clockPauseTime = SystemClock.elapsedRealtime() - clock.getBase();
-                    startRunFinishedDialog();
-                } else {
-                    Toast.makeText(getView().getContext(), "You haven't started a run yet.",
-                            Toast.LENGTH_SHORT).show();
+                } else { // following route mode
+                    if (running) {
+                        running = false;
+                        startRunFinishedDialog();
+                    } else {
+                        Toast.makeText(getView().getContext(), "You haven't started a run yet.",
+                                Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
     }
 
     private void startRunFinishedDialog() {
+        clockPauseTime = SystemClock.elapsedRealtime() - clock.getBase();
+        clock.stop();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Do you want to log this workout?")
+        builder.setMessage("Congrats! Do you want to log this workout?")
                 .setTitle("Run Finished");
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 //send run to history table
+                followingRoute = false;
+                clock.setBase(SystemClock.elapsedRealtime());
+                clock.stop();
                 AddHistory.sendHistoryUsingVolley(getContext(), Integer.parseInt(mUserId),
                         Utils.formatDateTime(routeCoordinates.get(0).getTime()),
                         -1, Utils.getRunDuration(routeCoordinates),
@@ -267,12 +287,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
         builder.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                followingRoute = false;
+                clock.setBase(SystemClock.elapsedRealtime());
+                clock.stop();
                 clearCreatedRoute();
                 Toast.makeText(getContext(), "Discarded", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNeutralButton("Continue Running", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                if(!routeCompleted){
+                    followingRoute = true;
+                }
                 Toast.makeText(getContext(), "Keep on going!", Toast.LENGTH_SHORT).show();
                 running = true;
                 clock.setBase(SystemClock.elapsedRealtime() - clockPauseTime);
@@ -330,7 +356,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
                     mLastLocation = location;
 
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    LatLng curLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
                     if(creatingRoute || running) {
                         LocationContainer lastLocation= new LocationContainer(
@@ -340,22 +366,53 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         routeCoordinates.add(lastLocation);
                         if(creatingRoute){
                             List<LatLng> newRoute = drawnRoute.getPoints();
-                            newRoute.add(latLng);
+                            newRoute.add(curLatLng);
                             drawnRoute.setPoints(newRoute);
                         }
                     }
 
                     if(initialMapLoad){
-                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_DEFAULT));
+                        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curLatLng, ZOOM_DEFAULT));
 
                         initialMapLoad = false;
+
+                        if(routeId != -1){
+                            Log.i("followRoute", "Setting followRouteMode");
+                            ((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
+                        }
+                        Log.i("followRoute", routeId + "");
                     }
                     if(!scrolling){
-                        //focus map on user location
-                        if(directionsAddedToMap){
-                            setFollowingCameraPosition(latLng, followedRoute.getPoints().get(0));
+
+                        if(directionsAddedToMap && followingRoute && !routeCompleted){
+                            List<LatLng> pointList = followedRoute.getPoints();
+                            final double MIN_LAT_LNG_DIFF = 10;
+                            if(Utils.distanceBetweenLatLng(pointList.get(pointList.size()-1),curLatLng)
+                            < MIN_LAT_LNG_DIFF){
+                                routeCompleted = true;
+                                startRunFinishedDialog();
+                            } else {
+                                //focus camera on user's next step in route
+                                int indexOfClosestPoint = -1;
+                                float smallestDistance = Float.MAX_VALUE;
+                                for(int i = previousRoutIndex; i < pointList.size(); i++){
+                                    LatLng LL = pointList.get(i);
+                                    float tempDist = Utils.distanceBetweenLatLng(LL, curLatLng);
+                                    if(tempDist < smallestDistance){
+                                        indexOfClosestPoint = i;
+                                        smallestDistance = tempDist;
+                                    }
+                                }
+                                previousRoutIndex = indexOfClosestPoint;
+                                nextRouteIndex = indexOfClosestPoint + 1;
+                                if(nextRouteIndex >= pointList.size()){
+                                    nextRouteIndex = pointList.size()-1;
+                                }
+                                setFollowingCameraPosition(curLatLng, pointList.get(nextRouteIndex));
+                            }
                         } else {
-                            setCameraPosition(latLng);
+                            //focus camera on user location
+                            setCameraPosition(curLatLng);
                         }
                     }
                 }
@@ -384,8 +441,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         LatLng oldCurPos = mGoogleMap.getCameraPosition().target;
         float bearing = mGoogleMap.getCameraPosition().bearing;
         final double MIN_LAT_LNG_DIFF = 0.000001;
-        if(Math.abs(oldCurPos.latitude - curPos.latitude) > MIN_LAT_LNG_DIFF &&
-                Math.abs(oldCurPos.longitude - curPos.longitude) > MIN_LAT_LNG_DIFF){
+        if(Utils.distanceBetweenLatLng(oldCurPos, curPos) > MIN_LAT_LNG_DIFF){
             bearing = Utils.findBearing2(curPos, routePnt);
         }
         CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -433,9 +489,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-
-        //todo: add a listener to prevent camera from resetting after user scrolls map
-
         //mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         mLocationRequest = new LocationRequest();
@@ -573,12 +626,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-        if(routeId != -1){
-            Log.i("followRoute", "Setting followRouteMode");
-            ((RadioButton)radioGroup.getChildAt(1)).setChecked(true);
-        }
-        Log.i("followRoute", routeId + "");
-
     }
 
     private void createRouteMode() {
@@ -586,11 +633,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             followedRoute.remove();
             endRouteMarker.remove();
             startRouteMarker.remove();
-            if(mDirectionsList != null) {
-                for (Polyline pol : mDirectionsList) {
-                    pol.remove();
-                }
-            }
+
             Log.i("followRoute",followedRoute.toString());
         }
         if(mLastLocation != null){
@@ -607,16 +650,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         followingRouteMode = true;
         clock.setVisibility(View.VISIBLE);
-        if(mLastLocation != null){
-            //setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+        nextRouteIndex = 1;
+        previousRoutIndex = 0;
 
-            setFollowingCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()),
-                    followedRoute.getPoints().get(0));
-        }
         GetRoute.getRoute(getContext(), routeId, new RouteCallback() {
             @Override
             public void onSuccess(RouteContainer route) {
-                latLngFollowedRoute = getLatLngList(route.getRoute_f().substring(6, route.getRoute_f().length()-1));
+                List<LatLng> latLngFollowedRoute = getLatLngList(route.getRoute_f().substring(6, route.getRoute_f().length()-1));
 
                 PolylineOptions options = new PolylineOptions()
                         .color(Color.BLUE)
@@ -635,34 +675,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         .anchor(0.5f, 0.5f)
                         .position(latLngFollowedRoute.get(0))
                         .icon(bitmapDescriptorFromVector(getContext(), R.drawable.ic_circle_green)));
-                addDirectionsToMap();
+                addDirectionsToMap(followedRoute);
+
+                if(mLastLocation != null){
+                    setCameraPosition(new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude()));
+                }
             }
         });
     }
 
-    private void addDirectionsToMap() {
+    private void addDirectionsToMap(Polyline followedRoute) {
+        Log.i("directions", "Trying to get directions!!!");
         Log.i("directions", mLastLocation.toString());
-        mDirectionsList = new ArrayList<>();
         LatLng currentLatLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-        LatLng startRouteLatLng = new LatLng(latLngFollowedRoute.get(0).latitude, latLngFollowedRoute.get(0).longitude);
+        LatLng startRouteLatLng = new LatLng(followedRoute.getPoints().get(0).latitude,
+                followedRoute.getPoints().get(0).longitude);
         GetDirections.getWalkingDirections(getContext(),currentLatLng,startRouteLatLng,
                 new DirectionsCallback() {
                     @Override
                     public void onSuccess(DirectionsContainer directions) {
                         Log.i("directions", "Status code: " + directions.getStatus());
                         ArrayList<Step> directionsStepList = directions.getSteps();
-                        for(int i = 0; i < directionsStepList.size(); i++){
-                            List<LatLng> list = PolyUtil.decode(directionsStepList.get(i).getPolyline().getPoints());
-                            if(i == directionsStepList.size()-1){
-                                list.add(startRouteLatLng);
-                            }
-                            PolylineOptions options = new PolylineOptions()
-                                    .color(Color.BLACK)
-                                    .width(12)
-                                    .startCap(new RoundCap())
-                                    .endCap(new RoundCap())
-                                    .addAll(list);
-                            mDirectionsList.add( mGoogleMap.addPolyline(options));
+                        for(int i = directionsStepList.size()-1; i >= 0; i--){
+                            List<LatLng> newList = PolyUtil.decode(directionsStepList.get(i).getPolyline().getPoints());
+                            List<LatLng> curList = followedRoute.getPoints();
+                            curList.addAll(0, newList);
+                            followedRoute.setPoints(curList);
                         }
                         directionsAddedToMap = true;
                     }
