@@ -20,6 +20,9 @@ public  class Utils {
             dist += distance(list.get(i).getLat(), list.get(i).getLon(),
                     list.get(i+1).getLat(), list.get(i+1).getLon(), 'M');
         }
+        //rounds dist to first decimal place
+        double tempDist = Math.round(dist * 10);
+        dist = tempDist / 10;
         return dist;
     }
 
@@ -47,7 +50,7 @@ public  class Utils {
     }
 
     private static double nano2seconds(double nano){
-        return nano * Math.pow(10,9);
+        return nano / Math.pow(10,9);
     }
 
     public static double pound2kilogram(double lb) {

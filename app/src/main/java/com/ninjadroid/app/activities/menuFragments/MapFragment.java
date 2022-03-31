@@ -283,14 +283,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 //send run to history table
                 followingRoute = false;
                 //converts times to seconds
-                long startTime = clock.getBase() * 1000;
-                long endTime = SystemClock.elapsedRealtime() * 1000;
-                int totalTime = (int)(endTime - startTime);
+                long startTime = clock.getBase();
+                long endTime = SystemClock.elapsedRealtime();
+                int totalTime = (int)((endTime - startTime)/1000);
                 clock.setBase(SystemClock.elapsedRealtime());
                 clock.stop();
                 AddHistory.sendHistoryUsingVolley(getContext(), Integer.parseInt(mUserId),
                         Utils.formatDateTime(routeCoordinates.get(0).getTime()),
-                        Utils.simpleCalorieCalc(totalTime,profile.getWeight()), Utils.getRunDuration(routeCoordinates),
+                        Utils.simpleCalorieCalc(totalTime,profile.getWeight()), totalTime,
                         Utils.calcDistanceTraveled(routeCoordinates), routeId);
             }
         });
@@ -334,7 +334,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(DialogInterface dialog, int id) {
                 double startTime = routeCoordinates.get(0).getTime();
                 double endTime = routeCoordinates.get(routeCoordinates.size()-1).getTime();
-                int totalTime = (int) (startTime - endTime);
+                int totalTime = (int) ((startTime - endTime)/1000);
 
                 PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId),
                         Utils.simpleCalorieCalc(totalTime, profile.getWeight()));
