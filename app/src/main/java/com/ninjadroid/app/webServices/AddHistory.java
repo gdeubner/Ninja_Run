@@ -80,8 +80,8 @@ public class AddHistory {
                 .appendPath(URLBuilder.updatePoints())
                 .appendQueryParameter("points", String.valueOf(points))
                 .appendQueryParameter("user_id", String.valueOf(user_id))
-                .appendQueryParameter("distance", dist)
-                .appendQueryParameter("calories", String.valueOf(calories));
+                .appendQueryParameter("dist", dist)
+                .appendQueryParameter("cals", String.valueOf(calories));
 
         String url = builder.build().toString();
         Log.i("updatePoints", url);
