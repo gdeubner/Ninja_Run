@@ -105,7 +105,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             TextView tv = view.findViewById(R.id.textview);
             String routeID = tv.getText().toString().split("\n")[0].split(":")[1];
             //************
-
             Intent intent = new Intent(activity, RouteActivity.class);
             intent.putExtra(KEY, routeID);
             ((Activity)activity).startActivityForResult(intent, Activity_REQUEST_CODE);

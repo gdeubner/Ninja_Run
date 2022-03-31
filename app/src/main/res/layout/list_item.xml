@@ -11,8 +11,8 @@
 
         <TextView
             android:id="@+id/textview7"
-            android:layout_width="121dp"
-            android:layout_height="100dp"
+            android:layout_width="159dp"
+            android:layout_height="50dp"
             android:fontFamily="sans-serif-light"
             android:text="Town: Crazy cool town"
             android:textSize="16dp"

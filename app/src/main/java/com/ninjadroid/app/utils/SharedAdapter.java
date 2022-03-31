@@ -89,7 +89,8 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
         public void onClick(View view) {
             //todo: this is a temporary fix for getting the routeID until this recycler view is fully implemented
             //************
-            TextView tv = view.findViewById(R.id.textview);
+            TextView tv = view.findViewById(R.id.textview7);
+            System.out.println("textview thing:" + tv);
             String routeID = tv.getText().toString().split("\n")[0].split(":")[1];
             //************
 
@@ -152,7 +153,7 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
 
     private static void queryInfo(Context context,String routeID) {
         // Instantiate the RequestQueue.
-        Log.i("Justin", "17"); //replace with userID
+        Log.i("Justin", Integer.toString(user_id)); //replace with userID
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Uri.Builder builder = new Uri.Builder();
