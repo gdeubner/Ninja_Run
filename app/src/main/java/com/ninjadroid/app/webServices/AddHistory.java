@@ -65,6 +65,47 @@ public class AddHistory {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
+        int points = (int)((distance * 100) + (calories * .85));
+        System.out.println("POINTS" + points);
+        updatePointsUsingVolley(context,points,user_id);
+    }
+
+    public static void updatePointsUsingVolley(Context context, int points, int user_id) {
+        Uri.Builder builder = new Uri.Builder();
+        builder.scheme(URLBuilder.getScheme())
+                .encodedAuthority(URLBuilder.getEncodedAuthority())
+                .appendPath(URLBuilder.updatePoints())
+                .appendQueryParameter("points", String.valueOf(points))
+                .appendQueryParameter("user_id", String.valueOf(user_id));
+
+        String url = builder.build().toString();
+        Log.i("updatePoints", url);
+
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(context);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Display the first 500 characters of the response string.
+                        Log.i("updatePoints", response);
+                        try{
+                            Log.i("updatePoints", response);
+                        } catch (Exception e) {
+                            Log.e("updatePoints", e.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("updatePoints", error.getMessage());
+            }
+        });
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
     }
 
 }

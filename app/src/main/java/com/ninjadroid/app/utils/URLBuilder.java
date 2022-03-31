@@ -45,6 +45,8 @@ public class URLBuilder {
 
     public static String deleteShared() {return "delete_shared";}
 
+    public static String updatePoints() {return "update_points";}
+
     public static String getScheme() {
         return scheme;
     }
