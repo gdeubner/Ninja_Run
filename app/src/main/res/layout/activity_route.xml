@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/iv_routePreview"
         android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:contentDescription="Route preview"
         android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"

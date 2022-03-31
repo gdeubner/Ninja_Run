@@ -33,9 +33,10 @@ import java.util.regex.Pattern;
 
 public class PostRoute {
 
-    public static void postRoute(ArrayList<LocationContainer> routeCoordinates, Context context, int uid){
+    public static void postRoute(ArrayList<LocationContainer> routeCoordinates, Context context,
+                                 int uid, int calories){
         String url = buildUrl(routeCoordinates, context, uid);
-        postDataUsingVolley(context, url, routeCoordinates, uid);
+        postDataUsingVolley(context, url, routeCoordinates, uid, calories);
     }
 
     private static String buildUrl(ArrayList<LocationContainer> routeCoordinates, Context context, int uid){
@@ -82,7 +83,8 @@ public class PostRoute {
         return builder.build().toString();
     }
 
-    private static void postDataUsingVolley(Context context, String url, ArrayList<LocationContainer> routeCoordinates, int uid) {
+    private static void postDataUsingVolley(Context context, String url, ArrayList<LocationContainer> routeCoordinates,
+                                            int uid, int calories) {
         // creating a new variable for our request queue
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -95,7 +97,7 @@ public class PostRoute {
 
                     Toast.makeText(context, "Route saved!", Toast.LENGTH_SHORT).show();
                     AddHistory.sendHistoryUsingVolley(context, uid, Utils.formatDateTime(routeCoordinates.get(0).getTime()),
-                            -1, Utils.getRunDuration(routeCoordinates), Utils.calcDistanceTraveled(routeCoordinates),
+                            calories, Utils.getRunDuration(routeCoordinates), Utils.calcDistanceTraveled(routeCoordinates),
                             route_id);
 
                 } catch (Exception e) {

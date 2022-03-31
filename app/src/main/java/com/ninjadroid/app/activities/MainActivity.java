@@ -63,15 +63,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 userProfile = profile;
                 TextView tv_profile = navigationView.findViewById(R.id.tv_profileNameNav);
                 tv_profile.setText(userProfile.getName());
+
+                //start map fragment
+                if(savedInstanceState == null) {
+                    MapFragment fmapFragment = MapFragment.newInstance(userID, -1, userProfile);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            fmapFragment, "MAP_FRAGMENT").commit();
+                    navigationView.getMenu().getItem(1).setChecked(true);
+                }
             }
         });
 
-        if(savedInstanceState == null) {
-            MapFragment fmapFragment = MapFragment.newInstance(userID, -1);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    fmapFragment, "MAP_FRAGMENT").commit();
-            navigationView.getMenu().getItem(1).setChecked(true);
-        }
+
     }
 
     @Override
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             profileFragment, "PROFILE_FRAGMENT").commit();
                     break;
                 case R.id.nav_map:
-                    MapFragment fmapFragment = MapFragment.newInstance(userID, -1);
+                    MapFragment fmapFragment = MapFragment.newInstance(userID, -1, userProfile);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             fmapFragment, "MAP_FRAGMENT").commit();
                     break;
@@ -142,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(data != null){
             int routeID = data.getExtras().getInt("routeID");
 
-            MapFragment fmapFragment = MapFragment.newInstance(userID, routeID);
+            MapFragment fmapFragment = MapFragment.newInstance(userID, routeID, userProfile);
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     fmapFragment, "MAP_FRAGMENT").commit();
             navigationView.getMenu().getItem(1).setChecked(true);

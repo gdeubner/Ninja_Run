@@ -104,6 +104,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     Polyline drawnRoute;
     Polyline followedRoute;
     int routeId;
+    ProfileContainer profile;
     Marker startRouteMarker;
     Marker endRouteMarker;
     Chronometer clock;
@@ -116,6 +117,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String USERID = "userId";
     private static final String ROUTE_ID = "routeId";
+    private static final String USER_PROFILE = "profile";
+
 
     // TODO: Rename and change types of parameters
     private String mUserId;
@@ -132,11 +135,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * @return A new instance of fragment MapFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static MapFragment newInstance(String userId, int routeId) {
+    public static MapFragment newInstance(String userId, int routeId, ProfileContainer profile) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
         args.putString(USERID, userId);
         args.putInt(ROUTE_ID, routeId);
+        args.putSerializable(USER_PROFILE, profile);
         fragment.setArguments(args);
         return fragment;
     }
@@ -147,8 +151,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (getArguments() != null) {
             mUserId = getArguments().getString(USERID);
             routeId = getArguments().getInt(ROUTE_ID);
+            profile = (ProfileContainer) getArguments().getSerializable(USER_PROFILE);
         }
-
     }
 
     @Override
@@ -278,11 +282,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onClick(DialogInterface dialog, int id) {
                 //send run to history table
                 followingRoute = false;
+                //converts times to seconds
+                long startTime = clock.getBase();
+                long endTime = SystemClock.elapsedRealtime();
+                int totalTime = (int)((endTime - startTime)/1000);
                 clock.setBase(SystemClock.elapsedRealtime());
                 clock.stop();
                 AddHistory.sendHistoryUsingVolley(getContext(), Integer.parseInt(mUserId),
                         Utils.formatDateTime(routeCoordinates.get(0).getTime()),
-                        -1, Utils.getRunDuration(routeCoordinates),
+                        Utils.simpleCalorieCalc(totalTime,profile.getWeight()), totalTime,
                         Utils.calcDistanceTraveled(routeCoordinates), routeId);
             }
         });
@@ -324,7 +332,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 .setTitle("Route Complete");
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId) );
+                double startTime = routeCoordinates.get(0).getTime();
+                double endTime = routeCoordinates.get(routeCoordinates.size()-1).getTime();
+                int totalTime = (int) ((startTime - endTime)/1000);
+
+                PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId),
+                        Utils.simpleCalorieCalc(totalTime, profile.getWeight()));
             }
         });
         builder.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
