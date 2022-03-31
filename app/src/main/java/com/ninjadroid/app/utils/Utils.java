@@ -84,7 +84,8 @@ public  class Utils {
         //convert time to minutes
         time = Utils.second2minute(time);
         double MET = 13.5;
-        return (int)(time * (MET * 3.5 * weight) / 200);
+        int calories =  (int)(time * (MET * 3.5 * weight) / 200);
+        return calories;
     }
 
     public static float findBearing(LatLng curPos, LatLng routePnt){
