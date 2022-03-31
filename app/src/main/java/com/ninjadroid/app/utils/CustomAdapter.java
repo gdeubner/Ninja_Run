@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.net.Uri;
 import android.text.InputType;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +60,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public void onBindViewHolder(CustomAdapter.ViewHolder holder, int position) {
         String result[] = this.data.get(position).split(";");
         if (result.length == 0) {
+            holder.textView.setVisibility(View.INVISIBLE);
+            holder.textView7.setVisibility(View.INVISIBLE);
+            holder.textView3.setVisibility(View.INVISIBLE);
+            holder.textView4.setVisibility(View.INVISIBLE);
+            holder.textView5.setVisibility(View.INVISIBLE);
+            holder.textView12.setVisibility(View.INVISIBLE);
+            holder.textView8.setVisibility(View.VISIBLE);
+            holder.imageView4.setVisibility(View.INVISIBLE);
             return;
         }
         holder.textView.setText(result[0]);
@@ -85,6 +95,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         private TextView textView5;
         private TextView textView7;
         private TextView textView12;
+        private ImageView imageView4;
+        private TextView textView8;
 
         public ViewHolder(View view) {
             super(view);
@@ -96,6 +108,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             this.textView5 = view.findViewById(R.id.textview5);
             this.textView7 = view.findViewById(R.id.textview7);
             this.textView12 = view.findViewById(R.id.textview12);
+            this.imageView4 = view.findViewById(R.id.imageview4);
+            this.textView8 = view.findViewById(R.id.textView8);
         }
 
         @Override

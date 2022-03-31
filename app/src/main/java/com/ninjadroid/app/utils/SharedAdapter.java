@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,12 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         String result[] = this.data.get(position).split(";");
         if (result.length == 0) {
+            holder.textView8.setVisibility(View.VISIBLE);
+            holder.textView.setVisibility(View.INVISIBLE);
+            holder.textView7.setVisibility(View.INVISIBLE);
+            holder.textView3.setVisibility(View.INVISIBLE);
+            holder.textView4.setVisibility(View.INVISIBLE);
+            holder.imageView4.setVisibility(View.INVISIBLE);
             return;
         }
         holder.textView.setText(result[1]);
@@ -74,6 +81,8 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
         private TextView textView3;
         private TextView textView4;
         private TextView textView7;
+        private TextView textView8;
+        private ImageView imageView4;
 
         public ViewHolder(View view) {
             super(view);
@@ -83,6 +92,8 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
             this.textView3 = view.findViewById(R.id.textview3);
             this.textView4 = view.findViewById(R.id.textview4);
             this.textView7 = view.findViewById(R.id.textview7);
+            this.textView8 = view.findViewById(R.id.textview8);
+            this.imageView4 = view.findViewById(R.id.imageview4);
         }
 
         @Override
