@@ -288,10 +288,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 int totalTime = (int)(endTime - startTime);
                 clock.setBase(SystemClock.elapsedRealtime());
                 clock.stop();
-                Log.i("history", "time: " + totalTime + " calories" + profile.getCalories());
                 AddHistory.sendHistoryUsingVolley(getContext(), Integer.parseInt(mUserId),
                         Utils.formatDateTime(routeCoordinates.get(0).getTime()),
-                        Utils.simpleCalorieCalc(totalTime,profile.getCalories()), Utils.getRunDuration(routeCoordinates),
+                        Utils.simpleCalorieCalc(totalTime,profile.getWeight()), Utils.getRunDuration(routeCoordinates),
                         Utils.calcDistanceTraveled(routeCoordinates), routeId);
             }
         });
