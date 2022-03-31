@@ -90,7 +90,6 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
             //todo: this is a temporary fix for getting the routeID until this recycler view is fully implemented
             //************
             TextView tv = view.findViewById(R.id.textview7);
-            System.out.println("textview thing:" + tv);
             String routeID = tv.getText().toString().split("\n")[0].split(":")[1];
             //************
 

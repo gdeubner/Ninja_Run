@@ -22,6 +22,8 @@ import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.CustomAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.containers.HistoryContainer;
+import com.ninjadroid.app.utils.containers.ProfileContainer;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,7 @@ public class HistoryFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mUserID;
+    private HistoryContainer historyC;
 
     public HistoryFragment() {
         // Required empty public constructor
@@ -57,6 +60,7 @@ public class HistoryFragment extends Fragment {
         if (getArguments() != null) {
             mUserID = getArguments().getString(USERID);
         }
+        historyC = (HistoryContainer) getArguments().getSerializable("container");
     }
 
     @Override
