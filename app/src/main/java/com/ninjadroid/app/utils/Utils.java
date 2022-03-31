@@ -78,13 +78,13 @@ public  class Utils {
      * @return Estimates the calories burned during the course of a run.
      *     Assumes an average constant speed of 8 km/h (which = 13.5 MET).
      */
-    public static double simpleCalorieCalc(double time, double weight) {
+    public static int simpleCalorieCalc(double time, double weight) {
         //convert lb to kg
         weight = Utils.pound2kilogram(weight);
         //convert time to minutes
         time = Utils.second2minute(time);
         double MET = 13.5;
-        return time * (MET * 3.5 * weight) / 200;
+        return (int)(time * (MET * 3.5 * weight) / 200);
     }
 
     public static float findBearing(LatLng curPos, LatLng routePnt){
