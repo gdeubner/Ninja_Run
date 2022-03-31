@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
+import java.math.*;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -67,17 +68,19 @@ public class AddHistory {
         queue.add(stringRequest);
         int points = (int)((distance * 100) + (calories * .85));
         System.out.println("POINTS" + points);
-        updatePointsUsingVolley(context,points,user_id,distance,calories);
+        String dist = "" + distance;
+        dist = dist.substring(0,(dist.indexOf(".") + 5));
+        updatePointsUsingVolley(context,points,user_id,dist,calories);
     }
 
-    public static void updatePointsUsingVolley(Context context, int points, int user_id,double distance, int calories) {
+    public static void updatePointsUsingVolley(Context context, int points, int user_id,String dist, int calories) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(URLBuilder.getScheme())
                 .encodedAuthority(URLBuilder.getEncodedAuthority())
                 .appendPath(URLBuilder.updatePoints())
                 .appendQueryParameter("points", String.valueOf(points))
                 .appendQueryParameter("user_id", String.valueOf(user_id))
-                .appendQueryParameter("distance", String.valueOf(0))
+                .appendQueryParameter("distance", dist)
                 .appendQueryParameter("calories", String.valueOf(calories));
 
         String url = builder.build().toString();
