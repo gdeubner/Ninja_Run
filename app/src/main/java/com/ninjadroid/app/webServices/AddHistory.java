@@ -67,16 +67,18 @@ public class AddHistory {
         queue.add(stringRequest);
         int points = (int)((distance * 100) + (calories * .85));
         System.out.println("POINTS" + points);
-        updatePointsUsingVolley(context,points,user_id);
+        updatePointsUsingVolley(context,points,user_id,distance,calories);
     }
 
-    public static void updatePointsUsingVolley(Context context, int points, int user_id) {
+    public static void updatePointsUsingVolley(Context context, int points, int user_id,double distance, int calories) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(URLBuilder.getScheme())
                 .encodedAuthority(URLBuilder.getEncodedAuthority())
                 .appendPath(URLBuilder.updatePoints())
                 .appendQueryParameter("points", String.valueOf(points))
-                .appendQueryParameter("user_id", String.valueOf(user_id));
+                .appendQueryParameter("user_id", String.valueOf(user_id))
+                .appendQueryParameter("distance", String.valueOf(distance))
+                .appendQueryParameter("calories", String.valueOf(calories));
 
         String url = builder.build().toString();
         Log.i("updatePoints", url);
