@@ -78,7 +78,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
         holder.textView3.setText(result[2]);
         holder.textView4.setText(result[3]);
-        holder.textView5.setText(result[4]);
+        System.out.println("RES4: " + result[4]);
+        if (result[4].length() >= 20) {
+            holder.textView5.setText(result[4].substring(0,result[4].indexOf(".") + 5));
+        } else {
+            holder.textView5.setText(result[4]);
+        }
         holder.textView12.setText(result[5]);
     }
 
