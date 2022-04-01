@@ -32,9 +32,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private ActivityMainBinding binding;
+    private int currentNavItemId;
 
-    String userID;
-    ProfileContainer userProfile;
+    private String userID;
+    private ProfileContainer userProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +67,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 //start map fragment
                 if(savedInstanceState == null) {
-                    MapFragment fmapFragment = MapFragment.newInstance(userID, -1, userProfile);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            fmapFragment, "MAP_FRAGMENT").commit();
-                    navigationView.getMenu().getItem(1).setChecked(true);
+                    goToMapFragment(-1);
                 }
             }
         });
@@ -82,12 +80,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);  //closes drawer on left side of screen
         } else {
-            super.onBackPressed();
+
+            if(currentNavItemId == R.id.nav_map) {
+                Log.i("Main", "backPressed");
+                super.onBackPressed();
+            } else {
+                getSupportFragmentManager().popBackStack();
+                goToMapFragment(-1);
+            }
         }
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        currentNavItemId = item.getItemId();
         if(!navigationView.getMenu().findItem(item.getItemId()).isChecked()){
             switch (item.getItemId()) {
                 case R.id.nav_profile:
@@ -144,21 +150,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
         if(data != null){
             int routeID = data.getExtras().getInt("routeID");
-
-            MapFragment fmapFragment = MapFragment.newInstance(userID, routeID, userProfile);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    fmapFragment, "MAP_FRAGMENT").commit();
-            navigationView.getMenu().getItem(1).setChecked(true);
+            goToMapFragment(routeID);
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        goToMapFragment(-1);
         if(getIntent().getIntExtra("ProfileFragment",0)==1){
             Log.i("Profile page first", "came directly");
             userID = getIntent().getStringExtra("userID");
-
             GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
                 @Override
                 public void onSuccess(ProfileContainer profile) {
@@ -177,5 +179,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onNewIntent (Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+    }
+
+    private void goToMapFragment(int routeID){
+        MapFragment fmapFragment = MapFragment.newInstance(userID, routeID, userProfile);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                fmapFragment, "MAP_FRAGMENT").commit();
+        navigationView.getMenu().getItem(1).setChecked(true);
+        currentNavItemId = R.id.nav_map;
     }
 }

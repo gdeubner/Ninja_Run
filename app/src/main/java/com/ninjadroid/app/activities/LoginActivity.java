@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +28,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.Utils;
+import com.ninjadroid.app.webServices.AddHistory;
 
 import java.io.File;
 
@@ -185,5 +188,25 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         passwordEditText.setText("");
+    }
+
+    @Override
+    public void onBackPressed() {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("You're about to exit Ninja Run")
+                    .setTitle("Are you sure?");
+            builder.setPositiveButton("Leave", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    finish();
+                    System.exit(0);
+                }
+            });
+            builder.setNegativeButton("Stay", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+
+                }
+            });
+            AlertDialog dialog = builder.create();
+            dialog.show();
     }
 }
