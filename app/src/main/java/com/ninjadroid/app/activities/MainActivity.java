@@ -31,7 +31,7 @@ import com.ninjadroid.app.webServices.GetProfile;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private ActivityMainBinding binding;
+    //private ActivityMainBinding binding;
     private int currentNavItemId;
 
     private String userID;
@@ -40,14 +40,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = binding.toolbar;
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawer = binding.drawerLayout;
-        navigationView = binding.navView;
+        drawer = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -157,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
-        goToMapFragment(-1);
         if(getIntent().getIntExtra("ProfileFragment",0)==1){
             Log.i("Profile page first", "came directly");
             userID = getIntent().getStringExtra("userID");
