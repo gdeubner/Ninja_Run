@@ -50,7 +50,13 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(info.equals(",")){
             Log.i("heyy", "nothing entered");
-        }else{
+        }else if(info.length() > 1 && info.charAt(0)==','){
+            password = info.substring(1);
+            passwordEdit.setText(password);
+        }else if(info.length() > 1 && info.charAt(info.length()-1)==','){
+            username = info.substring(0,info.length()-1);
+            usernameEdit.setText(username);
+        } else{
             Log.i("heyy", "something entered");
             String temp[] = info.split(",");
             username = temp[0];

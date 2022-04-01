@@ -150,10 +150,11 @@ public class EditProfileActivity extends AppCompatActivity {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-
     @Override
-    protected void onStop() {
-        super.onStop();
-        finish();
+    public void onBackPressed() {
+        Intent intent = new Intent(getBaseContext(),MainActivity.class);
+        intent.putExtra("ProfileFragment",1);
+        intent.putExtra("userID", userID);
+        startActivity(intent);
     }
 }
