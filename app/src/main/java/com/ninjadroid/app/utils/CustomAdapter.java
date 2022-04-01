@@ -77,7 +77,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             holder.textView7.setText("Date" + result[1].substring(result[1].indexOf(":"),result[1].indexOf("T")));
         }
         holder.textView3.setText(result[2]);
-        holder.textView4.setText(result[3]);
+        int val = Integer.parseInt(result[3].substring(result[3].indexOf(":") + 1));
+        val = val/60;
+        holder.textView4.setText("Duration (mins): " + Integer.toString(val));
         if (result[4].length() >= 20) {
             holder.textView5.setText(result[4].substring(0,result[4].indexOf(".") + 5));
         } else {
