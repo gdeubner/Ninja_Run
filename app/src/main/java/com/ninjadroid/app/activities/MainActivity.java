@@ -156,18 +156,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onResume() {
         super.onResume();
+        GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
+            @Override
+            public void onSuccess(ProfileContainer profile) {
+                userProfile = profile;
+                TextView tv_profile = navigationView.findViewById(R.id.tv_profileNameNav);
+                tv_profile.setText(userProfile.getName());
+            }
+        });
+
         if(getIntent().getIntExtra("ProfileFragment",0)==1){
             Log.i("Profile page first", "came directly");
-            userID = getIntent().getStringExtra("userID");
-            GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
-                @Override
-                public void onSuccess(ProfileContainer profile) {
-                    userProfile = profile;
-                    ProfileFragment profileFragment = ProfileFragment.newInstance(profile);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            profileFragment, "PROFILE_FRAGMENT").commit();
-                }
-            });
+            ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    profileFragment, "PROFILE_FRAGMENT").commit();
        }else{
             Log.i("itttt", "didnt workkkkk");
         }
