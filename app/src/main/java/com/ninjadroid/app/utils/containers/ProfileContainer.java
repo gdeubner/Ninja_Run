@@ -10,8 +10,8 @@ public class ProfileContainer implements Serializable {
    private int height_ft;
    private double height_in;
    private int points;
-   private double calories;
-   private double distance;
+   private int total_calories;
+   private double total_distance;
    private String Name;
    private int isAdmin;
 
@@ -43,12 +43,12 @@ public class ProfileContainer implements Serializable {
       return points;
    }
 
-   public double getCalories() {
-      return calories;
+   public int getCalories() {
+      return total_calories;
    }
 
    public double getDistance() {
-      return distance;
+      return total_distance;
    }
 
    public String getName() {

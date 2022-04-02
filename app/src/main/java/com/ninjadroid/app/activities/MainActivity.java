@@ -173,7 +173,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     profileFragment, "PROFILE_FRAGMENT").commit();
 
-       }else{
+        }else if(getIntent().getIntExtra("FollowersFragment",0)==1){
+            FollowersFragment follFrag = FollowersFragment.newInstance(userID);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    follFrag,"FOLL_FRAGMENT").commit();
+        }else if(getIntent().getIntExtra("FollowingFragment",0)==1){
+            FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    followingFrag,"FOLLOWING_FRAGMENT").commit();
+        }
+        else{
             Log.i("itttt", "didnt workkkkk");
             goToMapFragment(-1);
         }

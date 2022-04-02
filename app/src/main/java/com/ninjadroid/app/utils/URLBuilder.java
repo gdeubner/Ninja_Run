@@ -47,6 +47,10 @@ public class URLBuilder {
 
     public static String updatePoints() {return "update_points";}
 
+    public static String deleteFollow() {return "delete_follow";}
+
+    public static String getUserRoutes() {return "user_routes";}
+
     public static String getScheme() {
         return scheme;
     }

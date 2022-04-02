@@ -39,6 +39,7 @@
         </activity>
         <activity android:name=".activities.EditProfileActivity" />
         <activity android:name=".activities.RegisterActivity" />
+        <activity android:name=".activities.FriendActivity" />
     </application>
 
 </manifest>

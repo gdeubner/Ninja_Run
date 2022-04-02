@@ -1,6 +1,7 @@
 package com.ninjadroid.app.activities.menuFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,7 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.utils.CustomAdapter;
+import com.ninjadroid.app.utils.FollowerAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
 
 import java.util.ArrayList;
@@ -83,7 +84,7 @@ public class FollowersFragment extends Fragment {
 
         String myUrl = builder.build().toString();
         Log.i("Query", myUrl);
-        String message = "";
+
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, myUrl,
@@ -93,14 +94,16 @@ public class FollowersFragment extends Fragment {
                         // Display the first 500 characters of the response string.
                         Log.i("Get Request Response", response);
                         String[] result = response.split(",");
-
+                        ArrayList<String> username = new ArrayList<String>();
+                        ArrayList<String> userid = new ArrayList<String>();
                         int userIDint = Integer.valueOf(userID);
-                        ArrayList<String> username = populateusernameList(result);
-                        ArrayList<String> userid = populateuseridList(result);
-
+                        if(response.length()  > 2) {
+                            username = populateusernameList(result);
+                            userid = populateuseridList(result);
+                        }
                         final RecyclerView recyclerView = getView().findViewById(R.id.Followers);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(new CustomAdapter(userIDint, context,username));
+                        recyclerView.setAdapter(new FollowerAdapter(userIDint, context,username, userid, "Follower"));
                         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
                     }
@@ -119,8 +122,6 @@ public class FollowersFragment extends Fragment {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-
-
     public ArrayList<String> populateusernameList(String[] str) {
         int count = 0;
         ArrayList<String> data = new ArrayList<>();
@@ -139,6 +140,7 @@ public class FollowersFragment extends Fragment {
         }
         return data;
     }
+
     public ArrayList<String> populateuseridList(String[] str) {
         int count = 0;
         ArrayList<String> data = new ArrayList<>();

@@ -31,6 +31,7 @@
         <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/menu/drawer_menu.xml" value="0.16145833333333334" />
         <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/menu/popup_menu.xml" value="0.3265625" />
         <entry key="app/src/main/res/layout/activity_edit.xml" value="0.3146087646484375" />
+        <entry key="app/src/main/res/layout/activity_friend.xml" value="0.4569020589192708" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20989583333333334" />
         <entry key="app/src/main/res/layout/activity_route.xml" value="0.21458333333333332" />
@@ -42,6 +43,9 @@
         <entry key="app/src/main/res/layout/fragment_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/list_item.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/layout/list_item2.xml" value="0.21458333333333332" />
+        <entry key="app/src/main/res/layout/list_item3.xml" value="0.19583333333333333" />
+        <entry key="app/src/main/res/layout/list_item4.xml" value="0.19583333333333333" />
+        <entry key="app/src/main/res/layout/list_item5.xml" value="0.40472564697265634" />
         <entry key="app/src/main/res/layout/nav_header.xml" value="0.18385416666666668" />
         <entry key="app/src/main/res/layout/profile.xml" value="0.27595367431640627" />
         <entry key="app/src/main/res/menu/drawer_menu.xml" value="0.18385416666666668" />

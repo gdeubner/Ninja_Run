@@ -23,7 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.utils.CustomAdapter;
+import com.ninjadroid.app.utils.FollowerAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
 
 import java.util.ArrayList;
@@ -106,16 +106,19 @@ public class FollowingFragment extends Fragment {
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
                         Log.i("Get Request Response", response);
-                        if(response.length()!=2) {
-
-                            String[] result = response.split(",");
-                            ArrayList<String> data = populateList(result);
-
-                            final RecyclerView recyclerView = getView().findViewById(R.id.followingList);
-                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                            recyclerView.setAdapter(new CustomAdapter(Integer.valueOf(userID), context, data)); //change later from 17 to uid
-                            recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+                        String[] result = response.split(",");
+                        ArrayList<String> username = new ArrayList<String>();
+                        ArrayList<String> userid = new ArrayList<String>();
+                        int userIDint = Integer.valueOf(userID);
+                        if(response.length()  > 2) {
+                            username = populateList(result);
+                            userid = populateuseridList(result);
                         }
+                        final RecyclerView recyclerView = getView().findViewById(R.id.followingList);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                        recyclerView.setAdapter(new FollowerAdapter(userIDint, context, username, userid, "Following")); //change later from 17 to uid
+                        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+
 
                     }
                 }, new Response.ErrorListener() {
@@ -151,11 +154,30 @@ public class FollowingFragment extends Fragment {
         }
         return data;
     };
-
+    public ArrayList<String> populateuseridList(String[] str) {
+        int count = 0;
+        ArrayList<String> data = new ArrayList<>();
+        for (String s : str) {
+            if(count%2 == 1) {
+                String temp;
+                if(s.contains("]")){
+                    temp = s.substring(12,s.length()-2);
+                }
+                else {
+                    temp = s.substring( 12,s.length() - 1);
+                }
+                Log.i("temp is", temp);
+                data.add(temp);
+            }
+            count++;
+        }
+        return data;
+    }
     private void addFollow(Context context, String userID, String myUsername, String toFollowUsername) {
         // Instantiate the RequestQueue.
 
-        Log.i("AMYYY", "progressss"); //replace with userID
+        Log.i("AMYYY", "progressss");
+        Log.i("username", myUsername);//replace with userID
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Uri.Builder builder = new Uri.Builder();
@@ -228,7 +250,8 @@ public class FollowingFragment extends Fragment {
                         // Display the first 500 characters of the response string.
                         Log.i("Get Request Response", response);
                         String[] result = response.split(",");
-                        String myUsername = result[1].substring(1, result[1].length()-1);
+                        String myUsername = result[1].substring(12, result[1].length()-1);
+
                         addFollow(context, userID, myUsername, toFollowusername);
                     }
                 }, new Response.ErrorListener() {
@@ -245,4 +268,5 @@ public class FollowingFragment extends Fragment {
         });
         queue.add(stringRequest);
     }
+
 }

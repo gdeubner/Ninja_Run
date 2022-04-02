@@ -40,7 +40,7 @@ public class ProfileFragment extends Fragment {
     private int heightFt;
     private double heightIn;
     private int points;
-    private double calories;
+    private int calories;
     private double distance;
     private String name;
 
@@ -69,7 +69,7 @@ public class ProfileFragment extends Fragment {
         args.putInt("heightFt", profile.getHeight_ft());
         args.putDouble("heightIn", profile.getHeight_in());
         args.putInt("points", profile.getPoints());
-        args.putDouble("calories", profile.getCalories());
+        args.putInt("calories", profile.getCalories());
         args.putDouble("distance", profile.getDistance());
         args.putString("name", profile.getName());
         args.putSerializable("container", profile);
@@ -88,7 +88,7 @@ public class ProfileFragment extends Fragment {
             heightFt = getArguments().getInt("heightFt");
             heightIn = getArguments().getDouble("heightIn");
             points = getArguments().getInt("points",0);
-            calories = getArguments().getDouble("calories", 0);
+            calories = getArguments().getInt("calories", 0);
             distance = getArguments().getDouble("distance", 0);
             name = getArguments().getString("name");
             profileC = (ProfileContainer) getArguments().getSerializable("container");
@@ -133,11 +133,11 @@ public class ProfileFragment extends Fragment {
         weightstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         SpannableStringBuilder heightstr = new SpannableStringBuilder("Height: " + heightFt+"ft "+ heightIn+"in");
         heightstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder pointsstr = new SpannableStringBuilder("Points: " + points);
+        SpannableStringBuilder pointsstr = new SpannableStringBuilder("Points: " + String.valueOf(points));
         pointsstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder totCalstr = new SpannableStringBuilder("Total Calories: " + calories);
+        SpannableStringBuilder totCalstr = new SpannableStringBuilder("Total Calories: " + String.valueOf(calories));
         totCalstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder totDiststr = new SpannableStringBuilder("Total Distance: " + distance);
+        SpannableStringBuilder totDiststr = new SpannableStringBuilder("Total Distance: " + String.valueOf(distance));
         totDiststr.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         nameView.setText(name);
