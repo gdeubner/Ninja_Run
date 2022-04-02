@@ -4,19 +4,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.AppCompat"
     tools:context=".activities.LoginActivity">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout2"
+        android:layout_width="312dp"
+        android:layout_height="57dp"
+        android:layout_marginBottom="25dp"
+        android:hint="Username"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/apptitle">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
         android:layout_width="312dp"
         android:layout_height="57dp"
-        android:layout_marginStart="50dp"
         android:layout_marginBottom="60dp"
 
         android:hint="Password"
         android:scrollbarSize="25dp"
         app:layout_constraintBottom_toTopOf="@+id/signin"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout2"
         app:passwordToggleEnabled="true"
         app:passwordToggleTint="@color/colorPrimary">
 
@@ -28,55 +47,39 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        android:layout_width="312dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="25dp"
-        android:hint="Username"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
     <TextView
         android:id="@+id/apptitle"
-        android:layout_width="263dp"
-        android:layout_height="92dp"
-        android:layout_marginStart="75dp"
-        android:layout_marginEnd="75dp"
-        android:layout_marginBottom="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
         android:text="Ninja Run"
         android:textSize="60dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
+        app:layout_constraintBottom_toTopOf="@id/textInputLayout2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/signin"
         android:layout_width="166dp"
         android:layout_height="48dp"
-        android:layout_marginStart="122dp"
-        android:layout_marginEnd="122dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginTop="20dp"
         android:text="Log In"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/register"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textInputLayout" />
 
     <Button
         android:id="@+id/register"
         android:layout_width="166dp"
         android:layout_height="48dp"
-        android:layout_marginStart="122dp"
         android:layout_marginTop="13dp"
-        android:layout_marginEnd="122dp"
         android:text="Register"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signin" />

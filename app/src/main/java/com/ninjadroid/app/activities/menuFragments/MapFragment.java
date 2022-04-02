@@ -152,6 +152,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mUserId = getArguments().getString(USERID);
             routeId = getArguments().getInt(ROUTE_ID);
             profile = (ProfileContainer) getArguments().getSerializable(USER_PROFILE);
+            Log.i("MapFrag", "routeID" + routeId);
         }
     }
 
