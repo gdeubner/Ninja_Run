@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -190,5 +191,19 @@ public class FriendActivity extends AppCompatActivity {
             intent.putExtra("FollowingFragment",1);
         }
         startActivity(intent);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data != null){
+            int routeID = data.getExtras().getInt("routeID");
+
+            Intent intent = new Intent(FriendActivity.this, MainActivity.class);
+            intent.putExtra("routeID", routeID);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 }
