@@ -44,11 +44,7 @@ public class RouteActivity extends AppCompatActivity {
                 Intent intent = new Intent(RouteActivity.this, MainActivity.class);
                 intent.putExtra(ROUTE_ID_KEY, routeID);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                setResult(RESULT_OK, intent);
-//                # have to change start intent for friend route?
-//                if(getIntent().getStringExtra("From").equals("Friend")){
-//                    startActivity(intent);
-//                }
+                setResult(R.id.map, intent);
                 finish();
             }
         });

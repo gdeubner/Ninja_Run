@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int currentNavItemId;
 
     private String userID;
+    private int routeId;
     private ProfileContainer userProfile;
 
     @Override
@@ -55,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         userID = getIntent().getStringExtra("userID");
-        Log.i("MainActivity", userID);
-
+        routeId = -1;
         GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
             @Override
             public void onSuccess(ProfileContainer profile) {
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             profileFragment, "PROFILE_FRAGMENT").commit();
                     break;
                 case R.id.nav_map:
-                    MapFragment fmapFragment = MapFragment.newInstance(userID, -1, userProfile);
+                    MapFragment fmapFragment = MapFragment.newInstance(userID, routeId, userProfile);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             fmapFragment, "MAP_FRAGMENT").commit();
                     break;
@@ -147,10 +147,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data != null){
-            int routeID = data.getExtras().getInt("routeID");
-            goToMapFragment(routeID);
+
+        switch (resultCode){
+            case R.id.nav_profile:
+                Log.i("Profile page first", "came directly");
+                ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        profileFragment, "PROFILE_FRAGMENT").commit();
+            case R.id.nav_map:
+                routeId = data.getExtras().getInt("routeID");
+                goToMapFragment(routeId);
+                break;
+            case R.id.nav_following:
+                FollowersFragment follFrag = FollowersFragment.newInstance(userID);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        follFrag,"FOLL_FRAGMENT").commit();
+                break;
+            case R.id.nav_followers:
+                FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        followingFrag,"FOLLOWING_FRAGMENT").commit();
         }
+
     }
 
     @Override
@@ -165,23 +183,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        if(getIntent().getIntExtra("ProfileFragment",0)==1){
-            Log.i("Profile page first", "came directly");
-            ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    profileFragment, "PROFILE_FRAGMENT").commit();
-        }else if(getIntent().getIntExtra("FollowersFragment",0)==1){
-            FollowersFragment follFrag = FollowersFragment.newInstance(userID);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    follFrag,"FOLL_FRAGMENT").commit();
-        }else if(getIntent().getIntExtra("FollowingFragment",0)==1){
-            FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    followingFrag,"FOLLOWING_FRAGMENT").commit();
-        }
-        else{
-            Log.i("itttt", "didnt workkkkk");
-        }
+//        if(getIntent().getIntExtra("ProfileFragment",0)==1){
+//            Log.i("Profile page first", "came directly");
+//            ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    profileFragment, "PROFILE_FRAGMENT").commit();
+//        }else if(getIntent().getIntExtra("FollowersFragment",0)==1){
+//            FollowersFragment follFrag = FollowersFragment.newInstance(userID);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    follFrag,"FOLL_FRAGMENT").commit();
+//        }else if(getIntent().getIntExtra("FollowingFragment",0)==1){
+//            FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
+//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+//                    followingFrag,"FOLLOWING_FRAGMENT").commit();
+//        }
+//        else{
+//            Log.i("itttt", "didnt workkkkk");
+//        }
     }
 
     @Override
