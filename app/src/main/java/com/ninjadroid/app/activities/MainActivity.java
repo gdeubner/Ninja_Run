@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             fmapFragment, "MAP_FRAGMENT").commit();
                     break;
                 case R.id.nav_history:
-                    //todo: create and replace the history fragment here Justin!
                     HistoryFragment histFrag = HistoryFragment.newInstance(userID);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             histFrag,"HIST_FRAGMENT").commit();
@@ -148,22 +147,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (resultCode){
+        switch (requestCode){
             case R.id.nav_profile:
                 Log.i("Profile page first", "came directly");
                 ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         profileFragment, "PROFILE_FRAGMENT").commit();
             case R.id.nav_map:
-                routeId = data.getExtras().getInt("routeID");
+                if(data != null && data.getExtras() != null){
+                    routeId = data.getExtras().getInt("routeID");
+                } else {
+                    routeId = -1;
+                }
                 goToMapFragment(routeId);
                 break;
-            case R.id.nav_following:
+            case R.id.nav_followers:
                 FollowersFragment follFrag = FollowersFragment.newInstance(userID);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         follFrag,"FOLL_FRAGMENT").commit();
                 break;
-            case R.id.nav_followers:
+            case R.id.nav_following:
                 FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         followingFrag,"FOLLOWING_FRAGMENT").commit();
@@ -197,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
 //                    followingFrag,"FOLLOWING_FRAGMENT").commit();
 //        }
+
 //        else{
 //            Log.i("itttt", "didnt workkkkk");
 //        }

@@ -38,7 +38,6 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
     private static String inp_text;
     private static final String KEY = "routeID";
 
-    private static final int Activity_REQUEST_CODE = 1;
 
     public SharedAdapter(int user_id, Context activity, List<String> data){
         this.activity = activity;
@@ -106,7 +105,7 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
 
             Intent intent = new Intent(activity, RouteActivity.class);
             intent.putExtra(KEY, routeID);
-            ((Activity)activity).startActivityForResult(intent, Activity_REQUEST_CODE);
+            ((Activity)activity).startActivityForResult(intent, R.id.nav_map);
         }
 
         @Override

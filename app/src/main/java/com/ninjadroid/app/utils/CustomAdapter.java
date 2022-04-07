@@ -42,8 +42,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     private static String inp_text;
     private static final String KEY = "routeID";
 
-    private static final int Activity_REQUEST_CODE = 1;
-
     public CustomAdapter (int user_id, Context activity, List<String> data){
         this.activity = activity;
         this.data = data;
@@ -127,7 +125,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             //************
             Intent intent = new Intent(activity, RouteActivity.class);
             intent.putExtra(KEY, routeID);
-            ((Activity)activity).startActivityForResult(intent, Activity_REQUEST_CODE);
+            ((Activity)activity).startActivityForResult(intent, R.id.nav_map);
         }
 
         @Override

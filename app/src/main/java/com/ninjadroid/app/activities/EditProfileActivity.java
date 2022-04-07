@@ -1,5 +1,6 @@
 package com.ninjadroid.app.activities;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -71,8 +72,8 @@ public class EditProfileActivity extends AppCompatActivity {
         heightftEdit.setText(heightft);
         heightinEdit.setText(heightin);
 
-        Button editButton = findViewById(R.id.registerButtonE);
-        editButton.setOnClickListener(new View.OnClickListener() {
+        Button saveButton = findViewById(R.id.btn_saveChanges);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -84,22 +85,34 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 editInfo(getBaseContext(),userID,username, password,weight,heightft,heightin,name);
 
-                Intent intent = new Intent(getBaseContext(),MainActivity.class);
-                intent.putExtra("ProfileFragment",1);
-                intent.putExtra("userID", userID);
-                startActivity(intent);
+//                Intent intent = new Intent(getBaseContext(),MainActivity.class);
+//                intent.putExtra("ProfileFragment",1);
+//                intent.putExtra("userID", userID);
+//                startActivity(intent);
+
+                Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
+                //intent.putExtra(ROUTE_ID_KEY, routeID);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                setResult(R.id.nav_profile, intent);
+                finish();
 
             }
         });
 
-        Button cancelButton = findViewById(R.id.backButtonE);
+        Button cancelButton = findViewById(R.id.btn_cancelChanges);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getBaseContext(),MainActivity.class);
-                intent.putExtra("ProfileFragment",1);
-                intent.putExtra("userID", userID);
-                startActivity(intent);
+//                Intent intent = new Intent(getBaseContext(),MainActivity.class);
+//                intent.putExtra("ProfileFragment",1);
+//                intent.putExtra("userID", userID);
+//                startActivity(intent);
+
+                Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
+                //intent.putExtra(ROUTE_ID_KEY, routeID);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                setResult(Activity.RESULT_OK, intent);
+                finish();
             }
         });
     }
