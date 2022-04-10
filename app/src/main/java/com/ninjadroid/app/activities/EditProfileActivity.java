@@ -85,13 +85,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 editInfo(getBaseContext(),userID,username, password,weight,heightft,heightin,name);
 
-//                Intent intent = new Intent(getBaseContext(),MainActivity.class);
-//                intent.putExtra("ProfileFragment",1);
-//                intent.putExtra("userID", userID);
-//                startActivity(intent);
-
                 Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
-                //intent.putExtra(ROUTE_ID_KEY, routeID);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 setResult(R.id.nav_profile, intent);
                 finish();
@@ -103,15 +97,16 @@ public class EditProfileActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i("EditProfile", "clicked cancel");
 //                Intent intent = new Intent(getBaseContext(),MainActivity.class);
 //                intent.putExtra("ProfileFragment",1);
 //                intent.putExtra("userID", userID);
 //                startActivity(intent);
 
-                Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
-                //intent.putExtra(ROUTE_ID_KEY, routeID);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                setResult(Activity.RESULT_OK, intent);
+//                Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
+//                //intent.putExtra(ROUTE_ID_KEY, routeID);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                setResult(Activity.RESULT_OK, intent);
                 finish();
             }
         });
@@ -165,9 +160,11 @@ public class EditProfileActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(getBaseContext(),MainActivity.class);
-        intent.putExtra("ProfileFragment",1);
-        intent.putExtra("userID", userID);
-        startActivity(intent);
+        finish();
+        //super.onBackPressed();
+//        Intent intent = new Intent(getBaseContext(),MainActivity.class);
+//        intent.putExtra("ProfileFragment",1);
+//        intent.putExtra("userID", userID);
+//        startActivity(intent);
     }
 }

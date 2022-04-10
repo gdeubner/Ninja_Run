@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(!navigationView.getMenu().findItem(item.getItemId()).isChecked()){
             switch (item.getItemId()) {
                 case R.id.nav_profile:
+                    Log.i("MainActivity", "Loaded profile page by navbar");
                     ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             profileFragment, "PROFILE_FRAGMENT").commit();
@@ -146,37 +147,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i("MainActivity", "Checking Activity Result");
 
-        switch (requestCode){
-            case R.id.nav_profile:
-                Log.i("Profile page first", "came directly");
-                ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        profileFragment, "PROFILE_FRAGMENT").commit();
-            case R.id.nav_map:
-                if(data != null && data.getExtras() != null){
-                    routeId = data.getExtras().getInt("routeID");
-                } else {
-                    routeId = -1;
-                }
-                goToMapFragment(routeId);
-                break;
-            case R.id.nav_followers:
-                FollowersFragment follFrag = FollowersFragment.newInstance(userID);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        follFrag,"FOLL_FRAGMENT").commit();
-                break;
-            case R.id.nav_following:
-                FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        followingFrag,"FOLLOWING_FRAGMENT").commit();
+        if(data != null && data.getExtras() != null){
+            goToMapFragment(routeId);
+            routeId = data.getExtras().getInt("routeID");
+        } else {
+            routeId = -1;
         }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("MainActivity", "resuming");
         GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
             @Override
             public void onSuccess(ProfileContainer profile) {
@@ -185,31 +169,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 tv_profile.setText(userProfile.getName());
             }
         });
-
-//        if(getIntent().getIntExtra("ProfileFragment",0)==1){
-//            Log.i("Profile page first", "came directly");
-//            ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                    profileFragment, "PROFILE_FRAGMENT").commit();
-//        }else if(getIntent().getIntExtra("FollowersFragment",0)==1){
-//            FollowersFragment follFrag = FollowersFragment.newInstance(userID);
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                    follFrag,"FOLL_FRAGMENT").commit();
-//        }else if(getIntent().getIntExtra("FollowingFragment",0)==1){
-//            FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
-//            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                    followingFrag,"FOLLOWING_FRAGMENT").commit();
-//        }
-
-//        else{
-//            Log.i("itttt", "didnt workkkkk");
-//        }
-    }
-
-    @Override
-    public void onNewIntent (Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
     }
 
     private void goToMapFragment(int routeID){

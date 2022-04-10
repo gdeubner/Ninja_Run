@@ -109,11 +109,8 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
             Intent intent = new Intent(activity, FriendActivity.class);
             intent.putExtra("Friend",friendid);
             intent.putExtra("Type", followType);
-            if(followType.equals("follower")){
-                ((Activity)activity).startActivityForResult(intent, R.id.nav_map);
-            } else {
-                ((Activity)activity).startActivityForResult(intent, R.id.nav_map);
-            }
+            ((Activity)activity).startActivityForResult(intent, R.id.nav_map);
+
         }
 
     }
