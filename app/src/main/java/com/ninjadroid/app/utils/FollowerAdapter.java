@@ -31,23 +31,24 @@ import com.ninjadroid.app.activities.RouteActivity;
 import com.ninjadroid.app.activities.menuFragments.ProfileFragment;
 
 import java.util.List;
+import java.util.Map;
 
 public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHolder> {
     private static List<String> username;
     private static List<String> followid;
     private static Context activity;
     private static int user_id;
-    private static String follow;
+    private static String followType;
     private static final String KEY = "UserID";
 
     private static final int Activity_REQUEST_CODE = 1;
 
-    public FollowerAdapter(int user_id, Context activity, List<String> username, List<String> friendid, String follow ){
+    public FollowerAdapter(int user_id, Context activity, List<String> username, List<String> friendid, String followType ){
         this.activity = activity;
         this.username = username;
         this.user_id = user_id;
         this.followid =  friendid;
-        this.follow = follow;
+        this.followType = followType;
     }
 
     @Override
@@ -69,7 +70,7 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
                 int removeusername = username.indexOf(result);
                 String removeItem = followid.get(removeusername);
                 Log.i("here", removeItem);
-                DeleteFollower(activity, removeItem, result, follow);
+                DeleteFollower(activity, removeItem, result, followType);
 
 
                 username.remove(removeusername);
@@ -107,8 +108,9 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
             Log.i("Friend", friendid);
             Intent intent = new Intent(activity, FriendActivity.class);
             intent.putExtra("Friend",friendid);
-            intent.putExtra("Type", follow);
-            ((Activity)activity).startActivityForResult(intent, Activity_REQUEST_CODE);
+            intent.putExtra("Type", followType);
+            ((Activity)activity).startActivityForResult(intent, R.id.nav_map);
+
         }
 
     }

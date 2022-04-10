@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private int currentNavItemId;
 
     private String userID;
+    private int routeId;
     private ProfileContainer userProfile;
 
     @Override
@@ -55,8 +56,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         userID = getIntent().getStringExtra("userID");
-        Log.i("MainActivity", userID);
-
+        routeId = -1;
         GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
             @Override
             public void onSuccess(ProfileContainer profile) {
@@ -96,17 +96,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(!navigationView.getMenu().findItem(item.getItemId()).isChecked()){
             switch (item.getItemId()) {
                 case R.id.nav_profile:
+                    Log.i("MainActivity", "Loaded profile page by navbar");
                     ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             profileFragment, "PROFILE_FRAGMENT").commit();
                     break;
                 case R.id.nav_map:
-                    MapFragment fmapFragment = MapFragment.newInstance(userID, -1, userProfile);
+                    MapFragment fmapFragment = MapFragment.newInstance(userID, routeId, userProfile);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             fmapFragment, "MAP_FRAGMENT").commit();
                     break;
                 case R.id.nav_history:
-                    //todo: create and replace the history fragment here Justin!
                     HistoryFragment histFrag = HistoryFragment.newInstance(userID);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             histFrag,"HIST_FRAGMENT").commit();
@@ -147,15 +147,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(data != null){
-            int routeID = data.getExtras().getInt("routeID");
-            goToMapFragment(routeID);
+        Log.i("MainActivity", "Checking Activity Result");
+
+        if(data != null && data.getExtras() != null){
+            goToMapFragment(routeId);
+            routeId = data.getExtras().getInt("routeID");
+        } else {
+            routeId = -1;
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("MainActivity", "resuming");
         GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
             @Override
             public void onSuccess(ProfileContainer profile) {
@@ -164,30 +169,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 tv_profile.setText(userProfile.getName());
             }
         });
-
-        if(getIntent().getIntExtra("ProfileFragment",0)==1){
-            Log.i("Profile page first", "came directly");
-            ProfileFragment profileFragment = ProfileFragment.newInstance(userProfile);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    profileFragment, "PROFILE_FRAGMENT").commit();
-        }else if(getIntent().getIntExtra("FollowersFragment",0)==1){
-            FollowersFragment follFrag = FollowersFragment.newInstance(userID);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    follFrag,"FOLL_FRAGMENT").commit();
-        }else if(getIntent().getIntExtra("FollowingFragment",0)==1){
-            FollowingFragment followingFrag = FollowingFragment.newInstance(userID);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    followingFrag,"FOLLOWING_FRAGMENT").commit();
-        }
-        else{
-            Log.i("itttt", "didnt workkkkk");
-        }
-    }
-
-    @Override
-    public void onNewIntent (Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
     }
 
     private void goToMapFragment(int routeID){

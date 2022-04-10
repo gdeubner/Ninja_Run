@@ -68,9 +68,7 @@ public class AddHistory {
         queue.add(stringRequest);
         int points = (int)((distance * 100) + (calories * .85));
         System.out.println("POINTS" + points);
-        String dist = "" + distance;
-        dist = dist.substring(0,(dist.indexOf(".") + 5));
-        updatePointsUsingVolley(context,points,user_id,dist,calories);
+        updatePointsUsingVolley(context,points,user_id,String.valueOf(distance),calories);
     }
 
     public static void updatePointsUsingVolley(Context context, int points, int user_id,String dist, int calories) {

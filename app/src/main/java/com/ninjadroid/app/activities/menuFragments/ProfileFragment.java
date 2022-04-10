@@ -110,7 +110,9 @@ public class ProfileFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), EditProfileActivity.class);
                 intent.putExtra("profileObject", profileC);
-                startActivity(intent);
+                //startActivityForResult(intent, R.id.nav_profile);
+                getActivity().startActivityForResult(intent, 72);
+
             }
         });
 

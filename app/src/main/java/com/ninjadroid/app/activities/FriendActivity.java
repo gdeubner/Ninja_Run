@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
+import com.ninjadroid.app.databinding.ActivityRouteBinding;
 import com.ninjadroid.app.utils.CustomAdapter;
 import com.ninjadroid.app.utils.FRouteAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
@@ -184,13 +185,19 @@ public class FriendActivity extends AppCompatActivity {
 
 
     public void onBackPressed() {
-        Intent intent = new Intent(getBaseContext(),MainActivity.class);
-        if(fType.equals("Follower")){
-            intent.putExtra("FollowersFragment",1);
-        }else{
-            intent.putExtra("FollowingFragment",1);
-        }
-        startActivity(intent);
+//        Intent intent = new Intent(getBaseContext(),MainActivity.class);
+//        if(fType.equals("Follower")){
+//            intent.putExtra("FollowersFragment",1);
+//        }else{
+//            intent.putExtra("FollowingFragment",1);
+//        }
+//        startActivity(intent);
+
+        Intent intent = new Intent(FriendActivity.this, MainActivity.class);
+        //intent.putExtra("routeID", routeID);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        setResult(RouteActivity.RESULT_OK, intent);
+        finish();
     }
 
     @Override
@@ -202,7 +209,7 @@ public class FriendActivity extends AppCompatActivity {
             Intent intent = new Intent(FriendActivity.this, MainActivity.class);
             intent.putExtra("routeID", routeID);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            setResult(RESULT_OK, intent);
+            setResult(RouteActivity.RESULT_OK, intent);
             finish();
         }
     }
