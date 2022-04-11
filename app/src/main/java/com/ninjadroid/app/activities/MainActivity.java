@@ -21,6 +21,7 @@ import com.ninjadroid.app.activities.menuFragments.HistoryFragment;
 import com.ninjadroid.app.activities.menuFragments.MapFragment;
 import com.ninjadroid.app.activities.menuFragments.ProfileFragment;
 import com.ninjadroid.app.R;
+import com.ninjadroid.app.activities.menuFragments.SearchFragment;
 import com.ninjadroid.app.activities.menuFragments.SharedFragment;
 import com.ninjadroid.app.activities.menuFragments.FollowingFragment;
 import com.ninjadroid.app.databinding.ActivityMainBinding;
@@ -106,6 +107,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             fmapFragment, "MAP_FRAGMENT").commit();
                     break;
+
+                case R.id.nav_search:
+                    SearchFragment searchFragment = SearchFragment.newInstance(userID);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            searchFragment,"HIST_FRAGMENT").commit();
+                    break;
+
                 case R.id.nav_history:
                     HistoryFragment histFrag = HistoryFragment.newInstance(userID);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
