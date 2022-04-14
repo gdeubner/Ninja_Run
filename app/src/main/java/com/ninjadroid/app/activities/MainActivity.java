@@ -24,8 +24,7 @@ import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.menuFragments.SearchFragment;
 import com.ninjadroid.app.activities.menuFragments.SharedFragment;
 import com.ninjadroid.app.activities.menuFragments.FollowingFragment;
-import com.ninjadroid.app.databinding.ActivityMainBinding;
-import com.ninjadroid.app.utils.VolleyProfileCallback;
+import com.ninjadroid.app.webServices.callbacks.VolleyProfileCallback;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
 import com.ninjadroid.app.webServices.GetProfile;
 
@@ -111,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 case R.id.nav_search:
                     SearchFragment searchFragment = SearchFragment.newInstance(userID);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                            searchFragment,"HIST_FRAGMENT").commit();
+                            searchFragment,"SEARCH_FRAGMENT").commit();
                     break;
 
                 case R.id.nav_history:

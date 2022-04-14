@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,15 +20,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.databinding.ActivityRouteBinding;
-import com.ninjadroid.app.utils.CustomAdapter;
 import com.ninjadroid.app.utils.FRouteAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
-import com.ninjadroid.app.utils.VolleyProfileCallback;
+import com.ninjadroid.app.webServices.callbacks.VolleyProfileCallback;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
 import com.ninjadroid.app.webServices.GetProfile;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class FriendActivity extends AppCompatActivity {

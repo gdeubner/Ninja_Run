@@ -1,14 +1,18 @@
 package com.ninjadroid.app.activities.menuFragments;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -25,6 +29,9 @@ import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.FollowerAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.containers.RouteContainer;
+import com.ninjadroid.app.webServices.SearchRoutes;
+import com.ninjadroid.app.webServices.callbacks.SearchRoutesCallback;
 
 import java.util.ArrayList;
 
@@ -32,8 +39,11 @@ public class SearchFragment extends Fragment {
     private static final String USERID = "key";
 
     // TODO: Rename and change types of parameters
-    private String mUserID;
-    private String username = "";
+
+    private Spinner spinner;
+    private RecyclerView recyclerView;
+    private Button searchBtn;
+    private TextView searchBar;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -59,7 +69,6 @@ public class SearchFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mUserID = getArguments().getString(USERID);
         }
     }
 
@@ -67,10 +76,52 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        // Inflate the layout for this fragment
-
-
+        //Inflate the layout for this fragment
+        assignViewObjects(view);
+        addSpinnerfunctionality();
+        addButtonFunctionality();
         return view;
+    }
+
+    private void assignViewObjects(View view) {
+        spinner = view.findViewById(R.id.spn_searchBy);
+        recyclerView = view.findViewById(R.id.rv_searchResults);
+        searchBtn = view.findViewById(R.id.btn_search);
+        searchBar = view.findViewById(R.id.tv_searchBar);
+    }
+
+    private void addSpinnerfunctionality() {
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.searchBy_array, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+    }
+
+    private void addButtonFunctionality() {
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String search = searchBar.getText().toString();
+                if(search.equals("")){
+                    Toast.makeText(getActivity(), "Search bar is empty.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                int searchTypeIndex = spinner.getSelectedItemPosition();
+                String searchType = getResources().getStringArray(R.array.searchBy_arrayEnglish)[searchTypeIndex];
+
+                SearchRoutes.search(getActivity(), searchType, search, new SearchRoutesCallback() {
+                    @Override
+                    public void onSuccess(RouteContainer[] routes) {
+
+                    }
+                });
+
+            }
+        });
     }
 
 }

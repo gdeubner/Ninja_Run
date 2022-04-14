@@ -15,7 +15,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
-import com.ninjadroid.app.utils.DirectionsCallback;
+import com.ninjadroid.app.webServices.callbacks.DirectionsCallback;
 import com.ninjadroid.app.utils.containers.DirectionsContainers.DirectionsContainer;
 
 public class GetDirections {
