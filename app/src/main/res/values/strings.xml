@@ -34,5 +34,21 @@
     <string name="my_history">My History</string>
     <string name="map">Map</string>
     <string name="nav_profile">Profile</string>
+    <string name="search">Search</string>
+
+    <!-- Search Page -->
+
+    <string-array name="searchBy_array">
+        <item>Town</item>
+        <item>Route ID</item>
+        <item>Username</item>
+    </string-array>
+
+    <!-- do not change language of this array. positions should match that of searchBy_array above -->
+    <string-array name="searchBy_arrayEnglish">
+        <item>town</item>
+        <item>route_id</item>
+        <item>username</item>
+    </string-array>
 
 </resources>
