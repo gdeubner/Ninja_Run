@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.AppCompat"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -18,17 +19,22 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed">
 
-        <EditText
-            android:id="@+id/tv_searchBar"
-            android:layout_width="350dp"
-            android:layout_height="44dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tv_searchBarLayout"
+            android:layout_width="312dp"
+            android:layout_height="57dp"
+            android:layout_marginBottom="25dp"
             android:hint="Search"
-            android:inputType="textPersonName"
-            app:layout_constraintBottom_toTopOf="@id/spn_searchBy"
+            app:layout_constraintBottom_toTopOf="@+id/spn_searchBy"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="spread" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tv_searchBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btn_search"
@@ -40,19 +46,21 @@
             app:layout_constraintStart_toEndOf="@+id/spn_searchBy"
             app:layout_constraintTop_toTopOf="@+id/spn_searchBy" />
 
+
+
         <Spinner
             android:id="@+id/spn_searchBy"
             android:layout_width="195dp"
             android:layout_height="43dp"
             android:layout_margin="5dp"
-            android:background="@drawable/filter_background"
             android:elevation="100dp"
+
+            android:spinnerMode="dropdown"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_search"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_searchBar"
-            app:layout_constraintVertical_bias="0.0"
-            />
+            app:layout_constraintTop_toBottomOf="@+id/tv_searchBarLayout"
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
