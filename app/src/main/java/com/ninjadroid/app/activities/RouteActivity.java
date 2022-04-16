@@ -9,8 +9,8 @@ import android.view.View;
 
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.databinding.ActivityRouteBinding;
-import com.ninjadroid.app.utils.RouteCallback;
-import com.ninjadroid.app.utils.containers.RouteContainer;
+import com.ninjadroid.app.webServices.callbacks.RouteCallback;
+import com.ninjadroid.app.utils.containers.UserRouteContainer;
 import com.ninjadroid.app.webServices.GetRoute;
 
 public class RouteActivity extends AppCompatActivity {
@@ -30,7 +30,7 @@ public class RouteActivity extends AppCompatActivity {
         routeID = Integer.parseInt(getIntent().getStringExtra(ROUTE_ID_KEY));
         GetRoute.getRoute(this, routeID, new RouteCallback() {
             @Override
-            public void onSuccess(RouteContainer route) {
+            public void onSuccess(UserRouteContainer route) {
                 binding.tvCreator.setText(route.getUsername());
                 binding.tvLocation.setText(route.getTown());
                 binding.tvDistance.setText(getString(R.string.distance_string, route.getDistance()));

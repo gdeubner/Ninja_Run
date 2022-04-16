@@ -2,7 +2,6 @@ package com.ninjadroid.app.webServices;
 
 import android.content.Context;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -12,12 +11,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.ninjadroid.app.utils.URLBuilder;
-import com.ninjadroid.app.utils.VolleyProfileCallback;
+import com.ninjadroid.app.webServices.callbacks.VolleyProfileCallback;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
-
-import java.nio.charset.StandardCharsets;
 
 public class GetProfile {
 

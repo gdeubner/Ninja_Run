@@ -12,21 +12,28 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.ninjadroid.app.utils.URLBuilder;
-import com.ninjadroid.app.webServices.callbacks.RouteCallback;
+import com.ninjadroid.app.utils.containers.DirectionsContainers.DirectionsContainer;
+import com.ninjadroid.app.utils.containers.RouteContainer;
 import com.ninjadroid.app.utils.containers.UserRouteContainer;
+import com.ninjadroid.app.webServices.callbacks.SearchRoutesCallback;
 
 import java.nio.charset.StandardCharsets;
 
-public class GetRoute {
+public class SearchRoutes {
 
-    public static void getRoute(Context context, int route_id,
-                                final RouteCallback callBack){
+    public static void search(Context context, String searchBy, String searchParam,
+                              final SearchRoutesCallback callBack){
+
         Uri.Builder builder = new Uri.Builder();
         builder.scheme(URLBuilder.getScheme())
                 .encodedAuthority(URLBuilder.getEncodedAuthority())
-                .appendPath(URLBuilder.getGetRoutePath())
-                .appendQueryParameter("route_id", String.valueOf(route_id));
+                .appendPath(URLBuilder.getSearchRoutes())
+                .appendQueryParameter("search_by", searchBy)
+                .appendQueryParameter("search_param", searchParam);
+
+
         String url = builder.build().toString();
+        Log.i("SearchRoutes", url);
 
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -36,20 +43,28 @@ public class GetRoute {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.i("SearchRoutes", response);
                         try{
                             String decoded = java.net.URLDecoder.decode(response, StandardCharsets.UTF_8.name());
                             //updateView(response, context, binding);
                             Gson gson = new Gson();
-                            UserRouteContainer route = gson.fromJson(decoded, UserRouteContainer.class);
-                            callBack.onSuccess(route);
-                        } catch (Exception e) {
-                            Log.e("getRoute", e.getMessage());
+                            RouteContainer[] routes = gson.fromJson(decoded, RouteContainer[].class);
+                            callBack.onSuccess(routes);
+                        } catch (Exception e ) {
+
                         }
+
+
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("getRoute", error.getMessage());
+                try{
+                    Log.e("SearchRoutes", error.getMessage());
+                } catch (Exception e){
+                    Log.e("SearchRoutes", "Unknown error on server");
+
+                }
             }
         });
 

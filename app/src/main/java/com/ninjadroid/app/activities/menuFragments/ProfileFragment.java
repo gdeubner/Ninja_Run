@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.text.Spannable;
@@ -93,7 +94,7 @@ public class ProfileFragment extends Fragment {
             name = getArguments().getString("name");
             profileC = (ProfileContainer) getArguments().getSerializable("container");
         }
-
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.profile_title);
     }
 
     @Override

@@ -16,6 +16,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -55,14 +56,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.maps.android.PolyUtil;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.utils.DirectionsCallback;
+import com.ninjadroid.app.webServices.callbacks.DirectionsCallback;
 import com.ninjadroid.app.utils.Utils;
-import com.ninjadroid.app.utils.RouteCallback;
+import com.ninjadroid.app.webServices.callbacks.RouteCallback;
 import com.ninjadroid.app.utils.containers.DirectionsContainers.DirectionsContainer;
 import com.ninjadroid.app.utils.containers.DirectionsContainers.Step;
 import com.ninjadroid.app.utils.containers.LocationContainer;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
-import com.ninjadroid.app.utils.containers.RouteContainer;
+import com.ninjadroid.app.utils.containers.UserRouteContainer;
 import com.ninjadroid.app.webServices.AddHistory;
 import com.ninjadroid.app.webServices.GetDirections;
 import com.ninjadroid.app.webServices.GetRoute;
@@ -154,12 +155,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             profile = (ProfileContainer) getArguments().getSerializable(USER_PROFILE);
             Log.i("MapFrag", "routeID" + routeId);
         }
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.map_title);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
@@ -670,7 +673,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         GetRoute.getRoute(getContext(), routeId, new RouteCallback() {
             @Override
-            public void onSuccess(RouteContainer route) {
+            public void onSuccess(UserRouteContainer route) {
                 List<LatLng> latLngFollowedRoute = getLatLngList(route.getRoute_f().substring(6, route.getRoute_f().length()-1));
 
                 PolylineOptions options = new PolylineOptions()
