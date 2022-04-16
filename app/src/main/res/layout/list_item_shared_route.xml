@@ -10,22 +10,22 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textview7"
-            android:layout_width="159dp"
-            android:layout_height="50dp"
+            android:id="@+id/tv_routeID"
+            android:layout_width="158dp"
+            android:layout_height="48dp"
             android:fontFamily="sans-serif-light"
-            android:text="Town: Crazy cool town"
+            android:text="Town: fun town"
             android:textSize="16dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.994"
-            app:layout_constraintStart_toEndOf="@+id/imageview4"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/img_routeImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.012" />
 
         <TextView
-            android:id="@+id/textview3"
+            android:id="@+id/tv_routeLength"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -35,12 +35,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageview4"
+            app:layout_constraintStart_toEndOf="@+id/img_routeImage"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.436" />
+            app:layout_constraintVertical_bias="0.32" />
 
         <TextView
-            android:id="@+id/textview4"
+            android:id="@+id/tv_sharedBy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -50,27 +50,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageview4"
+            app:layout_constraintStart_toEndOf="@+id/img_routeImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.65" />
 
         <TextView
-            android:id="@+id/textview5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:text="Distance: 9999.0"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageview4"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.864" />
-
-        <TextView
-            android:id="@+id/textview"
+            android:id="@+id/tv_town"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -80,27 +65,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageview4"
+            app:layout_constraintStart_toEndOf="@+id/img_routeImage"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.012" />
 
-        <TextView
-            android:id="@+id/textview12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:text="Route Id: 9999"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageview4"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.223" />
-
         <ImageView
-            android:id="@+id/imageview4"
+            android:id="@+id/img_routeImage"
             android:layout_width="79dp"
             android:layout_height="98dp"
             android:visibility="visible"
@@ -114,14 +84,14 @@
             tools:srcCompat="@drawable/ic_action_name" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/tv_noRoutes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No history yet, try running a route!"
+            android:text="No shared routes, check back later!"
             android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/img_routeImage"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

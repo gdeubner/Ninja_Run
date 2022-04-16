@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -61,6 +62,8 @@ public class HistoryFragment extends Fragment {
             mUserID = getArguments().getString(USERID);
         }
         historyC = (HistoryContainer) getArguments().getSerializable("container");
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.history_title);
+
     }
 
     @Override

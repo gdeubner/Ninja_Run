@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
 
                 case R.id.nav_search:
-                    SearchFragment searchFragment = SearchFragment.newInstance(userID);
+                    SearchFragment searchFragment = SearchFragment.newInstance();
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             searchFragment,"SEARCH_FRAGMENT").commit();
                     break;

@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -61,6 +62,7 @@ public class FollowingFragment extends Fragment {
         if (getArguments() != null) {
             mUserID = getArguments().getString(USERID);
         }
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.following_title);
     }
 
     @Override

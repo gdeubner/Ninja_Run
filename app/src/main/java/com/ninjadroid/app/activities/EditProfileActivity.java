@@ -98,18 +98,10 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i("EditProfile", "clicked cancel");
-//                Intent intent = new Intent(getBaseContext(),MainActivity.class);
-//                intent.putExtra("ProfileFragment",1);
-//                intent.putExtra("userID", userID);
-//                startActivity(intent);
-
-//                Intent intent = new Intent(EditProfileActivity.this, MainActivity.class);
-//                //intent.putExtra(ROUTE_ID_KEY, routeID);
-//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                setResult(Activity.RESULT_OK, intent);
                 finish();
             }
         });
+        getSupportActionBar().setTitle(R.string.edit_profile_title);
     }
 
 
@@ -157,14 +149,5 @@ public class EditProfileActivity extends AppCompatActivity {
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-    }
-    @Override
-    public void onBackPressed() {
-        finish();
-        //super.onBackPressed();
-//        Intent intent = new Intent(getBaseContext(),MainActivity.class);
-//        intent.putExtra("ProfileFragment",1);
-//        intent.putExtra("userID", userID);
-//        startActivity(intent);
     }
 }

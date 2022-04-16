@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +45,7 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item2, parent, false);
+        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_shared_route, parent, false);
         return new ViewHolder(rowItem);
     }
 
@@ -87,19 +85,19 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
             super(view);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            this.textView = view.findViewById(R.id.textview);
-            this.textView3 = view.findViewById(R.id.textview3);
-            this.textView4 = view.findViewById(R.id.textview4);
-            this.textView7 = view.findViewById(R.id.textview7);
-            this.textView8 = view.findViewById(R.id.textview8);
-            this.imageView4 = view.findViewById(R.id.imageview4);
+            this.textView = view.findViewById(R.id.tv_town);
+            this.textView3 = view.findViewById(R.id.tv_routeLength);
+            this.textView4 = view.findViewById(R.id.tv_sharedBy);
+            this.textView7 = view.findViewById(R.id.tv_routeID);
+            this.textView8 = view.findViewById(R.id.tv_noRoutes);
+            this.imageView4 = view.findViewById(R.id.img_routeImage);
         }
 
         @Override
         public void onClick(View view) {
             //todo: this is a temporary fix for getting the routeID until this recycler view is fully implemented
             //************
-            TextView tv = view.findViewById(R.id.textview7);
+            TextView tv = view.findViewById(R.id.tv_routeID);
             String routeID = tv.getText().toString().split("\n")[0].split(":")[1];
             //************
 

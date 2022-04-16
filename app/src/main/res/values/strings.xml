@@ -36,6 +36,7 @@
     <string name="nav_profile">Profile</string>
     <string name="search">Search</string>
 
+
     <!-- Search Page -->
 
     <string-array name="searchBy_array">
@@ -44,11 +45,24 @@
         <item>Username</item>
     </string-array>
 
-    <!-- do not change language of this array. positions should match that of searchBy_array above -->
-    <string-array name="searchBy_arrayEnglish">
-        <item>town</item>
-        <item>route_id</item>
-        <item>username</item>
-    </string-array>
+    <!-- searchedRoute item -->
+    <string name="route_id">Route id: %1$d</string>
+    <string name="creator">Creator: %1$s</string>
+    <string name="town">Town: %1$s</string>
+    <string name="length">Length: %1$.1f miles</string>
+    <string name="no_routes_found">No Routes Found!</string>
+
+    <!-- page titles -->
+    <string name="map_title">Map</string>
+    <string name="profile_title">Profile</string>
+    <string name="search_title">Search for Routes</string>
+    <string name="history_title">My Running History</string>
+    <string name="shared_title">Routes Shared With Me</string>
+    <string name="follower_title">My Followers</string>
+    <string name="following_title">Following Me</string>
+    <string name="edit_profile_title">Edit Profile</string>
+
+
+
 
 </resources>

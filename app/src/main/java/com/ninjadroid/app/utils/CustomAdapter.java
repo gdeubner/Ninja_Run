@@ -5,13 +5,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -26,8 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.LoginActivity;
-import com.ninjadroid.app.activities.MainActivity;
 import com.ninjadroid.app.activities.RouteActivity;
 
 import androidx.appcompat.widget.PopupMenu;
@@ -50,7 +46,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     @Override
     public CustomAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_history, parent, false);
         return new ViewHolder(rowItem);
     }
 
@@ -106,13 +102,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             super(view);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            this.textView = view.findViewById(R.id.textview);
-            this.textView3 = view.findViewById(R.id.textview3);
-            this.textView4 = view.findViewById(R.id.textview4);
+            this.textView = view.findViewById(R.id.tv_town);
+            this.textView3 = view.findViewById(R.id.tv_routeLength);
+            this.textView4 = view.findViewById(R.id.tv_sharedBy);
             this.textView5 = view.findViewById(R.id.textview5);
-            this.textView7 = view.findViewById(R.id.textview7);
+            this.textView7 = view.findViewById(R.id.tv_routeID);
             this.textView12 = view.findViewById(R.id.textview12);
-            this.imageView4 = view.findViewById(R.id.imageview4);
+            this.imageView4 = view.findViewById(R.id.img_routeImage);
             this.textView8 = view.findViewById(R.id.textView8);
         }
 
@@ -120,7 +116,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         public void onClick(View view) {
             //todo: this is a temporary fix for getting the routeID until this recycler view is fully implemented
             //************
-            TextView tv = view.findViewById(R.id.textview);
+            TextView tv = view.findViewById(R.id.tv_town);
             String routeID = tv.getText().toString().split("\n")[0].split(":")[1];
             //************
             Intent intent = new Intent(activity, RouteActivity.class);
