@@ -1,7 +1,6 @@
 package com.ninjadroid.app.activities.menuFragments;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.utils.FollowerAdapter;
+import com.ninjadroid.app.utils.adapters.FollowerAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
 
 import java.util.ArrayList;

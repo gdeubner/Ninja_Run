@@ -1,4 +1,4 @@
-package com.ninjadroid.app.utils;
+package com.ninjadroid.app.utils.adapters;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -26,6 +26,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.RouteActivity;
+import com.ninjadroid.app.utils.URLBuilder;
 
 import java.util.List;
 

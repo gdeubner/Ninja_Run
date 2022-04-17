@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import com.ninjadroid.app.R;
@@ -33,9 +34,17 @@ public class RouteActivity extends AppCompatActivity {
             public void onSuccess(UserRouteContainer route) {
                 binding.tvCreator.setText(route.getUsername());
                 binding.tvLocation.setText(route.getTown());
+                Log.i("RouteActivity", "" + route.getDistance());
                 binding.tvDistance.setText(getString(R.string.distance_string, route.getDistance()));
+                String title = route.getRoute().getTitle();
+                if(title != null && title.length() > 0){
+                    binding.tvRouteTitle.setText(title);
+                }
                 //binding.tvElevation.setText(route.getElevation);
-                //binding.tvDateCreated.setText(route.getDate());
+                String date = route.getRoute().getDate();
+                if(date != null && date.length() > 0){
+                    binding.tvDateCreated.setText(date.split("T")[0]);
+                }
             }
         });
 
