@@ -44,6 +44,7 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
     private EditText searchBar;
     private SearchedAdapter adapter;
     private TextView noRoutesFound;
+    private List<RouteContainer> routeList;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -86,19 +87,36 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
         searchBtn = view.findViewById(R.id.btn_search);
         searchBar = view.findViewById(R.id.tv_searchBar);
         noRoutesFound = view.findViewById(R.id.tv_noRouteFound);
+
+
+        searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b){
+                    final InputMethodManager imm = (InputMethodManager) getActivity()
+                            .getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        });
     }
 
     private void addDropdownFunctionality() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.searchBy_array, R.layout.list_item_dropdown);
         dropdown.setAdapter(adapter);
+
     }
 
     private void addButtonFunctionality() {
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if(routeList != null){
+                    routeList.removeAll(routeList);
+                }
+                final InputMethodManager imm = (InputMethodManager) getActivity()
+                        .getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
                 noRoutesFound.setVisibility(View.INVISIBLE);
                 String search = searchBar.getText().toString();
@@ -111,6 +129,9 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
                     return;
                 }
                 String searchType = dropdown.getText().toString().toLowerCase().replace(' ', '_');
+                if(searchType.equals("route_name")){
+                    searchType = "title";
+                }
 
                 SearchRoutes.search(getActivity(), searchType, search, new SearchRoutesCallback() {
                     @Override
@@ -132,7 +153,7 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 manager.getOrientation());
         recyclerView.setLayoutManager(manager);
-        List<RouteContainer> routeList = Arrays.asList(routes);
+        routeList = new ArrayList<>(Arrays.asList(routes));
         adapter = new SearchedAdapter(getContext(), routeList);
         adapter.setClickListener(this);
         recyclerView.addItemDecoration(dividerItemDecoration);
@@ -143,6 +164,6 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(getActivity(), RouteActivity.class);
         intent.putExtra(ROUTE_ID_KEY, Integer.toString(adapter.getItem(position).getRoute_id()));
-       getActivity().startActivityForResult(intent, R.id.nav_map);
+        getActivity().startActivityForResult(intent, R.id.nav_map);
     }
 }

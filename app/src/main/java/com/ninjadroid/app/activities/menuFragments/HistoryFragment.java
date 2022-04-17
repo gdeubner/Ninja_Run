@@ -21,10 +21,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.utils.CustomAdapter;
+import com.ninjadroid.app.utils.HistoryAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
 import com.ninjadroid.app.utils.containers.HistoryContainer;
-import com.ninjadroid.app.utils.containers.ProfileContainer;
 
 import java.util.ArrayList;
 
@@ -108,7 +107,7 @@ public class HistoryFragment extends Fragment {
                         final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-                        recyclerView.setAdapter(new CustomAdapter(Integer.parseInt(userID), context,data)); //change later from 17 to uid
+                        recyclerView.setAdapter(new HistoryAdapter(Integer.parseInt(userID), context,data)); //change later from 17 to uid
                         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
 

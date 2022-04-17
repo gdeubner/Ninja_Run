@@ -9,10 +9,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -51,7 +54,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(findViewById(R.id.drawer_layout).getWindowToken(), 0);
+            }
+
+
+        };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -70,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
-
+        getSupportActionBar().setTitle(R.string.map_title);
 
     }
 

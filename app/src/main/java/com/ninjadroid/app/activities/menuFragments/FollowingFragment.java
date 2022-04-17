@@ -70,8 +70,8 @@ public class FollowingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_following, container, false);
         // Inflate the layout for this fragment
-        final Button followButton = view.findViewById(R.id.followButton);
-        final EditText followUsername = view.findViewById(R.id.followUsername);
+        final Button followButton = view.findViewById(R.id.btn_followBtn);
+        final EditText followUsername = view.findViewById(R.id.et_followerSearchBar);
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

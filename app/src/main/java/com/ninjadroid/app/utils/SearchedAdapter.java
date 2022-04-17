@@ -43,6 +43,10 @@ public class SearchedAdapter extends RecyclerView.Adapter<SearchedAdapter.ViewHo
                Math.round(mData.get(position).getDistance()*10)/ 10.0));
         holder.tv_routeID.setText(holder.itemView.getContext().getString(R.string.route_id,
                 mData.get(position).getRoute_id()));
+        String routeName = mData.get(position).getTitle();
+        if(routeName != null && routeName.length() > 0){
+            holder.tv_routeName.setText(routeName);
+        }
 
     }
 
@@ -59,6 +63,7 @@ public class SearchedAdapter extends RecyclerView.Adapter<SearchedAdapter.ViewHo
         TextView tv_town;
         TextView tv_length;
         TextView tv_routeID;
+        TextView tv_routeName;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -66,6 +71,7 @@ public class SearchedAdapter extends RecyclerView.Adapter<SearchedAdapter.ViewHo
             tv_town = itemView.findViewById(R.id.tv_routeTown);
             tv_length = itemView.findViewById(R.id.tv_routeDistance);
             tv_routeID = itemView.findViewById(R.id.tv_routeId);
+            tv_routeName= itemView.findViewById(R.id.tv_routeName);
 
             itemView.setOnClickListener(this);
         }

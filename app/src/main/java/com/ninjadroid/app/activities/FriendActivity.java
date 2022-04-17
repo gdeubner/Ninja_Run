@@ -181,13 +181,6 @@ public class FriendActivity extends AppCompatActivity {
 
 
     public void onBackPressed() {
-//        Intent intent = new Intent(getBaseContext(),MainActivity.class);
-//        if(fType.equals("Follower")){
-//            intent.putExtra("FollowersFragment",1);
-//        }else{
-//            intent.putExtra("FollowingFragment",1);
-//        }
-//        startActivity(intent);
 
         Intent intent = new Intent(FriendActivity.this, MainActivity.class);
         //intent.putExtra("routeID", routeID);

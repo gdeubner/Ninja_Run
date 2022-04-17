@@ -76,6 +76,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="12dp"
         android:hint="Enter New Name"
+        android:inputType="textVisiblePassword"
         app:layout_constraintStart_toEndOf="@+id/usernameTitleE"
         app:layout_constraintTop_toBottomOf="@+id/usernameE" />
 
@@ -86,6 +87,7 @@
         android:layout_marginStart="3dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Password"
+        android:inputType="textVisiblePassword"
         app:layout_constraintStart_toEndOf="@+id/passwordTitleE"
         app:layout_constraintTop_toBottomOf="@+id/nameEditE" />
 
