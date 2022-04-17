@@ -91,6 +91,7 @@ public class ProfileFragment extends Fragment {
             points = getArguments().getInt("points",0);
             calories = getArguments().getInt("calories", 0);
             distance = getArguments().getDouble("distance", 0);
+            distance = Math.round(distance*10)/10.0;
             name = getArguments().getString("name");
             profileC = (ProfileContainer) getArguments().getSerializable("container");
         }

@@ -24,9 +24,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!--Route page -->
-    <string name="distance_string">%1$f miles</string>
+    <string name="distance_string">%1$.1f miles</string>
 
-    <!--Side Bar Menue -->
+
+    <!--Side Bar Menu -->
     <string name="log_out">Log Out</string>
     <string name="followers">Followers</string>
     <string name="following">Following</string>
@@ -43,6 +44,7 @@
         <item>Town</item>
         <item>Route ID</item>
         <item>Username</item>
+        <item>Route Name</item>
     </string-array>
 
     <!-- searchedRoute item -->
@@ -51,6 +53,8 @@
     <string name="town">Town: %1$s</string>
     <string name="length">Length: %1$.1f miles</string>
     <string name="no_routes_found">No Routes Found!</string>
+    <string name="no_name_given">No Name Given : (</string>
+
 
     <!-- page titles -->
     <string name="map_title">Map</string>
@@ -61,8 +65,7 @@
     <string name="follower_title">My Followers</string>
     <string name="following_title">Following Me</string>
     <string name="edit_profile_title">Edit Profile</string>
-
-
+    <string name="route_creator">Creator: %1$s</string>
 
 
 </resources>

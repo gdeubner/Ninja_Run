@@ -13,6 +13,7 @@ public class RouteContainer implements Serializable {
     private double long_end;
     private String route_f;
     private String username;
+    private String title;
 
     public String getTown() {
         return town;
@@ -53,5 +54,10 @@ public class RouteContainer implements Serializable {
     public String getUsername() {
         return username;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
 
 }

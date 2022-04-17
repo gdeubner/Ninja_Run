@@ -31,27 +31,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     private static List<String> data;
     private static Context activity;
     private static int user_id;
     private static String inp_text;
     private static final String KEY = "routeID";
 
-    public CustomAdapter (int user_id, Context activity, List<String> data){
+    public HistoryAdapter(int user_id, Context activity, List<String> data){
         this.activity = activity;
         this.data = data;
         this.user_id = user_id;
     }
 
     @Override
-    public CustomAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_history, parent, false);
         return new ViewHolder(rowItem);
     }
 
     @Override
-    public void onBindViewHolder(CustomAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(HistoryAdapter.ViewHolder holder, int position) {
         String result[] = this.data.get(position).split(";");
         if (result.length == 0) {
             holder.textView.setVisibility(View.INVISIBLE);

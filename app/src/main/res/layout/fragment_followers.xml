@@ -8,19 +8,11 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Followers"
-        android:layout_width="409dp"
-        android:layout_height="579dp"
-        android:layout_marginTop="10dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="409dp"
-        android:layout_height="30dp"
-        android:layout_marginBottom="10dp"
-        android:text="Followers"
-        app:layout_constraintBottom_toTopOf="@+id/Followers"
-        tools:layout_editor_absoluteX="1dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
