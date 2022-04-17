@@ -34,13 +34,13 @@ import java.util.regex.Pattern;
 public class PostRoute {
 
     public static void postRoute(ArrayList<LocationContainer> routeCoordinates, Context context,
-                                 int uid, int calories, String title){
-        String url = buildUrl(routeCoordinates, context, uid, title);
+                                 int uid, int calories, String title, String date){
+        String url = buildUrl(routeCoordinates, context, uid, title, date);
         postDataUsingVolley(context, url, routeCoordinates, uid, calories);
     }
 
     private static String buildUrl(ArrayList<LocationContainer> routeCoordinates, Context context,
-                                    int uid, String title){
+                                    int uid, String title, String date){
         Uri.Builder builder = new Uri.Builder();
 
         double startLat, startLon, endLat, endLon;
@@ -80,7 +80,8 @@ public class PostRoute {
                 .appendQueryParameter("var_town", cityName)
                 .appendQueryParameter("var_dist", String.valueOf(dist))
                 .appendQueryParameter("var_uid", String.valueOf(uid))
-                .appendQueryParameter("var_title", String.valueOf(title));
+                .appendQueryParameter("var_title", String.valueOf(title))
+                .appendQueryParameter("var_date", String.valueOf(date));
 
         return builder.build().toString();
     }

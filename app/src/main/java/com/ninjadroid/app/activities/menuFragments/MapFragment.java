@@ -356,7 +356,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 String title = routeTitle.getText().toString();
 
                 PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId),
-                        Utils.simpleCalorieCalc(totalTime, profile.getWeight()), title);
+                        Utils.simpleCalorieCalc(totalTime, profile.getWeight()), title,
+                        Utils.formatDateTime(routeCoordinates.get(0).getTime()));
             }
         });
         builder.setNegativeButton("Discard", new DialogInterface.OnClickListener() {
