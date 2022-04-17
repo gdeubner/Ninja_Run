@@ -26,6 +26,11 @@
             android:title="@string/my_history" />
 
         <item
+            android:id="@+id/nav_myroutes"
+            android:icon="@drawable/ic_action_name"
+            android:title="My Routes" />
+
+        <item
             android:id="@+id/nav_shared"
             android:icon="@drawable/ic_baseline_shared"
             android:title="@string/shared_routes" />

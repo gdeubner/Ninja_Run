@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,10 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.activities.FriendActivity;
 import com.ninjadroid.app.activities.RouteActivity;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 

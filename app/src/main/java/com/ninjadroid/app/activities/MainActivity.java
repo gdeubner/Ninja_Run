@@ -26,6 +26,7 @@ import com.ninjadroid.app.activities.menuFragments.ProfileFragment;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.menuFragments.SearchFragment;
 import com.ninjadroid.app.activities.menuFragments.SharedFragment;
+import com.ninjadroid.app.activities.menuFragments.RouteFragment;
 import com.ninjadroid.app.activities.menuFragments.FollowingFragment;
 import com.ninjadroid.app.webServices.callbacks.VolleyProfileCallback;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
@@ -130,6 +131,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     HistoryFragment histFrag = HistoryFragment.newInstance(userID);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             histFrag,"HIST_FRAGMENT").commit();
+                    break;
+
+                case R.id.nav_myroutes:
+                    RouteFragment routeFrag = RouteFragment.newInstance(userID);
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            routeFrag,"ROUTE_FRAGMENT").commit();
                     break;
 
                 case R.id.nav_shared:
