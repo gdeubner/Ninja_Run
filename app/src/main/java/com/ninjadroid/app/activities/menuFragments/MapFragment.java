@@ -16,18 +16,21 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Looper;
 import android.os.SystemClock;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -112,6 +115,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     RadioGroup radioGroup;
     int nextRouteIndex;
     int previousRoutIndex;
+    Context context;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -154,12 +158,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             profile = (ProfileContainer) getArguments().getSerializable(USER_PROFILE);
             Log.i("MapFrag", "routeID" + routeId);
         }
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.map_title);
+        context = getContext();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
@@ -322,7 +329,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private void clearCreatedRoute() {
         if(startMarker != null){
             startMarker.remove();
+        }
+        if(endMarker != null){
             endMarker.remove();
+        }
+        if(drawnRoute != null){
             drawnRoute.remove();
         }
     }
@@ -331,14 +342,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Do you want to save your route?")
                 .setTitle("Route Complete");
+        View viewInflated = LayoutInflater.from(getActivity()).inflate(R.layout.send_route_dialogue_layout,
+                (ViewGroup) getView(), false);
+
+        EditText routeTitle = (EditText) viewInflated.findViewById(R.id.input);
+        builder.setView(viewInflated);
+
         builder.setPositiveButton("Save", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 double startTime = routeCoordinates.get(0).getTime();
                 double endTime = routeCoordinates.get(routeCoordinates.size()-1).getTime();
-                int totalTime = (int) ((startTime - endTime)/1000);
+                int totalTime = (int) ((endTime - startTime)/1000);
+                String title = routeTitle.getText().toString();
 
                 PostRoute.postRoute(routeCoordinates, getActivity().getBaseContext(), Integer.parseInt(mUserId),
-                        Utils.simpleCalorieCalc(totalTime, profile.getWeight()));
+                        Utils.simpleCalorieCalc(totalTime, profile.getWeight()), title);
             }
         });
         builder.setNegativeButton("Discard", new DialogInterface.OnClickListener() {

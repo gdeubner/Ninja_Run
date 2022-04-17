@@ -1,22 +1,17 @@
 package com.ninjadroid.app.utils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -27,11 +22,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.FriendActivity;
-import com.ninjadroid.app.activities.RouteActivity;
-import com.ninjadroid.app.activities.menuFragments.ProfileFragment;
 
 import java.util.List;
-import java.util.Map;
 
 public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHolder> {
     private static List<String> username;
@@ -53,7 +45,7 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item3, parent, false);
+        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_follower, parent, false);
         return new ViewHolder(rowItem);
 
 

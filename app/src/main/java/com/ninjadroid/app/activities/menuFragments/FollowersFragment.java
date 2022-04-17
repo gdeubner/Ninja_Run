@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -58,6 +59,7 @@ public class FollowersFragment extends Fragment {
         if (getArguments() != null) {
             mUserID = getArguments().getString(USERID);
         }
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.follower_title);
     }
 
     @Override
