@@ -14,6 +14,7 @@ public class RouteContainer implements Serializable {
     private String route_f;
     private String username;
     private String title;
+    private String date;
 
     public String getTown() {
         return town;
@@ -57,6 +58,10 @@ public class RouteContainer implements Serializable {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getDate() {
+        return date;
     }
 
 

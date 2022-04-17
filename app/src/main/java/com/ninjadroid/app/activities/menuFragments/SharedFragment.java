@@ -21,7 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.utils.SharedAdapter;
+import com.ninjadroid.app.utils.adapters.SharedAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
 
 import java.util.ArrayList;

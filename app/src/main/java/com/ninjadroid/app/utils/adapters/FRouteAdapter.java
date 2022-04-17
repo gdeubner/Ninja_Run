@@ -1,4 +1,4 @@
-package com.ninjadroid.app.utils;
+package com.ninjadroid.app.utils.adapters;
 
 import android.app.Activity;
 import android.content.Context;

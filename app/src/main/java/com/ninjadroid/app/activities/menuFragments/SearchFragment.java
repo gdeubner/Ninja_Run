@@ -1,6 +1,5 @@
 package com.ninjadroid.app.activities.menuFragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.RouteActivity;
-import com.ninjadroid.app.utils.SearchedAdapter;
+import com.ninjadroid.app.utils.adapters.SearchedAdapter;
 import com.ninjadroid.app.utils.containers.RouteContainer;
 import com.ninjadroid.app.webServices.SearchRoutes;
 import com.ninjadroid.app.webServices.callbacks.SearchRoutesCallback;
@@ -31,7 +30,6 @@ import com.ninjadroid.app.webServices.callbacks.SearchRoutesCallback;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.PropertyResourceBundle;
 
 public class SearchFragment extends Fragment implements SearchedAdapter.ItemClickListener{
     private static final String ROUTE_ID_KEY = "routeID";
