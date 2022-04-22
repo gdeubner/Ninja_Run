@@ -20,12 +20,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.adapters.HistoryAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
 import com.ninjadroid.app.utils.containers.HistoryContainer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class HistoryFragment extends Fragment {
     private static final String USERID = "key";
@@ -99,15 +101,18 @@ public class HistoryFragment extends Fragment {
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
                         Log.i("Get Request Response", response);
-                        String[] result = response.split(",");
 
 
-                        ArrayList<String> data = populateList(result);
+                        Gson gson = new Gson();
+                        HistoryContainer[] histArr = gson.fromJson(response, HistoryContainer[].class);
+                        ArrayList<HistoryContainer> histList = new ArrayList<>(Arrays.asList(histArr));
+//                        String[] result = response.split(",");
+//                        ArrayList<String> data = populateList(result);
 
                         final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
                         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-                        recyclerView.setAdapter(new HistoryAdapter(Integer.parseInt(userID), context,data)); //change later from 17 to uid
+                        recyclerView.setAdapter(new HistoryAdapter(Integer.parseInt(userID), context,histList)); //change later from 17 to uid
                         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
 

@@ -86,10 +86,10 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
             super(view);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            this.textView = view.findViewById(R.id.tv_town);
-            this.textView3 = view.findViewById(R.id.tv_routeLength);
-            this.textView4 = view.findViewById(R.id.tv_sharedBy);
-            this.textView7 = view.findViewById(R.id.tv_routeID);
+            this.textView = view.findViewById(R.id.tv_routeID);
+            this.textView3 = view.findViewById(R.id.tv_calories);
+            this.textView4 = view.findViewById(R.id.tv_duration);
+            this.textView7 = view.findViewById(R.id.tv_date);
             this.textView8 = view.findViewById(R.id.tv_noRoutes);
             this.imageView4 = view.findViewById(R.id.img_routeImage);
         }
@@ -98,7 +98,7 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
         public void onClick(View view) {
             //todo: this is a temporary fix for getting the routeID until this recycler view is fully implemented
             //************
-            TextView tv = view.findViewById(R.id.tv_routeID);
+            TextView tv = view.findViewById(R.id.tv_date);
             String routeID = tv.getText().toString().split("\n")[0].split(":")[1];
             //************
 

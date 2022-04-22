@@ -10,7 +10,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_routeID"
+            android:id="@+id/tv_date"
             android:layout_width="158dp"
             android:layout_height="48dp"
             android:fontFamily="sans-serif-light"
@@ -25,7 +25,7 @@
             app:layout_constraintVertical_bias="0.012" />
 
         <TextView
-            android:id="@+id/tv_routeLength"
+            android:id="@+id/tv_calories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -40,7 +40,7 @@
             app:layout_constraintVertical_bias="0.32" />
 
         <TextView
-            android:id="@+id/tv_sharedBy"
+            android:id="@+id/tv_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
@@ -55,7 +55,7 @@
             app:layout_constraintVertical_bias="0.65" />
 
         <TextView
-            android:id="@+id/tv_town"
+            android:id="@+id/tv_routeID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
