@@ -49,7 +49,12 @@ public class GetRoute {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("getRoute", error.getMessage());
+                try{
+                    Log.e("getRoute", error.getMessage());
+                } catch (Exception e){
+                    Log.e("getRoute", "Unknown error");
+
+                }
             }
         });
 

@@ -39,7 +39,7 @@ public class FRouteAdapter extends RecyclerView.Adapter<FRouteAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item5, parent, false);
+        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_friend, parent, false);
         return new ViewHolder(rowItem);
     }
 
