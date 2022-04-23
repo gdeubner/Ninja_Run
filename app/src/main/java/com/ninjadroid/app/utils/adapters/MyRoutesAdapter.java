@@ -1,4 +1,4 @@
-package com.ninjadroid.app.utils;
+package com.ninjadroid.app.utils.adapters;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -25,6 +27,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.RouteActivity;
+import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.webServices.ShareRoute;
 
 import java.util.List;
 
@@ -84,6 +88,7 @@ public class MyRoutesAdapter extends RecyclerView.Adapter<MyRoutesAdapter.ViewHo
                 distance.remove(removeRoute);
                 notifyItemRemoved(removeRoute);
                 notifyItemRangeChanged(removeRoute, getItemCount());
+
             }
         });
     }
@@ -93,7 +98,8 @@ public class MyRoutesAdapter extends RecyclerView.Adapter<MyRoutesAdapter.ViewHo
         return this.town.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener{
         private TextView myTown;
         private TextView myDistance;
         private TextView myRouteID;
@@ -104,6 +110,7 @@ public class MyRoutesAdapter extends RecyclerView.Adapter<MyRoutesAdapter.ViewHo
         public ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
+            view.setOnLongClickListener(this);
             this.myTown = view.findViewById(R.id.myTown);
             this.myDistance = view.findViewById(R.id.myDistance);
             this.myRouteID = view.findViewById(R.id.myRouteID);
@@ -121,14 +128,34 @@ public class MyRoutesAdapter extends RecyclerView.Adapter<MyRoutesAdapter.ViewHo
 
         @Override
         public void onClick(View view) {
-            int i = getAdapterPosition();
-            String routeId = routeID.get(i);
+            String routeId = routeID.get(getAdapterPosition());
             Log.i("Route", routeId);
             Intent intent = new Intent(activity, RouteActivity.class);
             intent.putExtra("routeID",routeId);
             intent.putExtra("From", "Friend");
             Activity activity = unwrap(view.getContext());
             activity.startActivityForResult(intent, Activity_REQUEST_CODE);
+        }
+
+        @Override
+        public boolean onLongClick(View view) {
+            // Handle long click
+            // Return true to indicate the click was handled
+            PopupMenu popup = new PopupMenu(view.getContext(),myDelete);
+            popup.getMenuInflater().inflate(R.menu.popup_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch(item.getItemId()) {
+                        case R.id.share:
+                            ShareRoute.share(activity, Integer.parseInt(routeID.get(getAdapterPosition())),
+                                    user_id);
+                    }
+                    return true;
+                }
+            });
+            popup.show();
+            return true;
         }
 
     }

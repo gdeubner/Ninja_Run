@@ -18,6 +18,9 @@ public class UtilsTest {
 
     @Test
     public void second2minute() {
+        assertEquals(2, Utils.second2minute(120));
+        assertEquals(0, Utils.second2minute(0));
+        assertNotEquals(2, Utils.second2minute(120));
     }
 
     @Test

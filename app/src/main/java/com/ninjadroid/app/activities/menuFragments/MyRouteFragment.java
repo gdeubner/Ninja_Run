@@ -7,8 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -23,17 +22,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
-import com.ninjadroid.app.utils.MyRoutesAdapter;
+import com.ninjadroid.app.utils.adapters.MyRoutesAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
-import com.ninjadroid.app.utils.containers.HistoryContainer;
 
 import java.util.ArrayList;
 
-public class RouteFragment extends Fragment {
+public class MyRouteFragment extends Fragment {
     private String mUserID;
     private static final String USERID = "key";
+    private TextView noRoutes;
 
-    public RouteFragment() {
+
+    public MyRouteFragment() {
         // Required empty public constructor
     }
 
@@ -42,11 +42,11 @@ public class RouteFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param userID Parameter 1.
-     * @return A new instance of fragment RouteFragment.
+     * @return A new instance of fragment MyRouteFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RouteFragment newInstance(String userID) {
-        RouteFragment fragment = new RouteFragment();
+    public static MyRouteFragment newInstance(String userID) {
+        MyRouteFragment fragment = new MyRouteFragment();
         Bundle args = new Bundle();
         args.putString(USERID, userID);
         fragment.setArguments(args);
@@ -65,10 +65,12 @@ public class RouteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_route, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_route, container, false);
         // Inflate the layout for this fragment
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("My Routes");
         queryInfo(getContext(), mUserID,view);
+        noRoutes = view.findViewById(R.id.tv_noRoutesMyRoutes);
+        noRoutes.setVisibility(View.INVISIBLE);
         return view;
     }
 
@@ -100,10 +102,7 @@ public class RouteFragment extends Fragment {
                             ArrayList<ArrayList<String>> data = populate(result);
                             recyclerView.setAdapter(new MyRoutesAdapter(Integer.parseInt(userID), context, data.get(0), data.get(1), data.get(2)));
                         }else{
-                            ArrayList<String> routeid = new ArrayList<>();
-                            ArrayList<String> town = new ArrayList<>();
-                            ArrayList<String> dist = new ArrayList<>();
-                            recyclerView.setAdapter(new MyRoutesAdapter(Integer.parseInt(userID), context, routeid, town, dist));
+                            noRoutes.setVisibility(View.VISIBLE);
                         }
                         recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
                     }

@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -22,11 +21,11 @@ import com.google.android.material.navigation.NavigationView;
 import com.ninjadroid.app.activities.menuFragments.FollowersFragment;
 import com.ninjadroid.app.activities.menuFragments.HistoryFragment;
 import com.ninjadroid.app.activities.menuFragments.MapFragment;
+import com.ninjadroid.app.activities.menuFragments.MyRouteFragment;
 import com.ninjadroid.app.activities.menuFragments.ProfileFragment;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.menuFragments.SearchFragment;
 import com.ninjadroid.app.activities.menuFragments.SharedFragment;
-import com.ninjadroid.app.activities.menuFragments.RouteFragment;
 import com.ninjadroid.app.activities.menuFragments.FollowingFragment;
 import com.ninjadroid.app.webServices.callbacks.VolleyProfileCallback;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     break;
 
                 case R.id.nav_myroutes:
-                    RouteFragment routeFrag = RouteFragment.newInstance(userID);
+                    MyRouteFragment routeFrag = MyRouteFragment.newInstance(userID);
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                             routeFrag,"ROUTE_FRAGMENT").commit();
                     break;
