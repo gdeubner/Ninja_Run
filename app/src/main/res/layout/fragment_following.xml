@@ -9,7 +9,7 @@
         android:id="@+id/btn_followBtn"
         android:layout_width="103dp"
         android:layout_height="48dp"
-        android:text="Follow"
+        android:text="@string/follow_button"
         app:layout_constraintBottom_toBottomOf="@+id/et_followerSearchBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/et_followerSearchBar"
@@ -27,14 +27,17 @@
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/et_followerSearchBar"
-        android:layout_width="272dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:hint="Friend Username"
         android:inputType="textVisiblePassword"
+        app:layout_constraintBottom_toTopOf="@id/followingList"
         app:layout_constraintEnd_toStartOf="@id/btn_followBtn"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -27,18 +27,19 @@ import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.RouteActivity;
 import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.containers.SharedContainer;
 
 import java.util.List;
 
 public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder> {
-    private static List<String> data;
-    private static Context activity;
-    private static int user_id;
-    private static String inp_text;
-    private static final String KEY = "routeID";
+    private  List<SharedContainer> data;
+    private  Context activity;
+    private  int user_id;
+    private  String inp_text;
+    private  final String KEY = "routeID";
 
 
-    public SharedAdapter(int user_id, Context activity, List<String> data){
+    public SharedAdapter(int user_id, Context activity, List<SharedContainer> data){
         this.activity = activity;
         this.data = data;
         this.user_id = user_id;
@@ -46,26 +47,26 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_shared_route, parent, false);
+        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_shared_route,
+                parent, false);
         return new ViewHolder(rowItem);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String result[] = this.data.get(position).split(";");
-        if (result.length == 0) {
-            holder.textView8.setVisibility(View.VISIBLE);
-            holder.textView.setVisibility(View.INVISIBLE);
-            holder.textView7.setVisibility(View.INVISIBLE);
-            holder.textView3.setVisibility(View.INVISIBLE);
-            holder.textView4.setVisibility(View.INVISIBLE);
-            holder.imageView4.setVisibility(View.INVISIBLE);
-            return;
+        holder.tv_townShared.setText(activity.getResources().getString(R.string.history_town,
+                data.get(position).getTown()));
+        holder.tv_distanceShared.setText(activity.getResources().getString(R.string.history_distance,
+                data.get(position).getDistance()));
+        holder.tv_sharedBy.setText(activity.getResources().getString(R.string.shared_by,
+                data.get(position).getUsername()));
+        holder.tv_routeIdShared.setText(activity.getResources().getString(R.string.history_route_id,
+                data.get(position).getRoute_id()));
+        String name = data.get(position).getTitle();
+        if(name != null && name.length() > 0){
+            holder.tv_routeName.setText(name);
+
         }
-        holder.textView.setText(result[1]);
-        holder.textView7.setText(result[0]);
-        holder.textView3.setText(result[2]);
-        holder.textView4.setText("Shared by:" + result[3].substring(result[3].indexOf(":") + 1));
     }
 
 
@@ -74,32 +75,34 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
         return this.data.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        private TextView textView;
-        private TextView textView3;
-        private TextView textView4;
-        private TextView textView7;
-        private TextView textView8;
-        private ImageView imageView4;
+    public  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
+        private TextView tv_townShared;
+        private TextView tv_distanceShared;
+        private TextView tv_sharedBy;
+        private TextView tv_routeIdShared;
+        private TextView tv_routeName;
+        private ImageView img_routeImage;
 
         public ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            this.textView = view.findViewById(R.id.tv_routeID);
-            this.textView3 = view.findViewById(R.id.tv_calories);
-            this.textView4 = view.findViewById(R.id.tv_duration);
-            this.textView7 = view.findViewById(R.id.tv_date);
-            this.textView8 = view.findViewById(R.id.tv_noRoutes);
-            this.imageView4 = view.findViewById(R.id.img_routeImage);
+            this.tv_townShared = view.findViewById(R.id.tv_townShared);
+            this.tv_distanceShared = view.findViewById(R.id.tv_distanceShared);
+            this.tv_sharedBy = view.findViewById(R.id.tv_sharedBy);
+            this.tv_routeIdShared = view.findViewById(R.id.tv_routeIdShared);
+            this.tv_routeName = view.findViewById(R.id.tv_routeNameShared);
+            this.img_routeImage = view.findViewById(R.id.img_routeImage);
         }
 
         @Override
         public void onClick(View view) {
+            Log.i("SharedAdapter", "item was clicked");
             //todo: this is a temporary fix for getting the routeID until this recycler view is fully implemented
             //************
-            TextView tv = view.findViewById(R.id.tv_date);
-            String routeID = tv.getText().toString().split("\n")[0].split(":")[1];
+            TextView tv = view.findViewById(R.id.tv_routeIdShared);
+            String routeID = tv.getText().toString().split("\n")[0].split(":")[1].trim();
             //************
 
             Intent intent = new Intent(activity, RouteActivity.class);
@@ -111,14 +114,14 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
         public boolean onLongClick(View view) {
             // Handle long click
             // Return true to indicate the click was handled
-            PopupMenu popup = new PopupMenu(view.getContext(),textView);
+            PopupMenu popup = new PopupMenu(view.getContext(),tv_routeIdShared);
             popup.getMenuInflater().inflate(R.menu.popup_menu2, popup.getMenu());
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     switch(item.getItemId()) {
                         case R.id.remove:
-                            shareFunc();
+                            shareFunc(data.get(getLayoutPosition()).getRoute_id(),getLayoutPosition());
                     }
                     return true;
                 }
@@ -127,41 +130,30 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
             return true;
         }
 
-        public void shareFunc() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("Are you sure you want to delete this route?");
-
-
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    shareFunc2(getLayoutPosition(),activity);
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-
-            builder.show();
-        }
     }
 
-    public static void shareFunc2(int pos, Context activity) {
-        String s = data.get(pos);
-        int pos2 = s.indexOf(';');
-        int pos3 = s.indexOf(':');
+    public void shareFunc(int routeId, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Are you sure you want to delete this route?");
 
-        queryInfo(activity,s.substring(pos3+1,pos2));
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                queryInfo(activity,Integer.toString(routeId), position);
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
 
-
+        builder.show();
     }
 
-    private static void queryInfo(Context context,String routeID) {
+    private void queryInfo(Context context,String routeID, int itemPosition) {
         // Instantiate the RequestQueue.
-        Log.i("Justin", Integer.toString(user_id)); //replace with userID
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Uri.Builder builder = new Uri.Builder();
@@ -184,7 +176,9 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
                         Log.i("Get Request Response", response);
                         Toast.makeText(activity,"Successfully deleted route " + routeID,Toast.LENGTH_SHORT).show();
 
-
+                        data.remove(itemPosition);
+                        notifyItemRemoved(itemPosition);
+                        notifyItemRangeChanged(itemPosition, getItemCount());
 
                     }
                 }, new Response.ErrorListener() {
