@@ -15,6 +15,11 @@ public class RouteContainer implements Serializable {
     private String username;
     private String title;
     private String date;
+    private double elevation;
+
+    public double getElevation() {
+        return elevation;
+    }
 
     public String getTown() {
         return town;
