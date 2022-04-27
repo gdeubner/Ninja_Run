@@ -22,6 +22,8 @@ import com.ninjadroid.app.R;
 
 import com.ninjadroid.app.activities.EditProfileActivity;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
+import com.ninjadroid.app.webServices.GetProfile;
+import com.ninjadroid.app.webServices.callbacks.VolleyProfileCallback;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,6 +84,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("PROFILE PAGE", "on create");
         if (getArguments() != null) {
             userId = getArguments().getInt("userID");
             usernameP = getArguments().getString("username");
@@ -91,10 +94,10 @@ public class ProfileFragment extends Fragment {
             points = getArguments().getInt("points",0);
             calories = getArguments().getInt("calories", 0);
             distance = getArguments().getDouble("distance", 0);
-            distance = Math.round(distance*10)/10.0;
             name = getArguments().getString("name");
             profileC = (ProfileContainer) getArguments().getSerializable("container");
         }
+
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.profile_title);
     }
 
@@ -105,6 +108,7 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         // Inflate the layout for this fragment
         //setInfo(getContext(), mUserID, view);
+        Log.i("PROFILE PAGE", "on create view");
 
         Button editPButton = view.findViewById(R.id.editPButton);
         editPButton.setOnClickListener(new View.OnClickListener() {
@@ -118,40 +122,64 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        name = profileC.getName();
-
-        final TextView nameView = view.findViewById(R.id.username);
-        final TextView usernameView = view.findViewById(R.id.usernameP);
-        final TextView userIDView = view.findViewById(R.id.UserIDP);
-        final TextView weightView= view.findViewById(R.id.weightP);
-        final TextView heightView= view.findViewById(R.id.heightP);
-        final TextView pointsView= view.findViewById(R.id.pointsP);
-        final TextView totCalView= view.findViewById(R.id.totalCaloriesP);
-        final TextView totDistView= view.findViewById(R.id.totalDistanceP);
-
-        SpannableStringBuilder userNamestr = new SpannableStringBuilder("Username: "+ usernameP);
-        userNamestr.setSpan(new StyleSpan(Typeface.BOLD), 0, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder userIDstr = new SpannableStringBuilder("User ID: "+ userId);
-        userIDstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder weightstr = new SpannableStringBuilder("Weight: " + weight);
-        weightstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder heightstr = new SpannableStringBuilder("Height: " + heightFt+"ft "+ heightIn+"in");
-        heightstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder pointsstr = new SpannableStringBuilder("Points: " + String.valueOf(points));
-        pointsstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder totCalstr = new SpannableStringBuilder("Total Calories: " + String.valueOf(calories));
-        totCalstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        SpannableStringBuilder totDiststr = new SpannableStringBuilder("Total Distance: " + String.valueOf(distance));
-        totDiststr.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        nameView.setText(name);
-        usernameView.setText(userNamestr);
-        userIDView.setText(userIDstr);
-        weightView.setText(weightstr);
-        heightView.setText(heightstr);
-        pointsView.setText(pointsstr);
-        totCalView.setText(totCalstr);
-        totDistView.setText(totDiststr);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("PROFILE PAGE", "on resume");
+        Log.i("PROFILE PAGE", "requery on resume");
+        GetProfile.getProfile(getContext(), String.valueOf(userId),new VolleyProfileCallback() {
+            @Override
+            public void onSuccess(ProfileContainer profile) {
+                profileC = profile;
+                usernameP= profileC.getUsername();
+                weight=profile.getWeight();
+                heightFt=profileC.getHeight_ft();
+                heightIn= profileC.getHeight_in();
+                points = profileC.getPoints();
+                calories = profileC.getCalories();
+                distance = profileC.getDistance();
+                name = profileC.getName();
+
+                Log.i("PROFILE PAGE new weight", String.valueOf(weight));
+
+                final TextView nameView = getView().findViewById(R.id.username);
+                final TextView usernameView = getView().findViewById(R.id.usernameP);
+                final TextView userIDView = getView().findViewById(R.id.UserIDP);
+                final TextView weightView= getView().findViewById(R.id.weightP);
+                final TextView heightView= getView().findViewById(R.id.heightP);
+                final TextView pointsView= getView().findViewById(R.id.pointsP);
+                final TextView totCalView= getView().findViewById(R.id.totalCaloriesP);
+                final TextView totDistView= getView().findViewById(R.id.totalDistanceP);
+
+                Log.i("PROFILE PAGE", "on resume reformatting text");
+                SpannableStringBuilder userNamestr = new SpannableStringBuilder("Username: "+ usernameP);
+                userNamestr.setSpan(new StyleSpan(Typeface.BOLD), 0, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                SpannableStringBuilder userIDstr = new SpannableStringBuilder("User ID: "+ userId);
+                userIDstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                SpannableStringBuilder weightstr = new SpannableStringBuilder("Weight: " + Math.round(weight*100)/100.0);
+                weightstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                SpannableStringBuilder heightstr = new SpannableStringBuilder("Height: " + heightFt+"ft "+ Math.round(heightIn*100)/100.0+"in");
+                heightstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                SpannableStringBuilder pointsstr = new SpannableStringBuilder("Points: " + String.valueOf(points));
+                pointsstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                SpannableStringBuilder totCalstr = new SpannableStringBuilder("Total Calories: " + String.valueOf(calories));
+                totCalstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                SpannableStringBuilder totDiststr = new SpannableStringBuilder("Total Distance: " + String.valueOf(Math.round(distance*100)/100.0));
+                totDiststr.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                Log.i("PROFILE PAGE", "on resume setting text");
+                nameView.setText(name);
+                usernameView.setText(userNamestr);
+                userIDView.setText(userIDstr);
+                weightView.setText(weightstr);
+                heightView.setText(heightstr);
+                pointsView.setText(pointsstr);
+                totCalView.setText(totCalstr);
+                totDistView.setText(totDiststr);
+            }
+        });
     }
 }
