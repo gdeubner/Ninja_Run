@@ -75,6 +75,10 @@
     <string name="history_route_id">Route ID: %1$d</string>
     <string name="history_town">Town: %1$s</string>
     <string name="history_route_name">No Route Name</string>
+    <string name="no_history">No running history yet!</string>
+    <string name="no_shared_routes">No shared routes yet. Check back soon!</string>
+    <string name="follow_button">Follow</string>
+    <string name="shared_by">Shared by: %1$s</string>
 
 
 </resources>

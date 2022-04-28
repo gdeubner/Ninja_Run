@@ -1,33 +1,19 @@
 package com.ninjadroid.app.utils.adapters;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.activities.RouteActivity;
-import com.ninjadroid.app.utils.URLBuilder;
-import com.ninjadroid.app.utils.Utils;
 import com.ninjadroid.app.utils.containers.HistoryContainer;
+import com.ninjadroid.app.webServices.ShareRoute;
+
 
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +35,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_history, parent, false);
+        View rowItem = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_history,
+                parent, false);
         return new ViewHolder(rowItem);
     }
 
@@ -82,7 +69,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         return this.data.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
         private TextView tv_routeID;
         private TextView tv_calories;
         private TextView tv_duration;
@@ -96,11 +84,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             super(view);
             view.setOnClickListener(this);
             view.setOnLongClickListener(this);
-            this.tv_routeID = view.findViewById(R.id.tv_routeID);
-            this.tv_calories = view.findViewById(R.id.tv_calories);
-            this.tv_duration = view.findViewById(R.id.tv_duration);
+            this.tv_routeID = view.findViewById(R.id.tv_townShared);
+            this.tv_calories = view.findViewById(R.id.tv_distanceShared);
+            this.tv_duration = view.findViewById(R.id.tv_sharedBy);
             this.tv_historyDistance = view.findViewById(R.id.tv_historyDistance);
-            this.tv_date = view.findViewById(R.id.tv_date);
+            this.tv_date = view.findViewById(R.id.tv_routeIdShared);
             this.tv_town = view.findViewById(R.id.tv_town);
             this.tv_name = view.findViewById(R.id.tv_historyRouteName);
             this.img_routeImage = view.findViewById(R.id.img_routeImage);
@@ -125,7 +113,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 public boolean onMenuItemClick(MenuItem item) {
                     switch(item.getItemId()) {
                         case R.id.share:
-                            shareFunc();
+                            ShareRoute.share(activity, data.get(getLayoutPosition()).getRoute_id(),
+                                    user_id);
                     }
                     return true;
                 }
@@ -133,85 +122,5 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             popup.show();
             return true;
         }
-
-        public void shareFunc() {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("Please specify who you'd like to share the route with");
-
-            final EditText input1 = new EditText(activity);
-            input1.setHint("Username of Friend");
-
-            input1.setInputType(InputType.TYPE_CLASS_TEXT);
-            builder.setView(input1);
-
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    inp_text = input1.getText().toString();
-                    queryInfo(activity,Integer.toString(user_id), inp_text,
-                            Integer.toString(data.get(getLayoutPosition()).getRoute_id()));
-
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-
-            builder.show();
-        }
-    }
-
-    private static void queryInfo(Context context, String userID, String sharedUn, String routeID) {
-        // Instantiate the RequestQueue.
-        Log.i("Justin", "17"); //replace with userID
-        RequestQueue queue = Volley.newRequestQueue(context);
-
-        Uri.Builder builder = new Uri.Builder();
-        builder.scheme(URLBuilder.getScheme())
-                .encodedAuthority(URLBuilder.getEncodedAuthority())
-                .appendPath(URLBuilder.getShareRoute())
-                .appendQueryParameter("user_id", userID)
-                .appendQueryParameter("shared_username",sharedUn)
-                .appendQueryParameter("route_id",routeID); //replace with userID
-
-        String myUrl = builder.build().toString();
-        Log.i("Query", myUrl);
-        String message = "";
-
-        // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, myUrl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        // Display the first 500 characters of the response string.
-                        Log.i("Get Request Response", response);
-                        if (response.equals("\"success\"")) {
-                            Toast.makeText(activity,"Successfully shared route with " + inp_text,Toast.LENGTH_SHORT).show();
-                        } else if (response.equals("\"duplicate\"")) {
-                            Toast.makeText(activity,"Route already shared with " + inp_text,Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(activity,"User " + inp_text + " does not exist",Toast.LENGTH_SHORT).show();
-                        }
-
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                try {
-                    Log.e("Get Request Response", error.getMessage());
-
-                } catch (Exception e){
-                    Log.e("Get Request Response", "Unspecified server error");
-                }
-
-            }
-        });
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
     }
 }

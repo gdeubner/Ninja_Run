@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -20,17 +21,21 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.adapters.SharedAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.containers.SharedContainer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class SharedFragment extends Fragment {
     private static final String USERID = "key";
 
     // TODO: Rename and change types of parameters
     private String mUserID;
+    private TextView emptyListMessageView;
 
     public SharedFragment() {
         // Required empty public constructor
@@ -67,7 +72,9 @@ public class SharedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         // Inflate the layout for this fragment
         queryInfo(getContext(), mUserID,view);
-
+        emptyListMessageView = view.findViewById(R.id.tv_EmptyList);
+        emptyListMessageView.setText(R.string.no_shared_routes);
+        emptyListMessageView.setVisibility(View.INVISIBLE);
         return view;
     }
 
@@ -93,16 +100,21 @@ public class SharedFragment extends Fragment {
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
                         Log.i("Get Request Response", response);
-                        String[] result = response.split(",");
 
+                        Gson gson = new Gson();
+                        SharedContainer[] sharedArr = gson.fromJson(response, SharedContainer[].class);
 
-                        ArrayList<String> data = populateList(result);
-
-                        final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(new SharedAdapter(Integer.parseInt(userID), context,data)); //change later from 17 to uid
-                        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
-
+                        if(sharedArr.length == 0){
+                            emptyListMessageView.setVisibility(View.VISIBLE);
+                        } else {
+                            ArrayList<SharedContainer> sharedList = new ArrayList<>(Arrays.asList(sharedArr));
+                            final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                            recyclerView.setAdapter(new SharedAdapter(Integer.parseInt(userID),
+                                    context, sharedList)); //change later from 17 to uid
+                            recyclerView.addItemDecoration(new DividerItemDecoration(context,
+                                    DividerItemDecoration.VERTICAL));
+                        }
 
                     }
                 }, new Response.ErrorListener() {

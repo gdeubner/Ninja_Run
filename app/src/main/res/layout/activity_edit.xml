@@ -76,6 +76,7 @@
         android:layout_marginStart="25dp"
         android:layout_marginTop="12dp"
         android:hint="Enter New Name"
+        android:maxLength="15"
         android:inputType="textVisiblePassword"
         app:layout_constraintStart_toEndOf="@+id/usernameTitleE"
         app:layout_constraintTop_toBottomOf="@+id/usernameE" />
@@ -87,6 +88,7 @@
         android:layout_marginStart="3dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Password"
+        android:maxLength="20"
         android:inputType="textVisiblePassword"
         app:layout_constraintStart_toEndOf="@+id/passwordTitleE"
         app:layout_constraintTop_toBottomOf="@+id/nameEditE" />
@@ -98,6 +100,7 @@
         android:layout_marginStart="22dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Weight"
+        android:maxLength="6"
         android:inputType="numberDecimal"
         app:layout_constraintStart_toEndOf="@+id/weightTitleE"
         app:layout_constraintTop_toBottomOf="@+id/passwordEditE" />
@@ -109,6 +112,7 @@
         android:layout_marginStart="11dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Feet"
+        android:maxLength="2"
         android:inputType="numberDecimal"
         app:layout_constraintStart_toEndOf="@+id/heightftTitleE"
         app:layout_constraintTop_toBottomOf="@+id/weightEditE" />
@@ -120,6 +124,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="26dp"
         android:hint="Enter New Inches"
+        android:maxLength="4"
         android:inputType="numberDecimal"
         app:layout_constraintStart_toEndOf="@+id/heightinTitleE"
         app:layout_constraintTop_toBottomOf="@+id/heightftEditE" />
