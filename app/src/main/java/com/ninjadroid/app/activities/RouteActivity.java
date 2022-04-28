@@ -45,6 +45,10 @@ public class RouteActivity extends AppCompatActivity {
                 if(date != null && date.length() > 0){
                     binding.tvDateCreated.setText(date.split("T")[0]);
                 }
+                double elevation = route.getRoute().getElevation();
+                if(elevation!= -1){
+                    binding.tvElevation.setText(Double.toString(elevation) + " feet");
+                }
             }
         });
 

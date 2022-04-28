@@ -26,6 +26,10 @@
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item3.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item4.xml" value="0.22083333333333333" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item5.xml" value="0.22083333333333333" />
+        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item_friend.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item_history.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item_my_routes.xml" value="0.31851851851851853" />
+        <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item_searched_route.xml" value="0.31851851851851853" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/login.xml" value="0.23948717948717949" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/nav_header.xml" value="0.234375" />
         <entry key="..\:/Users/Graham/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/profile.xml" value="0.23948717948717949" />
@@ -54,7 +58,7 @@
         <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/fragment_history.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/fragment_map.xml" value="0.3265625" />
         <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/fragment_search.xml" value="0.22" />
-        <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item_history.xml" value="0.25" />
+        <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item_history.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item_searched_route.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/list_item_shared_route.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/gdeub/AndroidStudioProjects/ninjadroid/app/src/main/res/layout/send_route_dialogue_layout.xml" value="0.3265625" />

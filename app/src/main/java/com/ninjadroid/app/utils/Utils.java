@@ -91,26 +91,6 @@ public  class Utils {
         return calories;
     }
 
-    public static float findBearing(LatLng curPos, LatLng routePnt){
-        //vector 1 (U)
-        double u1 = routePnt.latitude - curPos.latitude;
-        double u2 = routePnt.longitude - curPos.longitude;
-
-        //vector 2 (V)
-        double v1 = 0;
-        double v2 = 1;
-
-        double dotProd = u1*v1 + u2*v2;
-
-        double vMag = Math.sqrt(Math.pow(v1, 2) + Math.pow(v2, 2));
-        double uMag = Math.sqrt(Math.pow(u1, 2) + Math.pow(u2, 2));
-
-        double angleRad = Math.acos(dotProd/(vMag * uMag));
-
-        double angleDeg = Math.toDegrees(angleRad);
-        return (float) angleDeg + 90;
-    }
-
     public static float findBearing2(LatLng curPos, LatLng routePnt){
         double lat1 = curPos.latitude;
         double long1 = curPos.longitude;
@@ -138,4 +118,19 @@ public  class Utils {
                 target.latitude, target.longitude, results);
         return  results[0];
     }
+
+    //returns the change in altitude in feet rounded to the tens place
+    public static double calcElevationChange(ArrayList<LocationContainer> list){
+        int total = 0;
+        double initialAltitude = list.get(0).getAltitude();
+        for (LocationContainer loc: list) {
+            total += Math.abs(initialAltitude - loc.getAltitude());
+        }
+        return Math.round(meters2feet(total) * 10.0)/10.0;
+    }
+
+    public static double meters2feet(double meters){
+        return meters * 3.28084;
+    }
+
 }
