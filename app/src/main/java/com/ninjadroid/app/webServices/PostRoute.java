@@ -43,11 +43,12 @@ public class PostRoute {
                                     int uid, String title, String date){
         Uri.Builder builder = new Uri.Builder();
 
-        double startLat, startLon, endLat, endLon;
+        double startLat, startLon, endLat, endLon, altitudeChange;
         startLat = routeCoordinates.get(0).getLat();
         startLon = routeCoordinates.get(0).getLon();
         endLat = routeCoordinates.get(routeCoordinates.size()-1).getLat();
         endLon = routeCoordinates.get(routeCoordinates.size()-1).getLon();
+        altitudeChange = Utils.calcElevationChange(routeCoordinates);
 
         //gets location address, town, state
         Geocoder geocoder = new Geocoder(context, Locale.getDefault());
@@ -81,7 +82,8 @@ public class PostRoute {
                 .appendQueryParameter("var_dist", String.valueOf(dist))
                 .appendQueryParameter("var_uid", String.valueOf(uid))
                 .appendQueryParameter("var_title", String.valueOf(title))
-                .appendQueryParameter("var_date", String.valueOf(date));
+                .appendQueryParameter("var_date", String.valueOf(date))
+                .appendQueryParameter("var_elevation", String.valueOf(altitudeChange));
 
         return builder.build().toString();
     }

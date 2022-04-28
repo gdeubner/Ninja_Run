@@ -176,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.i("MainActivity", "Checking Activity Result");
 
         if(data != null && data.getExtras() != null){
-            goToMapFragment(routeId);
             routeId = data.getExtras().getInt("routeID");
+            goToMapFragment(routeId);
         } else {
             routeId = -1;
         }

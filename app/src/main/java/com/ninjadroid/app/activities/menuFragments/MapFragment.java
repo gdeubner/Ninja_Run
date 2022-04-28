@@ -82,6 +82,7 @@ import java.util.List;
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static final int LOCATION_UPDATE_INTERVAL = 10;  //in seconds
     private static final int FAST_LOCATION_UPDATE_INTERVAL = 2;  //in seconds
     private static final int ZOOM_DEFAULT = 16;
@@ -138,7 +139,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
      * @param userId Parameter 1.
      * @return A new instance of fragment MapFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static MapFragment newInstance(String userId, int routeId, ProfileContainer profile) {
         MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
@@ -166,11 +166,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_map, container, false);
     }
 
     @Override
+    //sets up the functionality for the whole fragment
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setRadioGroupFunctionality();
@@ -194,6 +194,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         followingRoute = false;
         routeCompleted = false;
 
+        //sets the start button functionality
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,6 +239,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         });
 
+        //sets the stop button functionality
         btn_stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -280,6 +282,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    //creates a dialog to be displayed when a user finished a run
     private void startRunFinishedDialog() {
         clockPauseTime = SystemClock.elapsedRealtime() - clock.getBase();
         clock.stop();
@@ -326,6 +329,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         dialog.show();
     }
 
+    //removes any markers and routes from th map
     private void clearCreatedRoute() {
         if(startMarker != null){
             startMarker.remove();
@@ -338,6 +342,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    //creates a dialog to be displayed when a user finished creating a route
     private void startRouteFinishDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage("Do you want to save your route?")
@@ -461,6 +466,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
+    //sets the camera position and zoom for when creating a route
     private void setCameraPosition(LatLng curPos){
             CameraPosition cameraPosition = new CameraPosition.Builder()
                     .target(curPos)
@@ -470,6 +476,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             mGoogleMap.animateCamera(cu);
     }
 
+    //sets the camera zoom, bearing, angle and position for following a route
     private void setFollowingCameraPosition(LatLng curPos, LatLng routePnt){
         // Construct a CameraPosition focusing on Mountain View and animate the camera to that position.
         LatLng oldCurPos = mGoogleMap.getCameraPosition().target;
@@ -490,7 +497,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onPause() {
         super.onPause();
-        //stop location updates when Activity is no longer active
+        //stop location updates when Activity is no longer active to save battery
         if (mFusedLocationClient != null) {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
         }
@@ -503,6 +510,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
+    //once map is loaded, this sets up the functionality to get the user's location
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         //resets map to continue moving camera location to center around user
@@ -523,7 +531,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-        //mGoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000 * LOCATION_UPDATE_INTERVAL);
@@ -551,9 +558,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-
-
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    //requests location permissions if the app doesn't currently have them
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(getView().getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -626,6 +631,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    //sets the Creating Route / Following Route radio button functionality
+    //This allows users to switch between creating a route or following a pre-chosen route
     private void setRadioGroupFunctionality(){
         radioGroup = ((Activity)getContext()).findViewById(R.id.rg_mapMode);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
@@ -662,6 +669,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    //sets the map to route-creation mode
     private void createRouteMode() {
         if (followedRoute != null){
             followedRoute.remove();
@@ -678,7 +686,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         clock.setVisibility(View.INVISIBLE);
     }
 
+    //sets the map to route-following mode
     private void followRouteMode(int routeId) {
+        if(followingRouteMode){
+            return;
+        }
         if (followedRoute != null){
             followedRoute.remove();
         }
@@ -718,6 +730,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+    //queries google maps api for directions to connecting current location to start of route to follow
     private void addDirectionsToMap(Polyline followedRoute) {
         Log.i("directions", "Trying to get directions!!!");
         Log.i("directions", mLastLocation.toString());
@@ -737,6 +750,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             followedRoute.setPoints(curList);
                         }
                         directionsAddedToMap = true;
+                        Toast.makeText(context, "Head to the green starting point!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -749,6 +763,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         vectorDrawable.draw(canvas);
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
+
 
     private List<LatLng> getLatLngList(String route) {
         Type listType = new TypeToken<ArrayList<LocationContainer>>() {}.getType();
