@@ -79,6 +79,7 @@
     <string name="no_shared_routes">No shared routes yet. Check back soon!</string>
     <string name="follow_button">Follow</string>
     <string name="shared_by">Shared by: %1$s</string>
+    <string name="date_created">Created: %1$s</string>
 
 
 </resources>

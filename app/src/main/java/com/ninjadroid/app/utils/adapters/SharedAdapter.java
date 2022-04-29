@@ -65,7 +65,11 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
         String name = data.get(position).getTitle();
         if(name != null && name.length() > 0){
             holder.tv_routeName.setText(name);
-
+        }
+        String date = data.get(position).getDate();
+        if(date != null && date.length() > 0) {
+            date = date.split("T")[0];
+            holder.tv_date.setText(holder.itemView.getContext().getString(R.string.date_created, date));
         }
     }
 
@@ -82,6 +86,7 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
         private TextView tv_sharedBy;
         private TextView tv_routeIdShared;
         private TextView tv_routeName;
+        TextView tv_date;
         private ImageView img_routeImage;
 
         public ViewHolder(View view) {
@@ -94,6 +99,8 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
             this.tv_routeIdShared = view.findViewById(R.id.tv_routeIdShared);
             this.tv_routeName = view.findViewById(R.id.tv_routeNameShared);
             this.img_routeImage = view.findViewById(R.id.img_routeImage);
+            this.tv_date = itemView.findViewById(R.id.tv_searchDateCreated);
+
         }
 
         @Override
@@ -121,7 +128,7 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
                 public boolean onMenuItemClick(MenuItem item) {
                     switch(item.getItemId()) {
                         case R.id.remove:
-                            shareFunc(data.get(getLayoutPosition()).getRoute_id(),getLayoutPosition());
+                            deleteFunc(data.get(getLayoutPosition()).getRoute_id(),getLayoutPosition());
                     }
                     return true;
                 }
@@ -132,11 +139,11 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
 
     }
 
-    public void shareFunc(int routeId, int position) {
+    public void deleteFunc(int routeId, int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("Are you sure you want to delete this route?");
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 queryInfo(activity,Integer.toString(routeId), position);

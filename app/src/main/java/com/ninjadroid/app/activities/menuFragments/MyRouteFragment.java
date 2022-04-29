@@ -21,11 +21,15 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.utils.adapters.MyRoutesAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
+import com.ninjadroid.app.utils.containers.RouteContainer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class MyRouteFragment extends Fragment {
     private String mUserID;
@@ -94,17 +98,19 @@ public class MyRouteFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        String[] result = response.split(",");
-                        final RecyclerView recyclerView = view.findViewById(R.id.myRouteList);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-                        if(result.length > 1) {
-                            ArrayList<ArrayList<String>> data = populate(result);
-                            recyclerView.setAdapter(new MyRoutesAdapter(Integer.parseInt(userID), context, data.get(0), data.get(1), data.get(2)));
+                        Gson gson = new Gson();
+                        RouteContainer[] routeArr = gson.fromJson(response, RouteContainer[].class);
+                        ArrayList<RouteContainer> routeList = new ArrayList<>(Arrays.asList(routeArr));
+                        Collections.reverse(routeList);
+                        if(routeList.size() > 0){
+                            final RecyclerView recyclerView = view.findViewById(R.id.myRouteList);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                            recyclerView.setAdapter(new MyRoutesAdapter(Integer.parseInt(userID), context, routeList));
+                            recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
                         }else{
                             noRoutes.setVisibility(View.VISIBLE);
                         }
-                        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -122,43 +128,4 @@ public class MyRouteFragment extends Fragment {
         queue.add(stringRequest);
     }
 
-    public ArrayList<ArrayList<String>> populate(String[] str) {
-        ArrayList<String> route = new ArrayList<>();
-        ArrayList<String> town = new ArrayList<>();
-        ArrayList<String> dist = new ArrayList<>();
-        ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
-
-        int count = 0;
-        for (String s : str) {
-            String temp = "";
-            Log.i("RouteIDD", s);
-            if (count == 0) {
-                temp = temp + s.substring(13);
-                Log.i("RouteID", temp);
-                route.add(temp);
-            } else if (s.contains("]")) {
-                temp = temp + s.substring(11, s.length() - 2);
-                Log.i("Distance", temp);
-                dist.add(temp);
-            } else if (count % 3 == 0) {
-                temp = temp + s.substring(12);
-                Log.i("RouteID", temp);
-                route.add(temp);
-            } else if (count % 3 == 1) {
-                temp = temp + s.substring(8, s.length()-1);
-                Log.i("Town", temp);
-                town.add(temp);
-            } else if (count % 3 == 2) {
-                temp = temp + s.substring(11, s.length()-1);
-                Log.i("Distance", temp);
-                dist.add(temp);
-            }
-            Log.i("infooo", temp);
-            count++;
-        }
-        data.add(route);
-        data.add(town);
-        data.add(dist);
-        return data;
-    };
 }

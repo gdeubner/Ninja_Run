@@ -29,6 +29,7 @@ import com.ninjadroid.app.webServices.callbacks.SearchRoutesCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchFragment extends Fragment implements SearchedAdapter.ItemClickListener{
@@ -152,6 +153,7 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
                 manager.getOrientation());
         recyclerView.setLayoutManager(manager);
         routeList = new ArrayList<>(Arrays.asList(routes));
+        Collections.reverse(routeList);
         adapter = new SearchedAdapter(getContext(), routeList);
         adapter.setClickListener(this);
         recyclerView.addItemDecoration(dividerItemDecoration);

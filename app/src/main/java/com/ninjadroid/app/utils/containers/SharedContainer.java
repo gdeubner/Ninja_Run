@@ -8,6 +8,7 @@ public class SharedContainer implements Serializable {
     private float distance;
     private String username;
     private String title;
+    private String date;
 
     // Getter Methods
 
@@ -31,8 +32,10 @@ public class SharedContainer implements Serializable {
         return title;
     }
 
-
-    // Setter Methods
+    public String getDate() {
+        return date;
+    }
+// Setter Methods
 
     public void setRoute_id(int route_id) {
         this.route_id = route_id;

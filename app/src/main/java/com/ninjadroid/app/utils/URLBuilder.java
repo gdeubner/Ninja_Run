@@ -3,7 +3,7 @@ package com.ninjadroid.app.utils;
 public class URLBuilder {
     private static String scheme = "http";
 
-    private static String encodedAuthority = "cs431-08.cs.rutgers.edu:3000";
+    private static String encodedAuthority = "cs431-08.cs.rutgers.edu:3001";
 
     private static String baseUrl = " http://cs431-08.cs.rutgers.edu:3000/";
 

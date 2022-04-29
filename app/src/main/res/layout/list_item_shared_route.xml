@@ -31,7 +31,11 @@
             android:text="@string/history_distance"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintBottom_toTopOf="@id/tv_sharedBy"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/tv_routeNameShared"
             app:layout_constraintTop_toBottomOf="@+id/tv_routeNameShared" />
 
@@ -43,6 +47,8 @@
             android:text="@string/shared_by"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_distanceShared"
             app:layout_constraintTop_toBottomOf="@+id/tv_distanceShared" />
@@ -55,10 +61,12 @@
             android:text="@string/history_town"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textStyle="bold"
+            android:ellipsize="end"
+            android:maxLines="1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tv_routeIdShared"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/tv_distanceShared"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline4"
             app:layout_constraintTop_toTopOf="@+id/tv_distanceShared"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -76,15 +84,39 @@
 
         <TextView
             android:id="@+id/tv_routeNameShared"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="@string/no_name_given"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintBottom_toTopOf="@id/tv_distanceShared"
+            app:layout_constraintEnd_toStartOf="@+id/tv_routeIdShared"
+            app:layout_constraintHorizontal_bias="0.121"
             app:layout_constraintStart_toEndOf="@+id/img_routeImage"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_sharedDateCreated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create: no date data"
+            android:ellipsize="end"
+            android:maxLines="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline4"
+            app:layout_constraintTop_toTopOf="@+id/tv_sharedBy"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.67" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

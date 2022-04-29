@@ -25,6 +25,7 @@ import com.ninjadroid.app.utils.adapters.FollowerAdapter;
 import com.ninjadroid.app.utils.URLBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class FollowersFragment extends Fragment {
     private static final String USERID = "key";
@@ -96,7 +97,9 @@ public class FollowersFragment extends Fragment {
                         Log.i("Get Request Response", response);
                         String[] result = response.split(",");
                         ArrayList<String> username = new ArrayList<String>();
+                        Collections.reverse(username);
                         ArrayList<String> userid = new ArrayList<String>();
+                        Collections.reverse(userid);
                         int userIDint = Integer.valueOf(userID);
                         if(response.length()  > 2) {
                             username = populateusernameList(result);

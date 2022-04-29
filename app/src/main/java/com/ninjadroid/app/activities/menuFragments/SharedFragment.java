@@ -29,6 +29,7 @@ import com.ninjadroid.app.utils.containers.SharedContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class SharedFragment extends Fragment {
     private static final String USERID = "key";
@@ -108,6 +109,7 @@ public class SharedFragment extends Fragment {
                             emptyListMessageView.setVisibility(View.VISIBLE);
                         } else {
                             ArrayList<SharedContainer> sharedList = new ArrayList<>(Arrays.asList(sharedArr));
+                            Collections.reverse(sharedList);
                             final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
                             recyclerView.setLayoutManager(new LinearLayoutManager(context));
                             recyclerView.setAdapter(new SharedAdapter(Integer.parseInt(userID),
@@ -134,35 +136,4 @@ public class SharedFragment extends Fragment {
         queue.add(stringRequest);
     }
 
-    public ArrayList<String> populateList(String[] str) {
-        int count = 0;
-        String temp = "";
-        ArrayList<String> data = new ArrayList<>();
-        for (String s : str) {
-            if (count == 4) {
-                count = 0;
-
-                //System.out.println(temp);
-                data.add(temp);
-                temp = "";
-            }
-            s = s.replace("[", "");
-            s = s.replace("{","");
-            s = s.replace("}","");
-            s = s.replace("\"","");
-            String s1 = (s.charAt(0) + "").toUpperCase() + s.substring(1);
-            s1 = s1.replace("_"," ");
-            //System.out.println(s1);
-            temp += s1 + ";";
-            count++;
-        }
-        temp = temp.replace("]","");
-        temp =  temp.replace("{","");
-        temp = temp.replace("}","");
-        temp = temp.replace("\"","");
-        //System.out.println(temp);
-        data.add(temp);
-
-        return data;
-    }
 }
