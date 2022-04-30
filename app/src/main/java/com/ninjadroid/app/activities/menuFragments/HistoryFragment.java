@@ -29,6 +29,7 @@ import com.ninjadroid.app.utils.containers.HistoryContainer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class HistoryFragment extends Fragment {
     private static final String USERID = "key";
@@ -107,13 +108,12 @@ public class HistoryFragment extends Fragment {
                         // Display the first 500 characters of the response string.
                         Log.i("Get Request Response", response);
 
-
                         Gson gson = new Gson();
                         HistoryContainer[] histArr = gson.fromJson(response, HistoryContainer[].class);
 
                         if(histArr.length > 0) {
                             ArrayList<HistoryContainer> histList = new ArrayList<>(Arrays.asList(histArr));
-
+                            Collections.reverse(histList);
                             final RecyclerView recyclerView = getView().findViewById(R.id.histRec);
                             recyclerView.setLayoutManager(new LinearLayoutManager(context));
 

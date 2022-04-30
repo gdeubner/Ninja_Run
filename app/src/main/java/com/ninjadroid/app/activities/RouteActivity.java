@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.ninjadroid.app.R;
 import com.ninjadroid.app.databinding.ActivityRouteBinding;
+import com.ninjadroid.app.webServices.ShareRoute;
 import com.ninjadroid.app.webServices.callbacks.RouteCallback;
 import com.ninjadroid.app.utils.containers.UserRouteContainer;
 import com.ninjadroid.app.webServices.GetRoute;
@@ -25,6 +26,8 @@ public class RouteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
+
+
 
         binding = ActivityRouteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -63,6 +66,12 @@ public class RouteActivity extends AppCompatActivity {
             }
         });
 
+        binding.btnShare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShareRoute.share(v.getContext(),routeID, MainActivity.userIDGlobalScope);
+            }
+        });
     }
 
 }

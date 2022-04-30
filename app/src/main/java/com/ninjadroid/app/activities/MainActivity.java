@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String userID;
     private int routeId;
     private ProfileContainer userProfile;
+    public static int userIDGlobalScope;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         userID = getIntent().getStringExtra("userID");
+        userIDGlobalScope = Integer.parseInt(userID);
         routeId = -1;
         GetProfile.getProfile(this, userID,new VolleyProfileCallback() {
             @Override

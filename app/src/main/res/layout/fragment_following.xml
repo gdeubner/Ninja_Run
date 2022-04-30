@@ -10,6 +10,7 @@
         android:layout_width="103dp"
         android:layout_height="48dp"
         android:text="@string/follow_button"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="@+id/et_followerSearchBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/et_followerSearchBar"

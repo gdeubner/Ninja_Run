@@ -89,8 +89,8 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
         public ViewHolder(View view) {
             super(view);
             view.setOnClickListener(this);
-            this.Username = view.findViewById(R.id.nameofuser);
-            this.RemoveBut = view.findViewById(R.id.removebutton);
+            this.Username = view.findViewById(R.id.tv_nameOfUser);
+            this.RemoveBut = view.findViewById(R.id.btn_remove);
 
         }
 
@@ -139,8 +139,7 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.
                         Log.i("Get Request Response", response);
-                        Toast.makeText(activity,"Successfully deleted " + removefollow ,Toast.LENGTH_SHORT).show();
-
+                        //Toast.makeText(activity,"Successfully deleted " + removefollow ,Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override

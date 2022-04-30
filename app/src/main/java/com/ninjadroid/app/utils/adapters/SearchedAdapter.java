@@ -46,6 +46,11 @@ public class SearchedAdapter extends RecyclerView.Adapter<SearchedAdapter.ViewHo
         if(routeName != null && routeName.length() > 0){
             holder.tv_routeName.setText(routeName);
         }
+        String date = mData.get(position).getDate();
+        if(date != null && date.length() > 0) {
+            date = date.split("T")[0];
+            holder.tv_date.setText(holder.itemView.getContext().getString(R.string.date_created, date));
+        }
 
     }
 
@@ -63,6 +68,7 @@ public class SearchedAdapter extends RecyclerView.Adapter<SearchedAdapter.ViewHo
         TextView tv_length;
         TextView tv_routeID;
         TextView tv_routeName;
+        TextView tv_date;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -71,6 +77,7 @@ public class SearchedAdapter extends RecyclerView.Adapter<SearchedAdapter.ViewHo
             tv_length = itemView.findViewById(R.id.tv_routeDistance);
             tv_routeID = itemView.findViewById(R.id.tv_routeId);
             tv_routeName= itemView.findViewById(R.id.tv_routeName);
+            tv_date = itemView.findViewById(R.id.tv_searchDateCreated);
 
             itemView.setOnClickListener(this);
         }
