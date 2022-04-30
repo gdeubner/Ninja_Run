@@ -114,8 +114,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     Chronometer clock;
     long clockPauseTime;
     RadioGroup radioGroup;
-    int nextRouteIndex;
-    int previousRoutIndex;
+    //int nextRouteIndex;
     Context context;
 
     // TODO: Rename parameter arguments, choose names that match
@@ -427,14 +426,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                             List<LatLng> pointList = followedRoute.getPoints();
                             final double MIN_LAT_LNG_DIFF = 10;
                             if(Utils.distanceBetweenLatLng(pointList.get(pointList.size()-1),curLatLng)
-                            < MIN_LAT_LNG_DIFF){
+                            < MIN_LAT_LNG_DIFF){ //checks if near end of route flag
                                 routeCompleted = true;
                                 startRunFinishedDialog();
                             } else {
                                 //focus camera on user's next step in route
                                 int indexOfClosestPoint = -1;
                                 float smallestDistance = Float.MAX_VALUE;
-                                for(int i = previousRoutIndex; i < pointList.size(); i++){
+                                for(int i = 0; i < pointList.size(); i++){
                                     LatLng LL = pointList.get(i);
                                     float tempDist = Utils.distanceBetweenLatLng(LL, curLatLng);
                                     if(tempDist < smallestDistance){
@@ -442,8 +441,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                         smallestDistance = tempDist;
                                     }
                                 }
-                                previousRoutIndex = indexOfClosestPoint;
-                                nextRouteIndex = indexOfClosestPoint + 1;
+                                int nextRouteIndex = indexOfClosestPoint + 1;
                                 if(nextRouteIndex >= pointList.size()){
                                     nextRouteIndex = pointList.size()-1;
                                 }
@@ -696,8 +694,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
         followingRouteMode = true;
         clock.setVisibility(View.VISIBLE);
-        nextRouteIndex = 1;
-        previousRoutIndex = 0;
+        //nextRouteIndex = 1;
 
         GetRoute.getRoute(getContext(), routeId, new RouteCallback() {
             @Override

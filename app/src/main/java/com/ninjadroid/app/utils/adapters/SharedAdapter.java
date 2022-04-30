@@ -86,7 +86,7 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
         private TextView tv_sharedBy;
         private TextView tv_routeIdShared;
         private TextView tv_routeName;
-        TextView tv_date;
+        private TextView tv_date;
         private ImageView img_routeImage;
 
         public ViewHolder(View view) {
@@ -99,7 +99,7 @@ public class SharedAdapter extends RecyclerView.Adapter<SharedAdapter.ViewHolder
             this.tv_routeIdShared = view.findViewById(R.id.tv_routeIdShared);
             this.tv_routeName = view.findViewById(R.id.tv_routeNameShared);
             this.img_routeImage = view.findViewById(R.id.img_routeImage);
-            this.tv_date = itemView.findViewById(R.id.tv_searchDateCreated);
+            this.tv_date = itemView.findViewById(R.id.tv_sharedDateCreated);
 
         }
 
