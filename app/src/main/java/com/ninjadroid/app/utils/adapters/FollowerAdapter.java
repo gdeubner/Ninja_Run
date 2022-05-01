@@ -65,7 +65,6 @@ public class FollowerAdapter extends RecyclerView.Adapter<FollowerAdapter.ViewHo
                 Log.i("here", removeItem);
                 DeleteFollower(activity, removeItem, result, followType);
 
-
                 username.remove(removeusername);
                 followid.remove(removeusername);
                 notifyItemRemoved(removeusername);

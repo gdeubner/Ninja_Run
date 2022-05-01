@@ -31,6 +31,8 @@ import com.ninjadroid.app.webServices.callbacks.VolleyProfileCallback;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
 import com.ninjadroid.app.webServices.GetProfile;
 
+//this is the activity which most of the fragment pages are created in. It also is responsible for
+//the sidebar menu and corresponding page navigation
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private NavigationView navigationView;
@@ -42,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ProfileContainer userProfile;
     public static int userIDGlobalScope;
 
+    /**
+     * assigns the relevant views, sets up the drawer layout, and sets the current fragment to the
+     * map fragment (treated as home base for the app)
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +96,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    /**
+     * handles the back button functionality. When pressed while the map's page is loaded, the app
+     * will sign the current user out and go to the login page. Otherwise, the app navigates from any
+     * page in the side_nav to map page.
+     */
     @Override
     public void onBackPressed() {
         if(drawer.isDrawerOpen(GravityCompat.START)){
@@ -105,6 +117,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * sets up the nav bar functionality
+     * @param item the nav bar item that was selected
+     * @returnreturns true if there was a page change, false otherwise
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         currentNavItemId = item.getItemId();
@@ -172,11 +189,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    /**
+     *if any data was passed back to the main activity, it will be a route id, so that is stored and
+     * used if the user switches to follow-route mode
+     * @param requestCode not used but required
+     * @param resultCode not used but required
+     * @param data the routeID passed back to the main activity
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("MainActivity", "Checking Activity Result");
-
         if(data != null && data.getExtras() != null){
             routeId = data.getExtras().getInt("routeID");
             goToMapFragment(routeId);
@@ -185,6 +208,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * obtains the user profile data when a different activity ends and the app navigates back to the
+     * main activity (in case there has been a change to it)
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -199,6 +226,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    /**
+     * a helper method designed to navigate to the map page
+     * @param routeID the id of the route to load if the user selects follow-route mode
+     */
     private void goToMapFragment(int routeID){
         MapFragment fmapFragment = MapFragment.newInstance(userID, routeID, userProfile);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

@@ -18,8 +18,18 @@ import com.google.gson.Gson;
 import com.ninjadroid.app.webServices.callbacks.DirectionsCallback;
 import com.ninjadroid.app.utils.containers.DirectionsContainers.DirectionsContainer;
 
+/**
+ * a class to call the get_directions endpoint for the GoogleMaps API
+ */
 public class GetDirections {
 
+    /**
+     * uses the GoogleMaps API to get directions between 2 given LatLong points
+     * @param context
+     * @param origin the starting LatLong object
+     * @param destination the ending LatLong object
+     * @param callBack what to do after the API sends its response
+     */
     public static void getWalkingDirections(Context context, LatLng origin, LatLng destination,
                                             final DirectionsCallback callBack){
 

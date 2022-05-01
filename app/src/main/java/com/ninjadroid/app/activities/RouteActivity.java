@@ -15,24 +15,28 @@ import com.ninjadroid.app.webServices.callbacks.RouteCallback;
 import com.ninjadroid.app.utils.containers.UserRouteContainer;
 import com.ninjadroid.app.webServices.GetRoute;
 
+//This page displays all the relevant information about a given route
 public class RouteActivity extends AppCompatActivity {
 
     ActivityRouteBinding binding;
     private static final String ROUTE_ID_KEY = "routeID";
     private static int routeID;
 
-
+    /**
+     * inflates the layout, gets the route information, and assigns the onClickListener functionality
+     * for the view's buttons
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route);
 
-
-
         binding = ActivityRouteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         routeID = Integer.parseInt(getIntent().getStringExtra(ROUTE_ID_KEY));
         GetRoute.getRoute(this, routeID, new RouteCallback() {
+            //when the get request returns, assign the route data to the page's text views
             @Override
             public void onSuccess(UserRouteContainer route) {
                 binding.tvCreator.setText(route.getUsername());

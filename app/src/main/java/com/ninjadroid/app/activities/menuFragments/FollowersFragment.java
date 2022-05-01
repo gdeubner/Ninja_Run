@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -32,6 +33,7 @@ public class FollowersFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mUserID;
+    private TextView noFollowers;
 
     public FollowersFragment() {
         // Required empty public constructor
@@ -41,10 +43,9 @@ public class FollowersFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param userID Parameter 1.
+     * @param userID
      * @return A new instance of fragment ProfileFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static FollowersFragment newInstance(String userID) {
         FollowersFragment fragment = new FollowersFragment();
         Bundle args = new Bundle();
@@ -53,6 +54,10 @@ public class FollowersFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * sets the global mUserID variable and sets the actionBar title
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,16 +67,31 @@ public class FollowersFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.follower_title);
     }
 
+    /**
+     * inflates the fragment_followers xml and launches getFollowers()
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the view created when inflating the fragment_followers xml
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_followers, container, false);
+        noFollowers = view.findViewById(R.id.tv_noFollowers);
+        noFollowers.setVisibility(View.INVISIBLE);
         // Inflate the layout for this fragment
-        queryInfo(getContext(), mUserID,view);
+        getFollowers(getContext(), mUserID,view);
         return view;
     }
 
-    private void queryInfo(Context context, String userID,View view) {
+    /**
+     * gets the followers of the current user from the server
+     * @param context
+     * @param userID
+     * @param view the view containing the RecyclerView which needs to be bound
+     */
+    private void getFollowers(Context context, String userID,View view) {
         // Instantiate the RequestQueue.
 
         RecyclerView recyclerView = view.findViewById(R.id.Followers);
@@ -104,12 +124,14 @@ public class FollowersFragment extends Fragment {
                         if(response.length()  > 2) {
                             username = populateusernameList(result);
                             userid = populateuseridList(result);
-                        }
-                        final RecyclerView recyclerView = getView().findViewById(R.id.Followers);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(new FollowerAdapter(userIDint, context,username, userid, "Follower"));
-                        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+                            final RecyclerView recyclerView = getView().findViewById(R.id.Followers);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                            recyclerView.setAdapter(new FollowerAdapter(userIDint, context,username, userid, "Follower"));
+                            recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
+                        } else {
+                            noFollowers.setVisibility(View.VISIBLE);
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -126,10 +148,16 @@ public class FollowersFragment extends Fragment {
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-    public ArrayList<String> populateusernameList(String[] str) {
+
+    /**
+     * converts an json Strings into String arraylist, extracting the usernames of followers
+     * @param strArr
+     * @return an Arraylist of usernames
+     */
+    public ArrayList<String> populateusernameList(String[] strArr) {
         int count = 0;
         ArrayList<String> data = new ArrayList<>();
-        for (String s : str) {
+        for (String s : strArr) {
             if(count%2 == 0) {
                 String temp;
                 if(count  == 0){
@@ -145,10 +173,15 @@ public class FollowersFragment extends Fragment {
         return data;
     }
 
-    public ArrayList<String> populateuseridList(String[] str) {
+    /**
+     *creates an ArrayList of userIDs
+     * @param strArr
+     * @return returns an ArrayList of userIDs
+     */
+    public ArrayList<String> populateuseridList(String[] strArr) {
         int count = 0;
         ArrayList<String> data = new ArrayList<>();
-        for (String s : str) {
+        for (String s : strArr) {
             if(count%2 == 1) {
                 String temp;
                 if(s.contains("]")){

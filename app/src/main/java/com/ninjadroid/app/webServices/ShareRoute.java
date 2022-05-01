@@ -17,6 +17,9 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ninjadroid.app.utils.URLBuilder;
 
+/**
+ * a class to call the share_route endpoint in the server
+ */
 public class ShareRoute {
 
     public static void share(Context context, int routeId, int sharerId) {

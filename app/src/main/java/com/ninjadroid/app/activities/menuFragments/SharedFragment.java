@@ -45,8 +45,7 @@ public class SharedFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @param userID Parameter 1.
+     * @param userID
      * @return A new instance of fragment ProfileFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -58,6 +57,10 @@ public class SharedFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * sets the actionBar title and the userID
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +70,13 @@ public class SharedFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.shared_title);
     }
 
+    /**
+     * inflates the fragment_history xml, launches getHistory, sets up the empty list view message
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the view inflated
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -97,6 +107,7 @@ public class SharedFragment extends Fragment {
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, myUrl,
                 new Response.Listener<String>() {
+                    //on response received, fill the recycler view with the response data
                     @Override
                     public void onResponse(String response) {
                         // Display the first 500 characters of the response string.

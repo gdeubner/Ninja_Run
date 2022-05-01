@@ -19,6 +19,9 @@ import com.ninjadroid.app.webServices.callbacks.SearchRoutesCallback;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * a class to call the search_route endpoint in the server
+ */
 public class SearchRoutes {
 
     public static void search(Context context, String searchBy, String searchParam,

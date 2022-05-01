@@ -31,6 +31,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * a class to call the post_route endpoint in the server
+ */
 public class PostRoute {
 
     public static void postRoute(ArrayList<LocationContainer> routeCoordinates, Context context,

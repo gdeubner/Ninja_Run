@@ -15,8 +15,17 @@ import com.ninjadroid.app.utils.URLBuilder;
 import com.ninjadroid.app.webServices.callbacks.VolleyProfileCallback;
 import com.ninjadroid.app.utils.containers.ProfileContainer;
 
+/**
+ * a class to call the get_profile endpoint in the server
+ */
 public class GetProfile {
 
+    /**
+     *
+     * @param context
+     * @param uid
+     * @param callBack
+     */
     public static void getProfile(Context context, String uid,final VolleyProfileCallback callBack) {
 
         RequestQueue queue = Volley.newRequestQueue(context);

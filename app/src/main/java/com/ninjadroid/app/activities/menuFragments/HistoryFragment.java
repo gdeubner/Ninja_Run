@@ -34,7 +34,6 @@ import java.util.Collections;
 public class HistoryFragment extends Fragment {
     private static final String USERID = "key";
 
-    // TODO: Rename and change types of parameters
     private String mUserID;
     private HistoryContainer historyC;
     private TextView emptyListMessageView;
@@ -50,7 +49,6 @@ public class HistoryFragment extends Fragment {
      * @param userID Parameter 1.
      * @return A new instance of fragment ProfileFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static HistoryFragment newInstance(String userID) {
         HistoryFragment fragment = new HistoryFragment();
         Bundle args = new Bundle();
@@ -59,6 +57,10 @@ public class HistoryFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * sets the global mUserID variable and sets the actionBar title
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,12 +72,19 @@ public class HistoryFragment extends Fragment {
 
     }
 
+    /**
+     * inflates the fragment_history xml, launches getHistory, sets up the empty list view message
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return the view inflated
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         // Inflate the layout for this fragment
-        queryInfo(getContext(), mUserID,view);
+        getHistory(getContext(), mUserID,view);
         emptyListMessageView = view.findViewById(R.id.tv_EmptyList);
         emptyListMessageView.setText(R.string.no_history);
         emptyListMessageView.setVisibility(View.INVISIBLE);
@@ -83,7 +92,13 @@ public class HistoryFragment extends Fragment {
         return view;
     }
 
-    private void queryInfo(Context context, String userID,View view) {
+    /**
+     * requests the run history of the user from the database
+     * @param context
+     * @param userID
+     * @param view the view containing the RecyclerView which needs to be bound
+     */
+    private void getHistory(Context context, String userID,View view) {
         // Instantiate the RequestQueue.
 
         RecyclerView recyclerView = view.findViewById(R.id.histRec);

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class FollowingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mUserID;
     private String username = "";
+    private TextView noFollowing;
 
     public FollowingFragment() {
         // Required empty public constructor
@@ -63,7 +65,7 @@ public class FollowingFragment extends Fragment {
         if (getArguments() != null) {
             mUserID = getArguments().getString(USERID);
         }
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.following_title);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Who I'm following");
     }
 
     @Override
@@ -71,6 +73,8 @@ public class FollowingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_following, container, false);
         // Inflate the layout for this fragment
+        noFollowing = view.findViewById(R.id.tv_noFollowing);
+        noFollowing.setVisibility(View.INVISIBLE);
         final Button followButton = view.findViewById(R.id.btn_followBtn);
         final EditText followUsername = view.findViewById(R.id.et_followerSearchBar);
         followButton.setOnClickListener(new View.OnClickListener() {
@@ -89,7 +93,6 @@ public class FollowingFragment extends Fragment {
         // Instantiate the RequestQueue.
 
         RecyclerView recyclerView = view.findViewById(R.id.followingList);
-        Log.i("AMYYY", "18"); //replace with userID
         RequestQueue queue = Volley.newRequestQueue(context);
 
         Uri.Builder builder = new Uri.Builder();
@@ -116,13 +119,16 @@ public class FollowingFragment extends Fragment {
                         Collections.reverse(userid);
                         int userIDint = Integer.valueOf(userID);
                         if(response.length()  > 2) {
+                            noFollowing.setVisibility(View.INVISIBLE);
                             username = populateList(result);
                             userid = populateuseridList(result);
+                            final RecyclerView recyclerView = getView().findViewById(R.id.followingList);
+                            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+                            recyclerView.setAdapter(new FollowerAdapter(userIDint, context, username, userid, "Following")); //change later from 17 to uid
+                            recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+                        } else {
+                            noFollowing.setVisibility(View.VISIBLE);
                         }
-                        final RecyclerView recyclerView = getView().findViewById(R.id.followingList);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-                        recyclerView.setAdapter(new FollowerAdapter(userIDint, context, username, userid, "Following")); //change later from 17 to uid
-                        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
 
 
                     }
@@ -181,7 +187,6 @@ public class FollowingFragment extends Fragment {
     private void addFollow(Context context, String userID, String myUsername, String toFollowUsername) {
         // Instantiate the RequestQueue.
 
-        Log.i("AMYYY", "progressss");
         Log.i("username", myUsername);//replace with userID
         RequestQueue queue = Volley.newRequestQueue(context);
 
@@ -211,8 +216,8 @@ public class FollowingFragment extends Fragment {
                             Toast.makeText(context, "You are already following them!",
                                     Toast.LENGTH_SHORT).show();
                         }else{
-                            Toast.makeText(context, "Successfully Followed!",
-                                    Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(context, "Successfully Followed!",
+                                    //Toast.LENGTH_SHORT).show();
                             showFollowingList(getContext(), mUserID, getView());
                         }
                     }

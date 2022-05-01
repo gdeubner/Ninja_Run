@@ -32,11 +32,9 @@ import com.ninjadroid.app.webServices.callbacks.VolleyProfileCallback;
  */
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     // private static final String USERID = "key";
 
-    // TODO: Rename and change types of parameters
     private int userId;
     private String usernameP;
     private double weight;
@@ -60,7 +58,6 @@ public class ProfileFragment extends Fragment {
      * @param profile Parameter 1.
      * @return A new instance of fragment ProfileFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance(ProfileContainer profile) {
         Log.i("PROFILE PAGE", "MADE IT");
 
@@ -104,11 +101,9 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.i("HIII", "make it?");
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         // Inflate the layout for this fragment
         //setInfo(getContext(), mUserID, view);
-        Log.i("PROFILE PAGE", "on create view");
 
         Button editPButton = view.findViewById(R.id.editPButton);
         editPButton.setOnClickListener(new View.OnClickListener() {
@@ -128,8 +123,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("PROFILE PAGE", "on resume");
-        Log.i("PROFILE PAGE", "requery on resume");
         GetProfile.getProfile(getContext(), String.valueOf(userId),new VolleyProfileCallback() {
             @Override
             public void onSuccess(ProfileContainer profile) {
@@ -143,7 +136,6 @@ public class ProfileFragment extends Fragment {
                 distance = profileC.getDistance();
                 name = profileC.getName();
 
-                Log.i("PROFILE PAGE new weight", String.valueOf(weight));
 
                 final TextView nameView = getView().findViewById(R.id.username);
                 final TextView usernameView = getView().findViewById(R.id.usernameP);
@@ -154,23 +146,21 @@ public class ProfileFragment extends Fragment {
                 final TextView totCalView= getView().findViewById(R.id.totalCaloriesP);
                 final TextView totDistView= getView().findViewById(R.id.totalDistanceP);
 
-                Log.i("PROFILE PAGE", "on resume reformatting text");
                 SpannableStringBuilder userNamestr = new SpannableStringBuilder("Username: "+ usernameP);
                 userNamestr.setSpan(new StyleSpan(Typeface.BOLD), 0, 9, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 SpannableStringBuilder userIDstr = new SpannableStringBuilder("User ID: "+ userId);
                 userIDstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 8, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                SpannableStringBuilder weightstr = new SpannableStringBuilder("Weight: " + Math.round(weight*100)/100.0);
+                SpannableStringBuilder weightstr = new SpannableStringBuilder("Weight: " + Math.round(weight*100)/100.0 + " lb");
                 weightstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                SpannableStringBuilder heightstr = new SpannableStringBuilder("Height: " + heightFt+"ft "+ Math.round(heightIn*100)/100.0+"in");
+                SpannableStringBuilder heightstr = new SpannableStringBuilder("Height: " + heightFt+" ft "+ Math.round(heightIn*100)/100.0+" in");
                 heightstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 SpannableStringBuilder pointsstr = new SpannableStringBuilder("Points: " + String.valueOf(points));
                 pointsstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 SpannableStringBuilder totCalstr = new SpannableStringBuilder("Total Calories: " + String.valueOf(calories));
                 totCalstr.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                SpannableStringBuilder totDiststr = new SpannableStringBuilder("Total Distance: " + String.valueOf(Math.round(distance*100)/100.0));
+                SpannableStringBuilder totDiststr = new SpannableStringBuilder("Total Distance: " + String.valueOf(Math.round(distance*100)/100.0) + " miles");
                 totDiststr.setSpan(new StyleSpan(Typeface.BOLD), 0, 15, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                Log.i("PROFILE PAGE", "on resume setting text");
                 nameView.setText(name);
                 usernameView.setText(userNamestr);
                 userIDView.setText(userIDstr);

@@ -17,6 +17,9 @@ import com.ninjadroid.app.utils.containers.UserRouteContainer;
 
 import java.nio.charset.StandardCharsets;
 
+/**
+ * a class to call the get_route endpoint in the server
+ */
 public class GetRoute {
 
     public static void getRoute(Context context, int route_id,

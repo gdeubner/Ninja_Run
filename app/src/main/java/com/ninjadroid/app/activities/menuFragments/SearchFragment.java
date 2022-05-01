@@ -35,8 +35,6 @@ import java.util.List;
 public class SearchFragment extends Fragment implements SearchedAdapter.ItemClickListener{
     private static final String ROUTE_ID_KEY = "routeID";
 
-    // TODO: Rename and change types of parameters
-
     private AutoCompleteTextView dropdown;
     private RecyclerView recyclerView;
     private Button searchBtn;
@@ -55,7 +53,6 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
      *
      * @return A new instance of fragment ProfileFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance() {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
@@ -63,12 +60,24 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
         return fragment;
     }
 
+    /**
+     * sets the activityBar title
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.search_title);
     }
 
+    /**
+     * inflates the fragment_search layout, assigns the relevant view objects, and adds the
+     * dropdown and Add button functionality
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -76,10 +85,14 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
         //Inflate the layout for this fragment
         assignViewObjects(view);
         addDropdownFunctionality();
-        addButtonFunctionality();
+        searchButtonFunctionality();
         return view;
     }
 
+    /**
+     * assigns the view objects of this page
+     * @param view
+     */
     private void assignViewObjects(View view) {
         dropdown = view.findViewById(R.id.dropdown_searchBy);
         recyclerView = view.findViewById(R.id.rv_searchResults);
@@ -90,8 +103,8 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
 
         searchBar.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View view, boolean b) {
-                if(!b){
+            public void onFocusChange(View view, boolean focussed) {
+                if(!focussed){
                     final InputMethodManager imm = (InputMethodManager) getActivity()
                             .getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -100,6 +113,9 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
         });
     }
 
+    /**
+     * assigns values to the dropdown menu and sets it's adapter
+     */
     private void addDropdownFunctionality() {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.searchBy_array, R.layout.list_item_dropdown);
@@ -107,12 +123,19 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
 
     }
 
-    private void addButtonFunctionality() {
+    /**
+     * sets the addButton functionality by assigning the callback function to be called after the
+     * database returns the resulting list of routes and setting up the logic to prevent empty and
+     * bad searches
+     */
+    private void searchButtonFunctionality() {
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(routeList != null){
                     routeList.removeAll(routeList);
+                    routeList.clear();
+
                 }
                 final InputMethodManager imm = (InputMethodManager) getActivity()
                         .getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -147,6 +170,11 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
         });
     }
 
+    /**
+     * fills the recycler view with the resulting list of routes after the server returns for the
+     * search
+     * @param routes
+     */
     private void setRecyclerView(RouteContainer[] routes) {
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -160,6 +188,12 @@ public class SearchFragment extends Fragment implements SearchedAdapter.ItemClic
         recyclerView.setAdapter(adapter);
     }
 
+    /**
+     * adds the onclick functionality for each item in the recycler view, causing the Route page to
+     * open
+     * @param view
+     * @param position
+     */
     @Override
     public void onItemClick(View view, int position) {
         Intent intent = new Intent(getActivity(), RouteActivity.class);

@@ -36,43 +36,34 @@ import java.util.Collections;
 
 public class FriendActivity extends AppCompatActivity {
     private String userID;
-    private String fType;
     private String name;
     private int points;
     private int calories;
     private double distance;
-    private ProfileContainer fProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friend);
-        Log.i("VEE", "yoooooooooo");
 
         TextView fUsername = findViewById(R.id.followusername);
         TextView fCalories = findViewById(R.id.totalCaloriesF);
         TextView fDistance = findViewById(R.id.totalDistanceF);
         TextView fPoints = findViewById(R.id.PointsF);
 
-        Log.i("ZZZZZZEE", "yoooooooooo");
 
         Intent intent = getIntent();
         userID = intent.getStringExtra("Friend");
-        fType = intent.getStringExtra("Type");
 
         GetProfile.getProfile(this, userID, new VolleyProfileCallback() {
             @Override
             public void onSuccess(ProfileContainer profile) {
-                Log.i("NAMEEEEEE", "yoooooooooo");
-                fProfile = profile;
                 name = profile.getUsername();
                 calories = profile.getCalories();
                 distance = profile.getDistance();
                 points = profile.getPoints();
 
-                Log.i("NAMEEEEEE", name);
                 String disttemp = String.valueOf(Math.round(distance));
-                Log.i("DISTTT", disttemp);
 
                 fUsername.setText(name);
                 fCalories.setText("Calories: "+ Integer.toString(calories));
