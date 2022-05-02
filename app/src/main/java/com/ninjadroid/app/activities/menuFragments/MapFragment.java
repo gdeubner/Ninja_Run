@@ -200,7 +200,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 if(followingRouteMode){
                     if(!running){
                         running = true;
-                        Toast.makeText(getContext(), "Run started", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Head to the green starting point!", Toast.LENGTH_SHORT).show();
                         routeCoordinates = new ArrayList<>();
                         clock.setBase(SystemClock.elapsedRealtime());
                         clock.start();

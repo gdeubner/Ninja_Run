@@ -31,8 +31,11 @@ public class RegisterActivity extends AppCompatActivity {
     private String heightin;
     private String name;
 
+    /**
+     * assigns the text views and gives the buttons their onClickListeners
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
@@ -46,10 +49,8 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //username = intent.getStringExtra((LoginPage.KEY));
         String info = intent.getStringExtra("info");
-        Log.i("heyy",info);
 
         if(info.equals(",")){
-            Log.i("heyy", "nothing entered");
         }else if(info.length() > 1 && info.charAt(0)==','){
             password = info.substring(1);
             passwordEdit.setText(password);
@@ -57,7 +58,6 @@ public class RegisterActivity extends AppCompatActivity {
             username = info.substring(0,info.length()-1);
             usernameEdit.setText(username);
         } else{
-            Log.i("heyy", "something entered");
             String temp[] = info.split(",");
             username = temp[0];
             password = temp[1];
@@ -93,6 +93,17 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * sends the user-entered data to the server to create the new user account. Provides an error
+     * toast message if the username is already taken or the user left fields blank
+     * @param context
+     * @param username
+     * @param password
+     * @param weight
+     * @param heightft
+     * @param heightin
+     * @param name
+     */
     private void registerUser(Context context, String username, String password, String weight,
                               String heightft, String heightin, String name) {
         // Instantiate the RequestQueue.
@@ -125,7 +136,6 @@ public class RegisterActivity extends AppCompatActivity {
                         }else{
 
                             String userID = response.substring(2, response.length() - 2);
-                            Log.i("Get Request Response", userID);
 
                             Intent intent = new Intent(getBaseContext(),MainActivity.class);
                             intent.putExtra("ProfileFragment",1);
@@ -153,6 +163,9 @@ public class RegisterActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    /**
+     * stops
+     */
     @Override
     protected void onStop() {
         super.onStop();

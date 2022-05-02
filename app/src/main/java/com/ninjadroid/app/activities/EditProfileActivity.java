@@ -37,13 +37,16 @@ public class EditProfileActivity extends AppCompatActivity {
     private ProfileContainer profile;
     private ProfileContainer changedProfile;
 
+    /**
+     * assigns all of the text vies and buttons, assigns button onClickListeners, assigns text views
+     * values
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i("AYOOOOOOOO", "im dying");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        Log.i("AYOOOOOOOO", "come on plz");
         Intent intent = getIntent();
         //username = intent.getStringExtra((LoginPage.KEY));
         //ProfileContainer temp = intent.getParcelableExtra("profileObject");
@@ -104,7 +107,17 @@ public class EditProfileActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(R.string.edit_profile_title);
     }
 
-
+    /**
+     * updates the user's info in the server's database
+     * @param context
+     * @param userID
+     * @param username
+     * @param password
+     * @param weight
+     * @param heightft
+     * @param heightin
+     * @param name
+     */
     private void editInfo(Context context, String userID,String username, String password, String weight, String heightft, String heightin, String name) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(context);

@@ -1,5 +1,8 @@
 package com.ninjadroid.app.utils;
 
+/**
+ * This class stores the URLs used by the app to contact the server.
+ */
 public class URLBuilder {
     private static String scheme = "http";
 

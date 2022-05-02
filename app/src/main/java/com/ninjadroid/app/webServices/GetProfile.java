@@ -21,9 +21,9 @@ import com.ninjadroid.app.utils.containers.ProfileContainer;
 public class GetProfile {
 
     /**
-     *
+     *requests a profile from the server
      * @param context
-     * @param uid
+     * @param uid the userID of the profile
      * @param callBack
      */
     public static void getProfile(Context context, String uid,final VolleyProfileCallback callBack) {
@@ -49,11 +49,9 @@ public class GetProfile {
                         try{
                             //String decoded = java.net.URLDecoder.decode(response, StandardCharsets.UTF_8.name());
                             //updateView(response, context, binding);
-                            Log.i("Responseee", response);
                             Gson gson = new Gson();
                             //Gson gson = new GsonBuilder().serializeNulls().create();
                             ProfileContainer profile = gson.fromJson(response, ProfileContainer.class);
-                            Log.i("BRO PLZ", "AHHHHHHHHHHHHhh");
                             callBack.onSuccess(profile);
 
                         } catch (Exception e) {

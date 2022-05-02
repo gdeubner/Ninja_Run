@@ -41,6 +41,10 @@ public class FriendActivity extends AppCompatActivity {
     private int calories;
     private double distance;
 
+    /**
+     * assigns text views their values and queries the database for the friend's info
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +81,11 @@ public class FriendActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * requests the friend's info from the server
+     * @param context
+     * @param userID the userID of the friend
+     */
     private void queryInfo(Context context, String userID) {
         // Instantiate the RequestQueue.
 

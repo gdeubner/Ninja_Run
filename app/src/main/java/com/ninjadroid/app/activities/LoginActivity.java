@@ -46,6 +46,10 @@ public class LoginActivity extends AppCompatActivity {
     Button registerButton;
     Activity activity;
 
+    /**
+     * assigns the various views and assigns the login and register buttons their clickListeners
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +97,9 @@ public class LoginActivity extends AppCompatActivity {
         activity = this;
     }
 
+    /**
+     * checks to see if the app has permission to use the phone's location services
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -100,6 +107,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    /**
+     * checks to see if the app has permission to use the phone's location services and
+     * requests them it the app does not
+     */
     private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -137,6 +148,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * asks the server if the username password combo is valid. If it is, the app proceeds to the
+     * next page, otherwise it launches a Toast message, reporting a bad username/password.
+     * @param context
+     * @param username used for login
+     * @param password used for login
+     */
     private void queryID(Context context, String username, String password) {
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -190,12 +208,19 @@ public class LoginActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
+    /**
+     * empties the password field if the user navigates back to the login page
+     */
     @Override
     protected void onResume() {
         super.onResume();
         passwordEditText.setText("");
     }
 
+    /**
+     * if the user presses the back button on this login page, popup will appear, asking if the user
+     * really wants to leave the app
+     */
     @Override
     public void onBackPressed() {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);

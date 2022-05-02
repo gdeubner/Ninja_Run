@@ -36,12 +36,30 @@ import java.util.regex.Pattern;
  */
 public class PostRoute {
 
+    /**
+     * a driver method to send new route data to the server
+     * @param routeCoordinates an ArrayList of LocationContainer objects, storing the given route
+     * @param context
+     * @param uid uid of the user who created the route
+     * @param calories calories burned while making the route
+     * @param title title of the route
+     * @param date date route was created
+     */
     public static void postRoute(ArrayList<LocationContainer> routeCoordinates, Context context,
                                  int uid, int calories, String title, String date){
         String url = buildUrl(routeCoordinates, context, uid, title, date);
         postDataUsingVolley(context, url, routeCoordinates, uid, calories);
     }
 
+    /**
+     * creates the URl used to send the route data
+     * @param routeCoordinates an ArrayList of LocationContainer objects, storing the given route
+     * @param context
+     * @param uid uid of the user who created the route
+     * @param title title of the route
+     * @param date date route was created
+     * @return returns the url to be used to send the route data
+     */
     private static String buildUrl(ArrayList<LocationContainer> routeCoordinates, Context context,
                                     int uid, String title, String date){
         Uri.Builder builder = new Uri.Builder();
@@ -91,6 +109,15 @@ public class PostRoute {
         return builder.build().toString();
     }
 
+    /**
+     * sends the route data to the server. The ArrayList of LocationContainers is converted
+     * to json and stored in the body of the Post request
+     * @param context
+     * @param url the url used to send the route
+     * @param routeCoordinates an ArrayList of LocationContainer objects, storing the given route
+     * @param uid the UID of the route creator
+     * @param calories calories burned while creating the route
+     */
     private static void postDataUsingVolley(Context context, String url, ArrayList<LocationContainer> routeCoordinates,
                                             int uid, int calories) {
         // creating a new variable for our request queue

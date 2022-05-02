@@ -91,6 +91,13 @@ public  class Utils {
         return calories;
     }
 
+    /**
+     * calculates the angle of the vector created by connecting the two LatLng parameters and
+     * true north. This is used for determining the camera angle while running
+     * @param curPos LatLng
+     * @param routePnt LatLng
+     * @return the float angle value
+     */
     public static float findBearing2(LatLng curPos, LatLng routePnt){
         double lat1 = curPos.latitude;
         double long1 = curPos.longitude;
@@ -112,6 +119,12 @@ public  class Utils {
         return (float)brng;
     }
 
+    /**
+     * calculates the distance between two LatLnf values
+     * @param center
+     * @param target
+     * @return
+     */
     public static float distanceBetweenLatLng(LatLng center, LatLng target){
         float[] results = new float[1];
         Location.distanceBetween(center.latitude, center.longitude,
@@ -119,9 +132,13 @@ public  class Utils {
         return  results[0];
     }
 
-    //returns the change in altitude in feet rounded to the tens place
+    /**
+     * returns the change in altitude in feet rounded to the tens place
+     * @param list
+     * @return
+     */
     public static double calcElevationChange(ArrayList<LocationContainer> list){
-        int total = 0;
+        double total = 0;
         double initialAltitude = list.get(0).getAltitude();
         for (LocationContainer loc: list) {
             total += Math.abs(initialAltitude - loc.getAltitude());
@@ -129,6 +146,11 @@ public  class Utils {
         return Math.round(meters2feet(total) * 10.0)/10.0;
     }
 
+    /**
+     * converts meters to feet
+     * @param meters number of meters to convert
+     * @return feet (double)
+     */
     public static double meters2feet(double meters){
         return meters * 3.28084;
     }

@@ -22,6 +22,12 @@ import java.nio.charset.StandardCharsets;
  */
 public class GetRoute {
 
+    /**
+     * returns the route data corresponding to the given route_id
+     * @param context
+     * @param route_id the id of the route
+     * @param callBack
+     */
     public static void getRoute(Context context, int route_id,
                                 final RouteCallback callBack){
         Uri.Builder builder = new Uri.Builder();

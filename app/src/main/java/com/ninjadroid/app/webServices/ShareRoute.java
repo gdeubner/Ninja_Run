@@ -21,7 +21,13 @@ import com.ninjadroid.app.utils.URLBuilder;
  * a class to call the share_route endpoint in the server
  */
 public class ShareRoute {
-
+    /**
+     * creates a popup asking the used who they want to share the given route with. After entering,
+     * the app attempts to share the route with that user
+     * @param context
+     * @param routeId the route to be shared
+     * @param sharerId the user who is sharing the route
+     */
     public static void share(Context context, int routeId, int sharerId) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Please specify who you'd like to share the route with");
@@ -36,7 +42,7 @@ public class ShareRoute {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String inp_text = input1.getText().toString();
-                queryInfo(context,Integer.toString(sharerId), inp_text,
+                shareRoute(context,Integer.toString(sharerId), inp_text,
                         Integer.toString(routeId));
 
             }
@@ -51,7 +57,15 @@ public class ShareRoute {
         builder.show();
     }
 
-    private static void queryInfo(Context context, String userID, String sharedUn, String routeID) {
+    /**
+     * attempts to share the given route with the given user. If successful, the route is already
+     * shared with the user, or the user does not exist, a corresponding Toast message is displayed
+     * @param context
+     * @param userID the id of the sharing user
+     * @param sharedUn the username of the user who will receive  the shared route
+     * @param routeID the id of the route being shared
+     */
+    private static void shareRoute(Context context, String userID, String sharedUn, String routeID) {
         // Instantiate the RequestQueue.
         Log.i("Justin", "17"); //replace with userID
         RequestQueue queue = Volley.newRequestQueue(context);

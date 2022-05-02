@@ -23,7 +23,15 @@ import java.nio.charset.StandardCharsets;
  * a class to call the search_route endpoint in the server
  */
 public class SearchRoutes {
-
+    /**
+     * queries the server for a list of routes that correspond to the search type and search
+     * parameters
+     * @param context
+     * @param searchBy the mode of searching (route_id, route_name, username of creator, town route
+     *                 was created in
+     * @param searchParam the parameters of the search
+     * @param callBack
+     */
     public static void search(Context context, String searchBy, String searchParam,
                               final SearchRoutesCallback callBack){
 
